@@ -42,7 +42,6 @@
 |     $9604     |     $1604     | Register #4: FG Scroll X                                |
 |     $9605     |     $1605     | Register #5: FG Scroll Y                                |
 |     $9606     |     $1606     | Register #6: IRQ scanline position (NOTE: 0 is disable) |
-|     $9607     |     $1607     | Background Color                                        |
 | $9607 ~ $9FFF | $1607 ~ $1FFF | Reserved (cannot write and always return $FF)           |
 | $A000 ~ $BFFF | $2000 ~ $3FFF | Character Pattern Table (32 x 256)                      |
 

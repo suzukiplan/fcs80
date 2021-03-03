@@ -42,6 +42,7 @@ class FCS80Video {
         inline unsigned char* getFgNameTableAddr() { return &this->ctx.ram[0x0800]; }
         inline unsigned char* getFgAttributionTableAddr() { return &this->ctx.ram[0x0C00]; }
         inline unsigned short* getColorTableAddr() { return (unsigned short*)&this->ctx.ram[0x1400]; }
+        inline unsigned char* getCharacterPatternAddr() { return &this->ctx.ram[0x2000]; }
         inline unsigned char getRegisterBgScrollX() { return this->ctx.ram[0x1602]; }
         inline unsigned char getRegisterBgScrollY() { return this->ctx.ram[0x1603]; }
         inline unsigned char getRegisterFgScrollX() { return this->ctx.ram[0x1604]; }
@@ -53,7 +54,7 @@ class FCS80Video {
         struct Context {
             int bobo;
             int countV;
-            unsigned char ram[0x2000];
+            unsigned char ram[0x4000];
             unsigned char bgBank;
             unsigned char fgBank;
             unsigned char spriteBank;
@@ -78,7 +79,7 @@ class FCS80Video {
         }
 
         inline unsigned char read(unsigned short addr) {
-            addr &= 0x1FFF;
+            addr &= 0x3FFF;
             switch (addr) {
                 case 0x1600: return this->ctx.countV < 200 ? this->ctx.countV : 0xFF;
                 case 0x1601: return this->ctx.countH;
@@ -87,7 +88,7 @@ class FCS80Video {
         }
 
         inline void write(unsigned short addr, unsigned char value) {
-            addr &= 0x1FFF;
+            addr &= 0x3FFF;
             this->ctx.ram[addr] = value;
         }
 
