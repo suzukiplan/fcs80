@@ -93,8 +93,6 @@ class FCS80 {
                 memcpy(this->rom, rom, size);
             }
             this->romSize = size;
-            this->vdp->rom = this->rom;
-            this->vdp->romSize = this->romSize;
             return true;            
         }
 
@@ -167,13 +165,10 @@ class FCS80 {
         inline unsigned char inPort(unsigned char port) {
             switch (port) {
                 case 0xA2: return this->psg->read();
-                case 0xE0: return this->ctx.romBank[0];
-                case 0xE1: return this->ctx.romBank[1];
-                case 0xE2: return this->ctx.romBank[2];
-                case 0xE3: return this->ctx.romBank[3];
-                case 0xF0: return this->vdp->ctx.bgBank;
-                case 0xF1: return this->vdp->ctx.fgBank;
-                case 0xF2: return this->vdp->ctx.spriteBank;
+                case 0xB0: return this->ctx.romBank[0];
+                case 0xB1: return this->ctx.romBank[1];
+                case 0xB2: return this->ctx.romBank[2];
+                case 0xB3: return this->ctx.romBank[3];
                 default: return 0xFF;
             }
         }
@@ -182,13 +177,21 @@ class FCS80 {
             switch (port) {
                 case 0xA0: this->psg->latch(value); break;
                 case 0xA1: this->psg->write(value); break;
-                case 0xE0: this->ctx.romBank[0] = value; break;
-                case 0xE1: this->ctx.romBank[1] = value; break;
-                case 0xE2: this->ctx.romBank[2] = value; break;
-                case 0xE3: this->ctx.romBank[3] = value; break;
-                case 0xF0: this->vdp->ctx.bgBank = value; break;
-                case 0xF1: this->vdp->ctx.fgBank = value; break;
-                case 0xF2: this->vdp->ctx.spriteBank = value; break;
+                case 0xB0: this->ctx.romBank[0] = value; break;
+                case 0xB1: this->ctx.romBank[1] = value; break;
+                case 0xB2: this->ctx.romBank[2] = value; break;
+                case 0xB3: this->ctx.romBank[3] = value; break;
+                case 0xC0: {
+                    unsigned short from = this->cpu->reg.pair.B;
+                    from <<= 8;
+                    from |= this->cpu->reg.pair.C;
+                    unsigned short to = value;
+                    to <<= 8;
+                    unsigned short size = this->cpu->reg.pair.D;
+                    size <<= 8;
+                    size |= this->cpu->reg.pair.E;
+                    for (int n = 0; n < size; n++, from++, to++) this->writeMemory(to, this->readMemory(from));
+                }
             }
         }
 };

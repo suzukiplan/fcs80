@@ -55,17 +55,10 @@ class FCS80Video {
             int bobo;
             int countV;
             unsigned char ram[0x4000];
-            unsigned char bgBank;
-            unsigned char fgBank;
-            unsigned char spriteBank;
             unsigned char countH;
         } ctx;
-        unsigned char* rom;
-        size_t romSize;
 
         FCS80Video(void* arg, void (*detectEndOfFrame)(void* arg), void (*detectIRQ)(void* arg)) {
-            this->rom = NULL;
-            this->romSize = 0;
             this->detectEndOfFrame = detectEndOfFrame;
             this->detectIRQ = detectIRQ;
             this->arg = arg;
@@ -73,9 +66,6 @@ class FCS80Video {
 
         void reset() {
             memset(&this->ctx, 0, sizeof(this->ctx));
-            this->ctx.bgBank = 4;
-            this->ctx.fgBank = 4;
-            this->ctx.spriteBank = 4;
         }
 
         inline unsigned char read(unsigned short addr) {
@@ -116,13 +106,12 @@ class FCS80Video {
         }
 
         inline void renderBG(int scanline) {
-            if (this->romSize < this->ctx.bgBank * 0x2000 + 0x2000) return;
             int y = scanline + this->getRegisterBgScrollY();
             unsigned short* display = &this->display[(scanline - 8) * 240];
             unsigned char* nametbl = this->getBgNameTableAddr() + (y / 8) * 64;
             unsigned char* attr = this->getBgAttributionTableAddr() + (y / 8) * 64;
             unsigned short* color = this->getColorTableAddr();
-            unsigned char* bg = &this->rom[this->ctx.bgBank * 0x2000];
+            unsigned char* bg = this->getCharacterPatternAddr();
             for (int x = this->getRegisterBgScrollX() + 8, xx = 0; xx < 240; x++, xx++, display++) {
             }
         }
