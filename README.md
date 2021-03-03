@@ -2,7 +2,7 @@
 
 ## Specification
 
-- CPU: Z80A+ (3579545Hz)
+- CPU: Z80A (3579545Hz)
 - PPU: FCS80-VDP (7864320Hz)
 - APU: AY-3-8910 (44100Hz)
 - RAM: 16KB

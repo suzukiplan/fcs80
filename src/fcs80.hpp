@@ -32,7 +32,7 @@
 #include "fcs80video.hpp"
 #include "z80.hpp"
 
-#define VGS80_CPU_CLOCK_PER_SEC 3579545 * 3
+#define VGS80_CPU_CLOCK_PER_SEC 3579545
 #define VGS80_VDP_CLOCK_PER_SEC 4024320 /* 256 * 262 * 60 Hz */
 #define VGS80_PSG_CLOCK_PER_SEC 44100
 
