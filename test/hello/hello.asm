@@ -1,0 +1,46 @@
+org 0x0000
+
+.main
+    ; 割り込み関連の初期化
+    IM 1
+    DI
+
+    ; VBLANKを待機
+    call wait_vblank
+
+    ; パレットを初期化
+    ld bc, 32
+    ld hl, palette0_data
+    ld de, 0x9400
+    ldir
+
+    ; PRG1 (0x2000) を Character Pattern Table (0xA000) に転送 (DMA)
+    ld bc, 0xa000
+    ld de, 0x2000
+    ld a, 0x20
+    out (0xc0), a
+
+    ; 画面中央付近 (10,7) に "HELLO,WORLD!" を描画
+    ld bc, 12
+    ld hl, hello_text
+    ld de, 0x00ea
+    ldir
+
+    ; 無限ループ
+end_loop:
+    jmp end_loop
+
+; VBLANKになるまで待機
+.wait_vblank
+    ld hl, 0x9600
+wait_vblank_loop:
+    ld a, (hl)
+    cp 0xff
+    jp nz, wait_vblank_loop
+    ret
+
+palette0_data:
+    defb 0x00, 0x00, 0x44, 0x44, 0xaa, 0xaa, 0xff, 0xff, 0x00, 0x00, 0x44, 0x44, 0xaa, 0xaa, 0xff, 0xff, 0x00, 0x00, 0x44, 0x44, 0xaa, 0xaa, 0xff, 0xff, 0x00, 0x00, 0x44, 0x44, 0xaa, 0xaa, 0xff, 0xff
+
+hello_text:
+    defb "HELLO,WORLD!"
