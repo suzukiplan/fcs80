@@ -20,10 +20,10 @@ org 0x0000
     ld a, 0x20
     out (0xc0), a
 
-    ; 画面中央付近 (10,7) に "HELLO,WORLD!" を描画
+    ; 画面中央付近 (10,12) に "HELLO,WORLD!" を描画
     ld bc, 12
     ld hl, hello_text
-    ld de, 0x00ea
+    ld de, 0x018a
     ldir
 
     ; 無限ループ
