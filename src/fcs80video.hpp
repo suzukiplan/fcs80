@@ -38,11 +38,11 @@ class FCS80Video {
         void (*detectIRQ)(void* arg);
         void* arg;
         inline unsigned char* getBgNameTableAddr() { return &this->ctx.ram[0x0000]; }
-        inline unsigned char* getBgAttributionTableAddr() { return &this->ctx.ram[0x0400]; }
+        inline unsigned char* getBgAttrTableAddr() { return &this->ctx.ram[0x0400]; }
         inline unsigned char* getFgNameTableAddr() { return &this->ctx.ram[0x0800]; }
-        inline unsigned char* getFgAttributionTableAddr() { return &this->ctx.ram[0x0C00]; }
+        inline unsigned char* getFgAttrTableAddr() { return &this->ctx.ram[0x0C00]; }
         inline unsigned short* getColorTableAddr() { return (unsigned short*)&this->ctx.ram[0x1400]; }
-        inline unsigned char* getCharacterPatternAddr() { return &this->ctx.ram[0x2000]; }
+        inline unsigned char* getPatternTableAddr() { return &this->ctx.ram[0x2000]; }
         inline unsigned char getRegisterBgScrollX() { return this->ctx.ram[0x1602]; }
         inline unsigned char getRegisterBgScrollY() { return this->ctx.ram[0x1603]; }
         inline unsigned char getRegisterFgScrollX() { return this->ctx.ram[0x1604]; }
@@ -64,23 +64,18 @@ class FCS80Video {
             this->arg = arg;
         }
 
-        void reset() {
-            memset(&this->ctx, 0, sizeof(this->ctx));
-        }
+        void reset() { memset(&this->ctx, 0, sizeof(this->ctx)); }
 
         inline unsigned char read(unsigned short addr) {
             addr &= 0x3FFF;
             switch (addr) {
                 case 0x1600: return this->ctx.countV < 200 ? this->ctx.countV : 0xFF;
                 case 0x1601: return this->ctx.countH;
+                default: return this->ctx.ram[addr];
             }
-            return this->ctx.ram[addr];
         }
 
-        inline void write(unsigned short addr, unsigned char value) {
-            addr &= 0x3FFF;
-            this->ctx.ram[addr] = value;
-        }
+        inline void write(unsigned short addr, unsigned char value) { this->ctx.ram[addr & 0x3FFF] = value; }
 
         inline void tick() {
             this->ctx.countH++;
@@ -98,28 +93,36 @@ class FCS80Video {
 
     private:
         inline void renderScanline(int scanline) {
-            if (scanline < 8 || 200 <= scanline) return;
+            if (scanline < 8 || 200 <= scanline) return; // blanking
             scanline -= 8;
             this->renderBG(scanline);
-            this->renderSprite(scanline);
+            this->renderSprites(scanline);
             this->renderFG(scanline);
         }
 
         inline void renderBG(int scanline) {
             int y = scanline + this->getRegisterBgScrollY();
-            unsigned short* display = &this->display[(scanline - 8) * 240];
-            unsigned char* nametbl = this->getBgNameTableAddr() + (y / 8) * 64;
-            unsigned char* attr = this->getBgAttributionTableAddr() + (y / 8) * 64;
-            unsigned short* color = this->getColorTableAddr();
-            unsigned char* bg = this->getCharacterPatternAddr();
+            unsigned short* display = &this->display[scanline * 240];
+            unsigned short* colorTable = getColorTableAddr();
+            int offset = (y / 8) * 64;
+            unsigned char* nametbl = this->getBgNameTableAddr() + offset;
+            unsigned char* attrtbl = this->getBgAttrTableAddr() + offset;
+            unsigned short* colortbl = this->getColorTableAddr();
             for (int x = this->getRegisterBgScrollX() + 8, xx = 0; xx < 240; x++, xx++, display++) {
+                offset = (x >> 3) & 0x1F;
+                unsigned char ptn = nametbl[offset];
+                unsigned char attr = attrtbl[offset];
+                unsigned char* chrtbl = this->getPatternTableAddr() + (ptn << 5) + ((y >> 3) << 2) + ((x & 7) >> 1);
+                int pal = x & 1 ? (*chrtbl) & 0x0F : ((*chrtbl) & 0xF0) >> 4;
+                pal += (attr & 0x0F) << 4;
+                *display = colortbl[pal];
             }
         }
 
         inline void renderFG(int scanline) {
         }
 
-        inline void renderSprite(int scanline) {
+        inline void renderSprites(int scanline) {
         }
 };
 
