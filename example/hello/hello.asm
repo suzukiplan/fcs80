@@ -13,10 +13,8 @@ org $0000
     ld de, $9400
     ldir
 
-    ; PRG1 ($2000) を Character Pattern Table ($A000) に転送 (DMA)
-    ld bc, $a000
-    ld de, $2000
-    ld a, $20
+    ; Bank 1 を Character Pattern Table ($A000) に転送 (DMA)
+    ld a, $01
     out ($c0), a
 
     ; 画面中央付近 (10,12) に "HELLO,WORLD!" を描画

@@ -243,15 +243,10 @@ class FCS80 {
                 case 0xB2: this->ctx.romBank[2] = value; break;
                 case 0xB3: this->ctx.romBank[3] = value; break;
                 case 0xC0: {
-                    unsigned short to = this->cpu->reg.pair.B;
-                    to <<= 8;
-                    to |= this->cpu->reg.pair.C;
-                    unsigned short from = value;
-                    from <<= 8;
-                    unsigned short size = this->cpu->reg.pair.D;
-                    size <<= 8;
-                    size |= this->cpu->reg.pair.E;
-                    for (int n = 0; n < size; n++, from++, to++) this->writeMemory(to, this->readMemory(from));
+                    int addr = this->cpu->reg.pair.A;
+                    addr *= 0x2000;
+                    if (addr + 0x2000 <= this->romSize) memcpy(&this->vdp->ctx.ram[0x2000], &this->rom[addr], 0x2000);
+                    else memset(&this->vdp->ctx.ram[0x2000], 0xFF, 0x2000);
                 }
             }
         }

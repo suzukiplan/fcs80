@@ -156,46 +156,26 @@ Bit layout:
 
 ## I/O map
 
-| Port |  I  |  O  | Description                      |
-| :--: | :-: | :-: | :------------------------------- |
-| $A0  |  o  |  -  | AY-3-8910: latch register number |
-| $A1  |  -  |  o  | AY-3-8910: write register        |
-| $A2  |  -  |  o  | AY-3-8910: read register         |
-| $B0  |  o  |  o  | PRG0 bank switch (default: $00)  |
-| $B1  |  o  |  o  | PRG1 bank switch (default: $01)  |
-| $B2  |  o  |  o  | PRG2 bank switch (default: $02)  |
-| $B3  |  o  |  o  | PRG3 bank switch (default: $03)  |
-| $C0  |  -  |  o  | High Speed DMA (memmove)         |
-| $C1  |  -  |  o  | High Speed DMA (memset)          |
+| Port |  I  |  O  | Description                                           |
+| :--: | :-: | :-: | :---------------------------------------------------- |
+| $A0  |  o  |  -  | AY-3-8910: latch register number                      |
+| $A1  |  -  |  o  | AY-3-8910: write register                             |
+| $A2  |  -  |  o  | AY-3-8910: read register                              |
+| $B0  |  o  |  o  | PRG0 bank switch (default: $00)                       |
+| $B1  |  o  |  o  | PRG1 bank switch (default: $01)                       |
+| $B2  |  o  |  o  | PRG2 bank switch (default: $02)                       |
+| $B3  |  o  |  o  | PRG3 bank switch (default: $03)                       |
+| $C0  |  -  |  o  | High Speed DMA (ROM to VRAM: Character Pattern Table) |
 
-### $C0: High Speed DMA (memmove)
+### $C0: High Speed DMA (Bank to VRAM)
 
-- Transfer destination address: Register BC
-- Transfer size: Register DE
-- Transfer source address: Value written to port $C0 x $100
+The ROM of the bank number corresponding to the value written to the port is transferred to the Character Pattern Table of VRAM.
 
-The following is the source code for transferring the contents of PRG3 ($6000 ~ $7FFF) to the Character Pattern Table ($A000 ~ $BFFF).
+#### ex) transfer Bank No.3 to the Character Pattern Table
 
 ```z80
-    ld bc, $A000
-    ld de, $2000
-    ld a, $60
+    ld a, $03
     out ($C0), a
-```
-
-### $C1: High Speed DMA (memset)
-
-- Transfer destination address: Register BC
-- Transfer size: Register DE
-- Set value written to port $C1
-
-The following is the source code for reset Character Pattern Table ($A000 ~ $BFFF).
-
-```z80
-    ld bc, $A000
-    ld de, $2000
-    ld a, $00
-    out ($C1), a
 ```
 
 ## ROM
