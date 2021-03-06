@@ -54,7 +54,8 @@ class FCS80Video {
             int countV;
             int iReserved;
             unsigned char countH;
-            unsigned char cReserved[3];
+            unsigned char status;
+            unsigned char cReserved[2];
             unsigned char ram[0x4000];
         } ctx;
 
@@ -71,6 +72,11 @@ class FCS80Video {
             switch (addr) {
                 case 0x1600: return this->ctx.countV < 200 ? this->ctx.countV : 0xFF;
                 case 0x1601: return this->ctx.countH;
+                case 0x1607: {
+                    unsigned char result = this->ctx.status;
+                    this->ctx.status = 0;
+                    return result;
+                }
                 default: return this->ctx.ram[addr];
             }
         }
@@ -86,6 +92,7 @@ class FCS80Video {
                 this->renderScanline(this->ctx.countV);
                 this->ctx.countV++;
                 this->ctx.countV %= 262;
+                this->ctx.status |= (200 == this->ctx.countV ? 0x80 : 0x00);
                 if (0 == this->ctx.countV) {
                     this->detectEndOfFrame(this->arg);
                 } else if (this->ctx.countV == this->getRegisterIRQ()) {
@@ -109,7 +116,7 @@ class FCS80Video {
         inline void renderBG(int scanline) {
             int y = scanline + this->getRegisterBgScrollY();
             unsigned short* display = &this->display[scanline * 240];
-            int offset = ((y + 8) / 8) * 32;
+            int offset = (((y + 8) / 8) & 0x1F) * 32;
             unsigned char* nametbl = this->getBgNameTableAddr() + offset;
             unsigned char* attrtbl = this->getBgAttrTableAddr() + offset;
             unsigned short* colortbl = this->getColorTableAddr();
@@ -136,7 +143,7 @@ class FCS80Video {
         inline void renderFG(int scanline) {
             int y = scanline + this->getRegisterFgScrollY();
             unsigned short* display = &this->display[scanline * 240];
-            int offset = ((y + 8) / 8) * 32;
+            int offset = (((y + 8) / 8) & 0x1F) * 32;
             unsigned char* nametbl = this->getFgNameTableAddr() + offset;
             unsigned char* attrtbl = this->getFgAttrTableAddr() + offset;
             unsigned short* colortbl = this->getColorTableAddr();
