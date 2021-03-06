@@ -1,5 +1,5 @@
 /**
- * FAIRY COMPUTER SYSTEM 80 - AY-3-8910 Emulator
+ * SUZUKI PLAN - AY-3-8910 Emulator
  * -----------------------------------------------------------------------------
  * The MIT License (MIT)
  * 

@@ -1,5 +1,4 @@
 org $0000
-
 .main
     ; 割り込み関連の初期化
     IM 1
@@ -9,7 +8,7 @@ org $0000
     call wait_vblank
 
     ; パレットを初期化
-    ld bc, 32
+    ld bc, 8
     ld hl, palette0_data
     ld de, $9400
     ldir
@@ -23,7 +22,7 @@ org $0000
     ; 画面中央付近 (10,12) に "HELLO,WORLD!" を描画
     ld bc, 12
     ld hl, hello_text
-    ld de, 394 ; = 12 * 32 + 10
+    ld de, 394 + $8000 ; 394 = 12 * 32 + 10
     ldir
 
     ; 無限ループ
@@ -39,8 +38,5 @@ wait_vblank_loop:
     jp nz, wait_vblank_loop
     ret
 
-palette0_data:
-    defw $0000, $4444, $AAAA, $FFFF, $0000, $4444, $AAAA, $FFFF, $0000, $4444, $AAAA, $FFFF, $0000, $4444, $AAAA, $FFFF
-
-hello_text:
-    defb "HELLO,WORLD!"
+palette0_data: defw %0000000000000000, %0001110011100111, %0110001100011000, %0111111111111111
+hello_text: defb "HELLO,WORLD!"

@@ -1,5 +1,5 @@
 /**
- * FAIRY COMPUTER SYSTEM 80 - Machine Emulator
+ * FAIRY COMPUTER SYSTEM 80 - Core Emulator
  * -----------------------------------------------------------------------------
  * The MIT License (MIT)
  * 
@@ -28,19 +28,16 @@
 #ifndef INCLUDE_FCS80_HPP
 #define INCLUDE_FCS80_HPP
 
+#include "fcs80def.h"
 #include "ay8910.hpp"
 #include "fcs80video.hpp"
 #include "z80.hpp"
-
-#define VGS80_CPU_CLOCK_PER_SEC 3579545
-#define VGS80_VDP_CLOCK_PER_SEC 4024320 /* 256 * 262 * 60 Hz */
-#define VGS80_PSG_CLOCK_PER_SEC 44100
 
 class FCS80 {
     private:
         unsigned char* rom;
         size_t romSize;
-        short soundBuffer[65536];
+        short soundBuffer[0x10000];
         unsigned short soundCursor;
 
     public:
@@ -55,13 +52,34 @@ class FCS80 {
         } ctx;
 
         FCS80() {
-            this->cpu = new Z80([](void* arg, unsigned short addr) { return ((FCS80*)arg)->readMemory(addr); }, [](void* arg, unsigned short addr, unsigned char value) { return ((FCS80*)arg)->writeMemory(addr, value); }, [](void* arg, unsigned char port) { return ((FCS80*)arg)->inPort(port); }, [](void* arg, unsigned char port, unsigned char value) { return ((FCS80*)arg)->outPort(port, value); }, this);
-            this->cpu->setConsumeClockCallback([](void* arg, int clocks) { ((FCS80*)arg)->consumeClock(clocks); });
-            this->vdp = new FCS80Video(this, [](void* arg) { ((FCS80*)arg)->cpu->requestBreak(); }, [](void* arg) { ((FCS80*)arg)->cpu->generateIRQ(0x07); });
+            this->cpu = new Z80([](void* arg, unsigned short addr) {
+                return ((FCS80*)arg)->readMemory(addr);
+            }, [](void* arg, unsigned short addr, unsigned char value) {
+                return ((FCS80*)arg)->writeMemory(addr, value);
+            }, [](void* arg, unsigned char port) {
+                return ((FCS80*)arg)->inPort(port);
+            }, [](void* arg, unsigned char port, unsigned char value) {
+                return ((FCS80*)arg)->outPort(port, value);
+            }, this);
+            this->cpu->setConsumeClockCallback([](void* arg, int clocks) {
+                ((FCS80*)arg)->consumeClock(clocks);
+            });
+            this->vdp = new FCS80Video(this, [](void* arg) {
+                ((FCS80*)arg)->cpu->requestBreak();
+            }, [](void* arg) {
+                ((FCS80*)arg)->cpu->generateIRQ(0x07);
+            });
             this->psg = new AY8910();
             this->rom = NULL;
             this->romSize = 0;
             this->reset();
+            /*this->cpu->setDebugMessage([](void* arg, const char* msg) {
+                FCS80* fcs80 = (FCS80*)arg;
+                printf("line:%03d px:%03d %s\n", fcs80->vdp->ctx.countV, fcs80->vdp->ctx.countH, msg);
+            });*/
+            /*this->cpu->addBreakPoint(0x0024, [](void* arg) {
+                puts("0024");
+            });*/
         }
 
         ~FCS80() {
@@ -76,11 +94,12 @@ class FCS80 {
             this->vdp->reset();
             this->psg->reset(1);
             memset(&this->cpu->reg, 0, sizeof(this->cpu->reg));
+            this->cpu->reg.SP = 0xFFFF;
             memset(this->soundBuffer, 0, sizeof(this->soundBuffer));
             this->soundCursor = 0;
         }
 
-        bool loadRom(void* rom, size_t size) {
+        bool loadRom(const void* rom, size_t size) {
             if (this->rom) free(this->rom);
             this->rom = NULL;
             size -= size % 0x2000;
@@ -123,27 +142,69 @@ class FCS80 {
             return result;
         }
 
+        void tick(unsigned char pad1, unsigned char pad2)
+        {
+            this->psg->ctx.reg[14] = pad1;
+            this->psg->ctx.reg[15] = pad2;
+            this->cpu->execute(0x7FFFFFFF);
+        }
+
+        unsigned short* getDisplay() { return this->vdp->display; }
+        size_t getDisplaySize() { return 240 * 192 * 2; }
+
+        short* dequeSoundBuffer(size_t* size) {
+            *size = 2 * this->soundCursor;
+            this->soundCursor = 0;
+            return this->soundBuffer;
+        }
+
+        size_t getStateSize() { return sizeof(this->ctx) + sizeof(this->cpu->reg) + sizeof(this->psg->ctx) + sizeof(this->vdp->ctx); }
+ 
+        void saveState(void* buffer) {
+            unsigned char* bufferPtr = (unsigned char*)buffer;
+            memcpy(bufferPtr, &this->ctx, sizeof(this->ctx));
+            bufferPtr += sizeof(this->ctx);
+            memcpy(bufferPtr, &this->cpu->reg, sizeof(this->cpu->reg));
+            bufferPtr += sizeof(this->cpu->reg);
+            memcpy(bufferPtr, &this->psg->ctx, sizeof(this->psg->ctx));
+            bufferPtr += sizeof(this->psg->ctx);
+            memcpy(bufferPtr, &this->vdp->ctx, sizeof(this->vdp->ctx));
+        }
+
+        void loadState(const void* buffer) {
+            const unsigned char* bufferPtr = (const unsigned char*)buffer;
+            this->reset();
+            memcpy(&this->ctx, bufferPtr, sizeof(this->ctx));
+            bufferPtr += sizeof(this->ctx);
+            memcpy(&this->cpu->reg, bufferPtr, sizeof(this->cpu->reg));
+            bufferPtr += sizeof(this->cpu->reg);
+            memcpy(&this->psg->ctx, bufferPtr, sizeof(this->psg->ctx));
+            bufferPtr += sizeof(this->psg->ctx);
+            memcpy(&this->vdp->ctx, bufferPtr, sizeof(this->vdp->ctx));
+            this->vdp->refreshDisplay();
+        }
+
     private:
         inline void consumeClock(int clocks) {
-            this->vdp->ctx.bobo += clocks * VGS80_VDP_CLOCK_PER_SEC;
-            while (VGS80_CPU_CLOCK_PER_SEC <= this->vdp->ctx.bobo) {
+            this->vdp->ctx.bobo += clocks * FCS80_VDP_CLOCK_PER_SEC;
+            while (0 < this->vdp->ctx.bobo) {
                 this->vdp->tick();
-                this->vdp->ctx.bobo -= VGS80_CPU_CLOCK_PER_SEC;
+                this->vdp->ctx.bobo -= FCS80_CPU_CLOCK_PER_SEC;
             }
-            this->psg->ctx.bobo += clocks * VGS80_PSG_CLOCK_PER_SEC;
-            while (VGS80_CPU_CLOCK_PER_SEC <= this->psg->ctx.bobo) {
+            this->psg->ctx.bobo += clocks * FCS80_PSG_CLOCK_PER_SEC;
+            while (0 < this->psg->ctx.bobo) {
                 short* l = &this->soundBuffer[this->soundCursor];
                 this->soundCursor++;
                 short* r = &this->soundBuffer[this->soundCursor];
                 this->soundCursor++;
                 this->psg->tick(l, r, 81);
-                this->vdp->ctx.bobo -= VGS80_CPU_CLOCK_PER_SEC;
+                this->psg->ctx.bobo -= FCS80_CPU_CLOCK_PER_SEC;
             }
         }
 
         inline unsigned char readMemory(unsigned short addr) {
             if (addr < 0x8000) {
-                int ptr = this->ctx.romBank[addr / 0x2000] * 0x2000;
+                int ptr = this->ctx.romBank[addr / 0x2000] * 0x2000 + (addr & 0x1FFF);
                 return (this->romSize <= ptr) ? 0xFF : this->rom[ptr];
             } else if (addr < 0xC000) {
                 return this->vdp->read(addr);
@@ -182,11 +243,11 @@ class FCS80 {
                 case 0xB2: this->ctx.romBank[2] = value; break;
                 case 0xB3: this->ctx.romBank[3] = value; break;
                 case 0xC0: {
-                    unsigned short from = this->cpu->reg.pair.B;
-                    from <<= 8;
-                    from |= this->cpu->reg.pair.C;
-                    unsigned short to = value;
+                    unsigned short to = this->cpu->reg.pair.B;
                     to <<= 8;
+                    to |= this->cpu->reg.pair.C;
+                    unsigned short from = value;
+                    from <<= 8;
                     unsigned short size = this->cpu->reg.pair.D;
                     size <<= 8;
                     size |= this->cpu->reg.pair.E;

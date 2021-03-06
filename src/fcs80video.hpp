@@ -1,11 +1,9 @@
-// WIP
-
 /**
  * FAIRY COMPUTER SYSTEM 80 - Video Display Processor Emulator
  * -----------------------------------------------------------------------------
  * The MIT License (MIT)
  * 
- * Copyright (c) 2020 Yoji Suzuki.
+ * Copyright (c) 2021 Yoji Suzuki.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -54,8 +52,10 @@ class FCS80Video {
         struct Context {
             int bobo;
             int countV;
-            unsigned char ram[0x4000];
+            int iReserved;
             unsigned char countH;
+            unsigned char cReserved[3];
+            unsigned char ram[0x4000];
         } ctx;
 
         FCS80Video(void* arg, void (*detectEndOfFrame)(void* arg), void (*detectIRQ)(void* arg)) {
@@ -75,7 +75,10 @@ class FCS80Video {
             }
         }
 
-        inline void write(unsigned short addr, unsigned char value) { this->ctx.ram[addr & 0x3FFF] = value; }
+        inline void write(unsigned short addr, unsigned char value) {
+            addr &= 0x3FFF;
+            this->ctx.ram[addr] = value;
+        }
 
         inline void tick() {
             this->ctx.countH++;
@@ -86,10 +89,13 @@ class FCS80Video {
                 if (0 == this->ctx.countV) {
                     this->detectEndOfFrame(this->arg);
                 } else if (this->ctx.countV == this->getRegisterIRQ()) {
+                    printf("detect IRQ: %d\n", this->ctx.countV);
                     this->detectIRQ(this->arg);
                 }
             }
         }
+
+        void refreshDisplay() { for (int i = 8; i < 200; i++) this->renderScanline(i); }
 
     private:
         inline void renderScanline(int scanline) {
@@ -103,8 +109,7 @@ class FCS80Video {
         inline void renderBG(int scanline) {
             int y = scanline + this->getRegisterBgScrollY();
             unsigned short* display = &this->display[scanline * 240];
-            unsigned short* colorTable = getColorTableAddr();
-            int offset = (y / 8) * 64;
+            int offset = ((y + 8) / 8) * 32;
             unsigned char* nametbl = this->getBgNameTableAddr() + offset;
             unsigned char* attrtbl = this->getBgAttrTableAddr() + offset;
             unsigned short* colortbl = this->getColorTableAddr();
@@ -112,7 +117,10 @@ class FCS80Video {
                 offset = (x >> 3) & 0x1F;
                 unsigned char ptn = nametbl[offset];
                 unsigned char attr = attrtbl[offset];
-                unsigned char* chrtbl = this->getPatternTableAddr() + (ptn << 5) + ((y >> 3) << 2) + ((x & 7) >> 1);
+                unsigned char* chrtbl = this->getPatternTableAddr();
+                chrtbl += ptn << 5;
+                chrtbl += (y & 7) << 2;
+                chrtbl += (x & 7) >> 1;
                 int pal = x & 1 ? (*chrtbl) & 0x0F : ((*chrtbl) & 0xF0) >> 4;
                 pal += (attr & 0x0F) << 4;
                 *display = colortbl[pal];
@@ -120,9 +128,32 @@ class FCS80Video {
         }
 
         inline void renderFG(int scanline) {
+            int y = scanline + this->getRegisterFgScrollY();
+            unsigned short* display = &this->display[scanline * 240];
+            int offset = ((y + 8) / 8) * 32;
+            unsigned char* nametbl = this->getFgNameTableAddr() + offset;
+            unsigned char* attrtbl = this->getFgAttrTableAddr() + offset;
+            unsigned short* colortbl = this->getColorTableAddr();
+            for (int x = this->getRegisterFgScrollX() + 8, xx = 0; xx < 240; x++, xx++, display++) {
+                offset = (x >> 3) & 0x1F;
+                unsigned char ptn = nametbl[offset];
+                unsigned char attr = attrtbl[offset];
+                if (attr & 0x80) {
+                    unsigned char* chrtbl = this->getPatternTableAddr();
+                    chrtbl += ptn << 5;
+                    chrtbl += (y & 7) << 2;
+                    chrtbl += (x & 7) >> 1;
+                    int pal = x & 1 ? (*chrtbl) & 0x0F : ((*chrtbl) & 0xF0) >> 4;
+                    if (pal) {
+                        pal += (attr & 0x0F) << 4;
+                        *display = colortbl[pal];
+                    }
+                }
+            }
         }
 
         inline void renderSprites(int scanline) {
+            // TODO: need implement
         }
 };
 

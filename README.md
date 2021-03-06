@@ -102,6 +102,10 @@ Bit-layout:
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 |  g2   |  g1   |  g0   |  b4   |  b3   |  b2   |  b1   |  b0   |
 
+- r4 ~ r0 : Red (0 ~ 31)
+- g4 ~ g0 : Green (0 ~ 31)
+- b4 ~ b0 : Blue (0 ~ 31)
+
 #### Register #0: Scanline vertical counter (read only)
 
 - $00 ~ $07 : Top blanking (0 ~ 7)
