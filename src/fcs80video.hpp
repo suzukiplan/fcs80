@@ -119,9 +119,15 @@ class FCS80Video {
                 unsigned char attr = attrtbl[offset];
                 unsigned char* chrtbl = this->getPatternTableAddr();
                 chrtbl += ptn << 5;
-                chrtbl += (y & 7) << 2;
-                chrtbl += (x & 7) >> 1;
-                int pal = x & 1 ? (*chrtbl) & 0x0F : ((*chrtbl) & 0xF0) >> 4;
+                chrtbl += (attr & 0x40 ? 7 - (y & 7) : y & 7) << 2;
+                int pal;
+                if (attr & 0x20) {
+                    chrtbl += (7 - (x & 7)) >> 1;
+                    pal = x & 1 ? ((*chrtbl) & 0xF0) >> 4 : (*chrtbl) & 0x0F;
+                } else {
+                    chrtbl += (x & 7) >> 1;
+                    pal = x & 1 ? (*chrtbl) & 0x0F : ((*chrtbl) & 0xF0) >> 4;
+                }
                 pal += (attr & 0x0F) << 4;
                 *display = colortbl[pal];
             }
@@ -141,9 +147,15 @@ class FCS80Video {
                 if (attr & 0x80) {
                     unsigned char* chrtbl = this->getPatternTableAddr();
                     chrtbl += ptn << 5;
-                    chrtbl += (y & 7) << 2;
-                    chrtbl += (x & 7) >> 1;
-                    int pal = x & 1 ? (*chrtbl) & 0x0F : ((*chrtbl) & 0xF0) >> 4;
+                    chrtbl += (attr & 0x40 ? 7 - (y & 7) : y & 7) << 2;
+                    int pal;
+                    if (attr & 0x20) {
+                        chrtbl += (7 - (x & 7)) >> 1;
+                        pal = x & 1 ? ((*chrtbl) & 0xF0) >> 4 : (*chrtbl) & 0x0F;
+                    } else {
+                        chrtbl += (x & 7) >> 1;
+                        pal = x & 1 ? (*chrtbl) & 0x0F : ((*chrtbl) & 0xF0) >> 4;
+                    }
                     if (pal) {
                         pal += (attr & 0x0F) << 4;
                         *display = colortbl[pal];
