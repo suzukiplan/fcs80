@@ -16,4 +16,4 @@ void emu_vsync(void);
 void emu_destroy(void);
 const void* emu_saveState(size_t* size);
 void emu_loadState(const void* state, size_t size);
-void emu_dump();
+void emu_dump(void);
