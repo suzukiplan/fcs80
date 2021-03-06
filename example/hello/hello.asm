@@ -35,37 +35,31 @@ mainloop:
     ld b, a
 
     ; 左カーソルが押されているかチェック（押されている場合は左スクロール）
+    ld hl, $9602
     and %00100000
     jp z, mainloop_check_right
-    ld a, ($9602)
-    inc a
-    ld ($9602), a
+    inc (hl)
     jmp mainloop_check_up
 mainloop_check_right:
     ; 右カーソルが押されているかチェック（押されている場合は右スクロール）
     ld a, b
     and %00010000
     jp z, mainloop_check_up
-    ld a, ($9602)
-    dec a
-    ld ($9602), a
+    dec (hl)
 mainloop_check_up:
     ; 上カーソルが押されているかチェック（押されている場合は上スクロール）
+    ld hl, $9603
     ld a, b
     and %10000000
     jp z, mainloop_check_down
-    ld a, ($9603)
-    inc a
-    ld ($9603), a
+    inc (hl)
     jmp mainloop_check_end
 mainloop_check_down:
     ; 下カーソルが押されているかチェック（押されている場合は下スクロール）
     ld a, b
     and %01000000
     jp z, mainloop_check_end
-    ld a, ($9603)
-    dec a
-    ld ($9603), a
+    dec (hl)
 mainloop_check_end:
     jmp mainloop
 
