@@ -1,4 +1,4 @@
-org 0x0000
+org $0000
 
 .main
     ; 割り込み関連の初期化
@@ -11,19 +11,19 @@ org 0x0000
     ; パレットを初期化
     ld bc, 32
     ld hl, palette0_data
-    ld de, 0x9400
+    ld de, $9400
     ldir
 
-    ; PRG1 (0x2000) を Character Pattern Table (0xA000) に転送 (DMA)
-    ld bc, 0xa000
-    ld de, 0x2000
-    ld a, 0x20
-    out (0xc0), a
+    ; PRG1 ($2000) を Character Pattern Table ($A000) に転送 (DMA)
+    ld bc, $a000
+    ld de, $2000
+    ld a, $20
+    out ($c0), a
 
     ; 画面中央付近 (10,12) に "HELLO,WORLD!" を描画
     ld bc, 12
     ld hl, hello_text
-    ld de, 0x018a
+    ld de, 394 ; = 12 * 32 + 10
     ldir
 
     ; 無限ループ
@@ -32,15 +32,15 @@ end_loop:
 
 ; VBLANKになるまで待機
 .wait_vblank
-    ld hl, 0x9600
+    ld hl, $9600
 wait_vblank_loop:
     ld a, (hl)
-    cp 0xff
+    cp $ff
     jp nz, wait_vblank_loop
     ret
 
 palette0_data:
-    defb 0x00, 0x00, 0x44, 0x44, 0xaa, 0xaa, 0xff, 0xff, 0x00, 0x00, 0x44, 0x44, 0xaa, 0xaa, 0xff, 0xff, 0x00, 0x00, 0x44, 0x44, 0xaa, 0xaa, 0xff, 0xff, 0x00, 0x00, 0x44, 0x44, 0xaa, 0xaa, 0xff, 0xff
+    defw $0000, $4444, $AAAA, $FFFF, $0000, $4444, $AAAA, $FFFF, $0000, $4444, $AAAA, $FFFF, $0000, $4444, $AAAA, $FFFF
 
 hello_text:
     defb "HELLO,WORLD!"
