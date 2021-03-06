@@ -82,6 +82,18 @@ struct OAM {
 } oam[256];
 ```
 
+#### Palette Table
+
+- FCS80 has 16 palettes
+- 1 palette has 16 colors
+- 1 color = RGB555 (16bit)
+
+Bit-layout:
+
+| Bit-15 | Bit-14 | Bit-13 | Bit-12 | Bit-11 | Bit-10 | Bit-9 | Bit-8 | Bit-7 | Bit-6 | Bit-5 | Bit-4 | Bit-3 | Bit-2 | Bit-1 | Bit-0 |
+| :----: | :----: | :----: | :----: | :----: | :----: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+|   -    |   r4   |   r3   |   r2   |   r1   |   r0   |  g4   |  g3   |  g2   |  g1   |  g0   |  b4   |  b3   |  b2   |  b1   |  b0   |
+
 #### Register #0: Scanline vertical counter (read only)
 
 - $00 ~ $07 : Top blanking (0 ~ 7)
