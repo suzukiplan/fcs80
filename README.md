@@ -44,7 +44,8 @@
 |     $9604     |     $1604     | Register #4: FG Scroll X                                |
 |     $9605     |     $1605     | Register #5: FG Scroll Y                                |
 |     $9606     |     $1606     | Register #6: IRQ scanline position (NOTE: 0 is disable) |
-| $9607 ~ $9FFF | $1607 ~ $1FFF | Reserved (cannot write and always return $FF)           |
+|     $9607     |     $1607     | Register #7: Status (read only)                         |
+| $9608 ~ $9FFF | $1608 ~ $1FFF | Reserved                                                |
 | $A000 ~ $BFFF | $2000 ~ $3FFF | Character Pattern Table (32 x 256)                      |
 
 #### Writing priorities
@@ -112,23 +113,33 @@ Bit-layout:
 - $08 ~ $C7 : Active scanline (8 ~ 199)
 - $FF : Bottom blanking (200 ~ 261)
 
-(How to detect VBlank)
-
-```z80
-.wait_vblank
-    ld hl, $9600
-wait_vblank_loop:
-    ld a, (hl)
-    cp $ff
-    jp nz, wait_vblank_loop
-    ret
-```
-
 #### Register #1: Scanline horizontal counter (read only)
 
 - $00 ~ $07 : Left blanking
 - $08 ~ $F7 : Active (rendering pixel position: 8 ~ 247)
 - $F8 ~ $FF : Right blanking
+
+#### Register #7: Status (read only)
+
+| Bit-7 | Bit-6 | Bit-5 | Bit-4 | Bit-3 | Bit-2 | Bit-1 | Bit-0 |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+|  BL   |   -   |   -   |   -   |   -   |   -   |   -   |   -   |
+
+- BL: 1 = start vblank
+
+NOTE: Status register always reset after read.
+
+(How to detect VBlank)
+
+```z80
+.wait_vblank
+    ld hl, $9607
+wait_vblank_loop:
+    ld a, (hl)
+    and $80
+    jp nz, wait_vblank_loop
+    ret
+```
 
 #### Character Pattern Table
 
