@@ -46,6 +46,10 @@ class FCS80Video {
         inline unsigned char getRegisterFgScrollX() { return this->ctx.ram[0x1604]; }
         inline unsigned char getRegisterFgScrollY() { return this->ctx.ram[0x1605]; }
         inline unsigned char getRegisterIRQ() { return this->ctx.ram[0x1606]; }
+        inline bool isAttrVisible(unsigned char attr) { return attr & 0x80; }
+        inline bool isAttrFlipH(unsigned char attr) { return attr & 0x40; }
+        inline bool isAttrFlipV(unsigned char attr) { return attr & 0x20; }
+        inline int paletteFromAttr(unsigned char attr) { return (attr & 0x0F) << 4; }
 
     public:
         unsigned short display[240 * 192];
@@ -126,17 +130,16 @@ class FCS80Video {
                 unsigned char attr = attrtbl[offset];
                 unsigned char* chrtbl = this->getPatternTableAddr();
                 chrtbl += ptn << 5;
-                chrtbl += (attr & 0x40 ? 7 - (y & 7) : y & 7) << 2;
+                chrtbl += (this->isAttrFlipV(attr) ? 7 - (y & 7) : y & 7) << 2;
                 int pal;
-                if (attr & 0x20) {
+                if (this->isAttrFlipH(attr)) {
                     chrtbl += (7 - (x & 7)) >> 1;
                     pal = x & 1 ? ((*chrtbl) & 0xF0) >> 4 : (*chrtbl) & 0x0F;
                 } else {
                     chrtbl += (x & 7) >> 1;
                     pal = x & 1 ? (*chrtbl) & 0x0F : ((*chrtbl) & 0xF0) >> 4;
                 }
-                pal += (attr & 0x0F) << 4;
-                *display = colortbl[pal];
+                *display = colortbl[pal + this->paletteFromAttr(attr)];
             }
         }
 
@@ -151,22 +154,20 @@ class FCS80Video {
                 offset = (x >> 3) & 0x1F;
                 unsigned char ptn = nametbl[offset];
                 unsigned char attr = attrtbl[offset];
-                if (attr & 0x80) {
-                    unsigned char* chrtbl = this->getPatternTableAddr();
-                    chrtbl += ptn << 5;
-                    chrtbl += (attr & 0x40 ? 7 - (y & 7) : y & 7) << 2;
-                    int pal;
-                    if (attr & 0x20) {
-                        chrtbl += (7 - (x & 7)) >> 1;
-                        pal = x & 1 ? ((*chrtbl) & 0xF0) >> 4 : (*chrtbl) & 0x0F;
-                    } else {
-                        chrtbl += (x & 7) >> 1;
-                        pal = x & 1 ? (*chrtbl) & 0x0F : ((*chrtbl) & 0xF0) >> 4;
-                    }
-                    if (pal) {
-                        pal += (attr & 0x0F) << 4;
-                        *display = colortbl[pal];
-                    }
+                if (!this->isAttrVisible(attr)) continue;
+                unsigned char* chrtbl = this->getPatternTableAddr();
+                chrtbl += ptn << 5;
+                chrtbl += (this->isAttrFlipV(attr) ? 7 - (y & 7) : y & 7) << 2;
+                int pal;
+                if (this->isAttrFlipH(attr)) {
+                    chrtbl += (7 - (x & 7)) >> 1;
+                    pal = x & 1 ? ((*chrtbl) & 0xF0) >> 4 : (*chrtbl) & 0x0F;
+                } else {
+                    chrtbl += (x & 7) >> 1;
+                    pal = x & 1 ? (*chrtbl) & 0x0F : ((*chrtbl) & 0xF0) >> 4;
+                }
+                if (pal) {
+                    *display = colortbl[pal + this->paletteFromAttr(attr)];
                 }
             }
         }
