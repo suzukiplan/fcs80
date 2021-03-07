@@ -9,7 +9,7 @@
 - GNU make
 - clang (for building the depended tools)
 - [z88dk](https://z88dk.org/site/)
-  - require a `z80asm` command in this example
+  - require `z80asm` command in this example
 
 ### Build
 
