@@ -13,14 +13,17 @@ int writeFile(FILE* out, const char* inputFile, char* reason)
     fseek(in, 0, SEEK_END);
     size = ftell(in);
     fseek(in, 0, SEEK_SET);
-    if (size < 1 || 8192 < size) {
+    if (size < 1) {
         sprintf(reason, "invalid file size (%ld)", size);
         fclose(in);
         return -1;
     }
-    memset(buf, 0, sizeof(buf));
-    fread(buf, 1, size, in);
-    fwrite(buf, 1, sizeof(buf), out);
+    while (0 < size) {
+        memset(buf, 0, sizeof(buf));
+        fread(buf, 1, 8192 < size ? 8192 : size, in);
+        fwrite(buf, 1, sizeof(buf), out);
+        size -= 8192;
+    }
     return 0;
 }
 
