@@ -16,7 +16,12 @@ This repository provides an official emulator for the FCS80 core system.
 - [4. ROM](#4-rom)
   - [4-1. File Format](#4-1-file-format)
 - [5. Programming Guide](#5-programming-guide)
+  - [5-1. Make your development environment](#5-1-make-your-development-environment)
+  - [5-2. Example](#5-2-example)
 - [6. HAL Implementation Guide](#6-hal-implementation-guide)
+  - [6-1. Integrate it into your project](#6-1-integrate-it-into-your-project)
+  - [6-2. How to use the FCS80 emulator](#6-2-how-to-use-the-fcs80-emulator)
+  - [6-3. Example](#6-3-example)
 
 ## 1. Specification
 
