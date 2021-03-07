@@ -3,6 +3,21 @@
 FAIRY COMPUTER SYSTEM 80 (FCS80) is a new retro game machine equipped with the Z80 and AY-3-8910, the actual technology of the 8-bit era, and VDP (FCS80-VIDEO), which has an easy-to-use interface with the Z80.
 This repository provides an official emulator for the FCS80 core system.
 
+## Table of content
+
+- [1. Specification](#1-specification)
+- [2. Memory Map](#2-memory-map)
+  - [2-1. CPU Memory](#2-1-cpu-memory)
+  - [2-2. VRAM](#2-2-vram)
+- [3. I/O map](#3-io-map)
+  - [3-1. $A0~$A2: AY-3-8910](#3-1-a0a2-ay-3-8910)
+  - [3-2. $B0~$B3: Bank switch](#3-2-b0b3-bank-switch)
+  - [3-3. $C0: High Speed DMA (Bank to VRAM)](3-3-c0-high-speed-dma-bank-to-vram)
+- [4. ROM](#4-rom)
+  - [4-1. File Format](#4-1-file-format)
+- [5. Programming Guide](#5-programming-guide)
+- [6. HAL Implementation Guide](#6-hal-implementation-guide)
+
 ## 1. Specification
 
 - CPU: Z80A (3579545Hz)
@@ -282,3 +297,69 @@ The ROM of the bank number corresponding to the value written to the port is tra
 - The first bank (Bank No. 0) must contain the program.
 - The second of later banks (Bank No. 1 to 255) contain the program or data.
 - The size of the ROM file ranges from a minimum of 8 KB (1 bank) to 2 MB (256 banks)
+
+## 5. Programming Guide
+
+This chapter will guide you on how to implement a game that runs on the FCS80.
+
+### 5-1. Make your development environment
+
+- Z80 assembler (recommended: [z88dk](https://z88dk.org/site/))
+- Graphic editor (recommended: [Asprite](https://store.steampowered.com/app/431730/Aseprite))
+
+### 5-2. Example
+
+| Name                             | Description                                                              |
+| :------------------------------- | :----------------------------------------------------------------------- |
+| [Hello, World!](./example/hello) | Display "Hello, World!" in the BG, and scroll it by the input of JoyPad. |
+
+## 6. HAL Implementation Guide
+
+This chapter guides you through the implementation of a program to run the FCS80 emulator.
+The FCS80 emulator provided in this repository can be compiled on any platform with LLVM using the clang compiler. (ex: Windows, macOS, Linux, Android, iOS, Nintendo Switch, SONY PlayStation, Microsoft XBOX etc.)
+
+### 6-1. Integrate it into your project
+
+Please incorporate the [modules under the src directory of this repository](./src) into your project.
+
+### 6-2. How to use the FCS80 emulator
+
+```c++
+#include "fcs80.hpp"
+
+{
+    // make instance of FCS80 emulator
+    FCS80 fcs80;
+
+    // load ROM image
+    fcs80.loadRomFile("path-of-rom-file");
+
+    // tick 1 frame
+    unsigned char pad1 = 0;
+    unsigned char pad2 = 0;
+    pad1 |= FCS80_JOYPAD_UP | FCS80_JOYPAD_T1; // ex: pushing UP and A button of 1P side
+    fcs80.tick(pad1, pad2);
+
+    // get display buffer (240x192 of RGB555)
+    unsigned short* display = fcs80.getDisplay();
+
+    // dequeue sound buffer (44100Hz 2ch 16bit PCM data)
+    size_t sizeBytesOfSoundData;
+    void* sound = fcs80.dequeuSoundBuffer(&sizeBytesOfSoundData);
+
+    // save state
+    size_t stateSize = fcs80.getStateSize();
+    void* stateBuffer = malloc(stateSize);
+    fcs80.saveState(stateBuffer);
+
+    // load state
+    fcs80.loadState(stateBuffer);
+
+    // reset
+    fcs80.reset();
+}
+```
+
+### 6-3. Example
+
+- [macOS (Cocoa)](./hal/cocoa)
