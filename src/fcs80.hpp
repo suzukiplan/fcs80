@@ -144,8 +144,7 @@ class FCS80 {
 
         void tick(unsigned char pad1, unsigned char pad2)
         {
-            this->psg->ctx.reg[14] = pad1;
-            this->psg->ctx.reg[15] = pad2;
+            this->psg->setPads(pad1, pad2);
             this->cpu->execute(0x7FFFFFFF);
         }
 
