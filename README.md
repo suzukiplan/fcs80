@@ -1,5 +1,8 @@
 # [WIP] FAIRY COMPUTER SYSTEM 80
 
+FAIRY COMPUTER SYSTEM 80 (FCS80) is a new retro game machine equipped with the Z80 and AY-3-8910, the actual technology of the 8-bit era, and VDP (FCS80-VIDEO), which has an easy-to-use interface with the Z80.
+This repository provides an official emulator for the FCS80 core system.
+
 ## Specification
 
 - CPU: Z80A (3579545Hz)
