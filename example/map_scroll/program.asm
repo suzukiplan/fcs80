@@ -60,6 +60,7 @@ mainloop:
     ld ($C002), hl
     jmp mainloop_set_nametbl
 mainloop_jump_to_head:
+    ; 先頭に達したのでループさせる
     ld hl, $5FE0
     ld ($C002), hl
 mainloop_set_nametbl:
@@ -75,21 +76,11 @@ mainloop_set_nametbl:
     ld a, d
     or $80
     ld d, a
-
     ld bc, 32
     ldir
 
 mainloop_next:
     jmp mainloop
-
-.dec_hl_32
-    push b
-    ld b, 32
-dec_hl_32_loop:
-    dec hl
-    djnz dec_hl_32_loop
-    pop b
-    ret
 
 ; VBLANKになるまで待機
 .wait_vblank
