@@ -100,7 +100,6 @@ class FCS80Video {
                 if (0 == this->ctx.countV) {
                     this->detectEndOfFrame(this->arg);
                 } else if (this->ctx.countV == this->getRegisterIRQ()) {
-                    printf("detect IRQ: %d\n", this->ctx.countV);
                     this->detectIRQ(this->arg);
                 }
             }
