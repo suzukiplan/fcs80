@@ -1,8 +1,8 @@
 # Hello, World
 
-|         Preview         |
-| :---------------------: |
-| ![preview](preview.png) |
+|        Preview        |
+| :-------------------: |
+| ![preview](hello.png) |
 
 ## How to build
 
