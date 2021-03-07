@@ -317,6 +317,7 @@ This chapter will guide you on how to implement a game that runs on the FCS80.
 | Name                             | Description                                                              |
 | :------------------------------- | :----------------------------------------------------------------------- |
 | [Hello, World!](./example/hello) | Display "Hello, World!" in the BG, and scroll it by the input of JoyPad. |
+| [Sprite Test](./example/sprite)  | Render and move 256 sprites                                              |
 
 ## 6. HAL Implementation Guide
 
