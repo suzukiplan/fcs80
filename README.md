@@ -202,7 +202,7 @@ Bit layout:
 |    14    |  o  |  -  | JoyPad 1                       |
 |    15    |  o  |  -  | JoyPad 2                       |
 
-#### Tone generator
+#### Register 0~5: Tone generator
 
 | Tone | Oct-1 | Oct-2 | Oct-3 | Oct-4 | Oct-5 | Oct-6 | Oct-7 | Oct-8 |
 | :--: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
@@ -219,13 +219,13 @@ Bit layout:
 |  A#  | $780  | $3C0  | $1E0  |  $F0  |  $78  |  $3C  |  $1E  |  $0F  |
 |  B   | $714  | $38A  | $1C5  |  $E3  |  $71  |  $39  |  $1C  |  $0E  |
 
-#### Noise generator
+#### Register 6: Noise generator
 
 | Bit-7 | Bit-6 | Bit-5 | Bit-4 | Bit-3 | Bit-2 | Bit-1 | Bit-0 |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 |   -   |   -   |   -   |  n4   |  n3   |  n2   |  n1   |  n0   |
 
-#### Mixing
+#### Register 7: Mixing
 
 | Bit-7 | Bit-6 | Bit-5 | Bit-4 | Bit-3 | Bit-2 | Bit-1 | Bit-0 |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
@@ -237,6 +237,18 @@ Bit layout:
 - TE2: Ch2 tone enable (1: enable, 0: disable)
 - TE1: Ch1 tone enable (1: enable, 0: disable)
 - TE0: Ch0 tone enable (1: enable, 0: disable)
+
+#### Register 8~10: Volume
+
+(TODO: need describe)
+
+#### Reigster 11~13: Envelope
+
+(TODO: need describe)
+
+#### Register 14~15: JoyPad
+
+(TODO: need describe)
 
 ### $C0: High Speed DMA (Bank to VRAM)
 
