@@ -51,7 +51,7 @@
 #### Writing priorities
 
 1. FG
-2. Sprite (NOTE: the sprite with the highest OAM index value will be displayed first)
+2. Sprite
 3. BG
 
 #### Name Table & Scroll (BG/FG)

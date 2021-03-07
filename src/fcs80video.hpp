@@ -46,11 +46,11 @@ class FCS80Video {
         inline unsigned char getRegisterFgScrollX() { return this->ctx.ram[0x1604]; }
         inline unsigned char getRegisterFgScrollY() { return this->ctx.ram[0x1605]; }
         inline unsigned char getRegisterIRQ() { return this->ctx.ram[0x1606]; }
+        inline unsigned char* getOamAddr() { return &this->ctx.ram[0x1000]; }
         inline bool isAttrVisible(unsigned char attr) { return attr & 0x80; }
         inline bool isAttrFlipH(unsigned char attr) { return attr & 0x40; }
         inline bool isAttrFlipV(unsigned char attr) { return attr & 0x20; }
         inline int paletteFromAttr(unsigned char attr) { return (attr & 0x0F) << 4; }
-
     public:
         unsigned short display[240 * 192];
         struct Context {
@@ -110,10 +110,9 @@ class FCS80Video {
     private:
         inline void renderScanline(int scanline) {
             if (scanline < 8 || 200 <= scanline) return; // blanking
-            scanline -= 8;
-            this->renderBG(scanline);
+            this->renderBG(scanline - 8);
             this->renderSprites(scanline);
-            this->renderFG(scanline);
+            this->renderFG(scanline - 8);
         }
 
         inline void renderBG(int scanline) {
@@ -172,7 +171,32 @@ class FCS80Video {
         }
 
         inline void renderSprites(int scanline) {
-            // TODO: need implement
+            unsigned char* oam = this->getOamAddr();
+            unsigned short* display = &this->display[(scanline - 8) * 240];
+            unsigned short* colortbl = this->getColorTableAddr();
+            oam += 255 * 4;
+            for (int i = 0; i < 256; i++, oam -= 4) {
+                if (!this->isAttrVisible(oam[3])) continue;
+                if (0 == oam[1] || 248 <= oam[1] || scanline < oam[0] || oam[0] + 8 <= scanline) continue;
+                unsigned char* chrtbl = this->getPatternTableAddr();
+                chrtbl += oam[2] << 5;
+                int dy = scanline - oam[0];
+                chrtbl += (this->isAttrFlipV(oam[3]) ? 7 - (dy & 7) : dy & 7) << 2;
+                bool flipH = this->isAttrFlipH(oam[3]);
+                for (int j = 0, x = oam[1]; j < 8; j++, x++) {
+                    if (x < 8 || 248 <= x) continue;
+                    int pal;
+                    if (flipH) {
+                        int jj = 7 - j;
+                        pal = jj & 1 ? (chrtbl[jj >> 1] & 0xF0) >> 4 : chrtbl[jj >> 1] & 0x0F;
+                    } else {
+                        pal = j & 1 ? chrtbl[j >> 1] & 0x0F : (chrtbl[j >> 1] & 0xF0) >> 4;
+                    }
+                    if (pal) {
+                        display[x - 8] = colortbl[pal + this->paletteFromAttr(oam[3])];
+                    }
+                }
+            }
         }
 };
 
