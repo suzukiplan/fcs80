@@ -178,6 +178,63 @@ Bit layout:
 | $B3  |  o  |  o  | PRG3 bank switch (default: $03)                       |
 | $C0  |  -  |  o  | High Speed DMA (ROM to VRAM: Character Pattern Table) |
 
+### $A0~$A2: AY-3-8910
+
+| Register |  I  |  O  | Feature                        |
+| :------: | :-: | :-: | :----------------------------- |
+|    0     |  o  |  o  | Ch0 tone generator (low 8bit)  |
+|    1     |  o  |  o  | Ch0 tone generator (high 4bit) |
+|    2     |  o  |  o  | Ch1 tone generator (low 8bit)  |
+|    3     |  o  |  o  | Ch1 tone generator (high 4bit) |
+|    4     |  o  |  o  | Ch2 tone generator (low 8bit)  |
+|    5     |  o  |  o  | Ch2 tone generator (high 4bit) |
+|    6     |  o  |  o  | Noise generator                |
+|    7     |  o  |  o  | Mixing                         |
+|    8     |  o  |  o  | Ch0 volume                     |
+|    9     |  o  |  o  | Ch1 volume                     |
+|    10    |  o  |  o  | Ch2 volume                     |
+|    11    |  o  |  o  | Envelope period (low 8bit)     |
+|    12    |  o  |  o  | Envelope period (high 8bit)    |
+|    13    |  o  |  o  | Envelope pattern               |
+|    14    |  o  |  -  | JoyPad 1                       |
+|    15    |  o  |  -  | JoyPad 2                       |
+
+#### Tone generator
+
+| Tone | Oct-1 | Oct-2 | Oct-3 | Oct-4 | Oct-5 | Oct-6 | Oct-7 | Oct-8 |
+| :--: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+|  C   | $D5D  | $6AF  | $357  | $1AC  |  $D6  |  $6B  |  $35  |  $1B  |
+|  C#  | $C9C  | $64E  | $327  | $194  |  $CA  |  $65  |  $32  |  $19  |
+|  D   | $BE7  | $5F4  | $2FA  | $17D  |  $BE  |  $5F  |  $30  |  $18  |
+|  D#  | $B3C  | $59E  | $2CF  | $168  |  $B4  |  $5A  |  $2D  |  $16  |
+|  E   | $A9B  | $54E  | $2A7  | $153  |  $AA  |  $55  |  $2A  |  $15  |
+|  F   | $A02  | $501  | $281  | $140  |  $A0  |  $50  |  $28  |  $14  |
+|  F#  | $973  | $4BA  | $25D  | $12E  |  $97  |  $4C  |  $26  |  $13  |
+|  G   | $8EB  | $476  | $23B  | $11D  |  $8F  |  $47  |  $24  |  $12  |
+|  G#  | $86B  | $436  | $21B  | $10D  |  $87  |  $43  |  $22  |  $11  |
+|  A   | $7F2  | $3F9  | $1FD  |  $FE  |  $7F  |  $40  |  $20  |  $10  |
+|  A#  | $780  | $3C0  | $1E0  |  $F0  |  $78  |  $3C  |  $1E  |  $0F  |
+|  B   | $714  | $38A  | $1C5  |  $E3  |  $71  |  $39  |  $1C  |  $0E  |
+
+#### Noise generator
+
+| Bit-7 | Bit-6 | Bit-5 | Bit-4 | Bit-3 | Bit-2 | Bit-1 | Bit-0 |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+|   -   |   -   |   -   |  n4   |  n3   |  n2   |  n1   |  n0   |
+
+#### Mixing
+
+| Bit-7 | Bit-6 | Bit-5 | Bit-4 | Bit-3 | Bit-2 | Bit-1 | Bit-0 |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+|   1   |   0   |  NE2  |  NE1  |  NE0  |  TE2  |  TE1  |  TE0  |
+
+- NE2: Ch2 noise enable (1: enable, 0: disable)
+- NE1: Ch1 noise enable (1: enable, 0: disable)
+- NE0: Ch0 noise enable (1: enable, 0: disable)
+- TE2: Ch2 tone enable (1: enable, 0: disable)
+- TE1: Ch1 tone enable (1: enable, 0: disable)
+- TE0: Ch0 tone enable (1: enable, 0: disable)
+
 ### $C0: High Speed DMA (Bank to VRAM)
 
 The ROM of the bank number corresponding to the value written to the port is transferred to the Character Pattern Table of VRAM.
