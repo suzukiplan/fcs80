@@ -18,6 +18,7 @@ This repository provides an official emulator for the FCS80 core system.
 - [5. Programming Guide](#5-programming-guide)
   - [5-1. Make your development environment](#5-1-make-your-development-environment)
   - [5-2. Example](#5-2-example)
+  - [5-3. Notes for keeping the compatible](#5-3-notes-for-keeping-the-compatible)
 - [6. HAL Implementation Guide](#6-hal-implementation-guide)
   - [6-1. Integrate it into your project](#6-1-integrate-it-into-your-project)
   - [6-2. How to use the FCS80 emulator](#6-2-how-to-use-the-fcs80-emulator)
@@ -318,6 +319,13 @@ This chapter will guide you on how to implement a game that runs on the FCS80.
 | :------------------------------- | :----------------------------------------------------------------------- |
 | [Hello, World!](./example/hello) | Display "Hello, World!" in the BG, and scroll it by the input of JoyPad. |
 | [Sprite Test](./example/sprite)  | Render and move 256 sprites                                              |
+
+### 5-3. Notes for keeping the compatible
+
+- Do not access to the Reserved area of [VRAM](#2-2-vram)
+- Do not access to the undocumented [I/O](#3-io-map)
+- Do not use the Refresh Register (`LD A, R` instruction)
+  - RefreshRegister (RR) has different values depending on the type of Z80 CPU. Compatibility will be maintained as long as you continue to use the official emulator, but there is a possibility that compatibility will not be maintained when the actual device or an unofficial emulator appears in the future.
 
 ## 6. HAL Implementation Guide
 
