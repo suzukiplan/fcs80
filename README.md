@@ -3,7 +3,7 @@
 FAIRY COMPUTER SYSTEM 80 (FCS80) is a new retro game machine equipped with the Z80 and AY-3-8910, the actual technology of the 8-bit era, and VDP (FCS80-VIDEO), which has an easy-to-use interface with the Z80.
 This repository provides an official emulator for the FCS80 core system.
 
-## Specification
+## 1. Specification
 
 - CPU: Z80A (3579545Hz)
 - PPU: FCS80-VDP (4024320Hz)
@@ -17,9 +17,9 @@ This repository provides an official emulator for the FCS80 core system.
 - RAM: 16KB
 - VRAM: 16KB
 
-## Memory Map
+## 2. Memory Map
 
-### CPU Memory
+### 2-1. CPU Memory
 
 |    Address    | Map                                 |
 | :-----------: | :---------------------------------- |
@@ -30,7 +30,7 @@ This repository provides an official emulator for the FCS80 core system.
 | $8000 ~ $BFFF | VRAM (16KB)                         |
 | $C000 ~ $FFFF | RAM (16KB)                          |
 
-### VRAM
+### 2-2. VRAM
 
 |  CPU address  | VRAM address  | Map                                                     |
 | :-----------: | :-----------: | :------------------------------------------------------ |
@@ -168,7 +168,7 @@ Bit layout:
 - `xx` : Color code (0 ~ 15)
 - Color code 0 is transparent in FG and/or Sprite (not transparent in BG)
 
-## I/O map
+## 3. I/O map
 
 | Port |  I  |  O  | Description                                           |
 | :--: | :-: | :-: | :---------------------------------------------------- |
@@ -181,7 +181,7 @@ Bit layout:
 | $B3  |  o  |  o  | PRG3 bank switch (default: $03)                       |
 | $C0  |  -  |  o  | High Speed DMA (ROM to VRAM: Character Pattern Table) |
 
-### $A0~$A2: AY-3-8910
+### 3-1. $A0~$A2: AY-3-8910
 
 | Register |  I  |  O  | Feature                        |
 | :------: | :-: | :-: | :----------------------------- |
@@ -250,7 +250,11 @@ Bit layout:
 
 (TODO: need describe)
 
-### $C0: High Speed DMA (Bank to VRAM)
+### 3-2. $B0~$B3: Bank switch
+
+(TODO: need describe)
+
+### 3-3. $C0: High Speed DMA (Bank to VRAM)
 
 The ROM of the bank number corresponding to the value written to the port is transferred to the Character Pattern Table of VRAM.
 
@@ -261,9 +265,9 @@ The ROM of the bank number corresponding to the value written to the port is tra
     out ($C0), a
 ```
 
-## ROM
+## 4. ROM
 
-### File Format
+### 4-1. File Format
 
 | Bank No. | Size | Content                        |
 | :------: | :--: | :----------------------------- |
