@@ -331,7 +331,7 @@ This chapter will guide you on how to implement a game that runs on the FCS80.
 ## 6. HAL Implementation Guide
 
 This chapter guides you through the implementation of a program to run the FCS80 emulator.
-The FCS80 emulator provided in this repository can be compiled on any platform with LLVM using the clang compiler. (ex: Windows, macOS, Linux, Android, iOS, Nintendo Switch, SONY PlayStation, Microsoft XBOX etc.)
+The FCS80 emulator provided in this repository can be compiled on any platform with GNU Compiler Collection or LLVM using the clang compiler. (ex: Windows, macOS, Linux, Android, iOS, Nintendo Switch, Sony PlayStation 3/4/5, Microsoft XBOX etc.)
 
 ### 6-1. Integrate it into your project
 
