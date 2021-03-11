@@ -51,6 +51,11 @@ This repository provides an official emulator for the FCS80 core system.
 | $8000 ~ $BFFF | VRAM (16KB)                         |
 | $C000 ~ $FFFF | RAM (16KB)                          |
 
+> _Discussion about there is no SRAM:_
+> The FCS80 does not have Static-RAM (also known as battery backup).
+> This is based on the idea that saves and loads are satisfied by state saves and state loads.
+> There may be cases where you want to keep high scores locally, but for leaderboards, I believe it is preferable to get them from outside the FCS80 (by reading RAM, etc.) and implement them outside the game.
+
 ### 2-2. VRAM
 
 |  CPU address  | VRAM address  | Map                                                     |
