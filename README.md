@@ -337,6 +337,9 @@ The FCS80 emulator provided in this repository can be compiled on any platform w
 
 Please incorporate the [modules under the src directory of this repository](./src) into your project.
 
+> Since all FCS80 emulator modules are provided in C++ header files (hpp), there is no need to add the modules to be compiled to the project.
+> In other words, you can incorporate them by simply adding a reference to the include path (-I option in clang++ or include_directories in cmake) as a minimum support method.
+
 ### 6-2. How to use the FCS80 emulator
 
 ```c++
