@@ -92,7 +92,7 @@ class FCS80 {
             memset(&this->ctx, 0, sizeof(this->ctx));
             for (int i = 0; i < 4; i++) this->ctx.romBank[i] = i;
             this->vdp->reset();
-            this->psg->reset(1);
+            this->psg->reset(4);
             memset(&this->cpu->reg, 0, sizeof(this->cpu->reg));
             this->cpu->reg.SP = 0xFFFF;
             memset(this->soundBuffer, 0, sizeof(this->soundBuffer));
