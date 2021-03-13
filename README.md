@@ -326,6 +326,7 @@ This chapter will guide you on how to implement a game that runs on the FCS80.
 | [Sprite Test](./example/sprite)          | Render and move 256 sprites                                                                      |
 | [Map Scroll](./example/map_scroll)       | View and scroll through map data created with the [Tiled Map Editor](https://www.mapeditor.org). |
 | [Raster Scroll](./example/raster_scroll) | Shake the screen by rewriting the scroll X for each scanline.                                    |
+| [PSG Test](./example/psg)                | Play 8 bars of Twinkle Twinkle Little Star on PSG with accompaniment.                            |
 
 ### 5-3. Notes for keeping the compatible
 
