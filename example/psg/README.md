@@ -15,7 +15,7 @@
 ### Build
 
 ```zsh
-cd fcs80/example/hello
+cd fcs80/example/psg
 make
 ```
 
