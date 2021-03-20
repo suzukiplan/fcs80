@@ -199,8 +199,9 @@ class AY8910
                 this->ctx.tCounter[ch] -= this->ctx.tPeriod[ch];
                 this->ctx.tUp[ch] ^= 1;
             }
-        } else
+        } else {
             this->ctx.tUp[ch] = 1;
+        }
         if (((mask & 0x01) || this->ctx.tUp[ch]) && ((mask & 0x08) || this->ctx.nUp)) {
             volume = this->ctx.reg[8 + ch] << 1;
             this->ctx.mix[ch] = volume & 0x20 ? this->levels[this->ctx.eState] : this->levels[volume & 0x1F];
