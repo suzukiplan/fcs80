@@ -56,10 +56,9 @@ class FCS80Video {
         struct Context {
             int bobo;
             int countV;
-            int iReserved;
-            unsigned char countH;
+            int countH;
             unsigned char status;
-            unsigned char cReserved[2];
+            unsigned char cReserved[3];
             unsigned char ram[0x4000];
         } ctx;
 
@@ -75,7 +74,7 @@ class FCS80Video {
             addr &= 0x3FFF;
             switch (addr) {
                 case 0x1600: return this->ctx.countV < 200 ? this->ctx.countV : 0xFF;
-                case 0x1601: return this->ctx.countH;
+                case 0x1601: return this->ctx.countH < 256 ? this->ctx.countH : 0xFF;
                 case 0x1607: {
                     unsigned char result = this->ctx.status;
                     this->ctx.status = 0;
@@ -92,6 +91,7 @@ class FCS80Video {
 
         inline void tick() {
             this->ctx.countH++;
+            this->ctx.countH %= 342;
             if (0 == this->ctx.countH) {
                 this->renderScanline(this->ctx.countV);
                 this->ctx.countV++;
