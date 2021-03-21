@@ -160,6 +160,38 @@ psgdrv_execute_env2:
     ld a, c
     dec a
     out (PSGDRV_AY_WRITE), a
+psgdrv_execute_env2_pd:
+    ld a, (PSGDRV_PITCH_DOWN_CH2)
+    and $FF
+    jp z, psgdrv_execute_env2_pu
+    ld b, a
+    ld a, $04
+    out (PSGDRV_AY_LATCH), a
+    in a, (PSGDRV_AY_READ)
+    add b
+    out (PSGDRV_AY_WRITE), a
+    ld a, $05
+    out (PSGDRV_AY_LATCH), a
+    in a, (PSGDRV_AY_READ)
+    adc 0
+    and $0F
+    out (PSGDRV_AY_WRITE), a
+psgdrv_execute_env2_pu:
+    ld a, (PSGDRV_PITCH_UP_CH2)
+    and $FF
+    jp z, psgdrv_execute_env3
+    ld b, a
+    ld a, $04
+    out (PSGDRV_AY_LATCH), a
+    in a, (PSGDRV_AY_READ)
+    sub b
+    out (PSGDRV_AY_WRITE), a
+    ld a, $05
+    out (PSGDRV_AY_LATCH), a
+    in a, (PSGDRV_AY_READ)
+    sbc 0
+    and $0F
+    out (PSGDRV_AY_WRITE), a
 psgdrv_execute_env3:
     ; ウェイトカウンタの減算
     ld a, (PSGDRV_WAIT_COUNTER)
@@ -198,6 +230,7 @@ psgdrv_execute_2:
 
 ; シーケンスデータのパース処理
 .psgdrv_parse
+psgdrv_parse_tone0:
     ld b, a
     and $F0
     jp nz, psgdrv_parse_tone1
