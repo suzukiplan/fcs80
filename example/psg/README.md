@@ -37,6 +37,8 @@ make
 |  $63   |  $xx   | Wait $xx frames (1 frame = 1/60 sec)                |
 |  $64   |  $xx   | Noise = $xx                                         |
 |  $65   |  $xx   | Mixing = $xx                                        |
+|  $66   |   -    | Set loop mark                                       |
+|  $67   |   -    | Jump to loop mark                                   |
 |  $FF   |   -    | End of sequence data                                |
 
 ## RAM usage

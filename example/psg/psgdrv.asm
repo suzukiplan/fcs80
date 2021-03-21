@@ -12,6 +12,8 @@ defc PSGDRV_VOL_DOWN_INTERVAL_CH2 = PSGDRV_RAM_HEAD + 5
 defc PSGDRV_VOL_DOWN_COUNTER_CH0 = PSGDRV_RAM_HEAD + 6
 defc PSGDRV_VOL_DOWN_COUNTER_CH1 = PSGDRV_RAM_HEAD + 7
 defc PSGDRV_VOL_DOWN_COUNTER_CH2 = PSGDRV_RAM_HEAD + 8
+defc PSGDRV_LOOP_MARK = PSGDRV_RAM_HEAD + 9
+defc PSGDRV_LOOP_MARK_H = PSGDRV_RAM_HEAD + 10
 
 ; Z80 + AY-3-8910 用のシンプルなサウンドドライバ
 ; - psgdrv_execute を 1秒間に60回 呼び出せば OK
@@ -224,6 +226,28 @@ psgdrv_parse_11:
     ld a, $FF ; keep sequence
     ret
 psgdrv_parse_12:
+    ld a, b
+    cp $66
+    jp nz, psgdrv_parse_13
+    ld bc, (PSGDRV_SEQUENCE_POSITION)
+    ld a, c
+    ld (PSGDRV_LOOP_MARK), a
+    ld a, b
+    ld (PSGDRV_LOOP_MARK + 1), a
+    ld a, $FF ; keep sequence
+    ret
+psgdrv_parse_13:
+    ld a, b
+    cp $67
+    jp nz, psgdrv_parse_14
+    ld hl, (PSGDRV_LOOP_MARK)
+    ld a, l
+    ld (PSGDRV_SEQUENCE_POSITION), a
+    ld a, h
+    ld (PSGDRV_SEQUENCE_POSITION + 1), a
+    ld a, $FF ; keep sequence
+    ret
+psgdrv_parse_14:
     ; シーケンス終了（シーケンス位置をデクリメントしてそこから先を参照しないようにする）
     ld hl, (PSGDRV_SEQUENCE_POSITION)
     dec hl
