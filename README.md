@@ -387,5 +387,7 @@ Please incorporate the [modules under the src directory of this repository](./sr
 
 ### 6-3. Example
 
-- [macOS (Cocoa)](./hal/cocoa)
-- [sndrec](./hal/sndrec)
+| Name                           | Platform | Description                                                          |
+| :----------------------------- | :------: | :------------------------------------------------------------------- |
+| [FCS80 for Cocoa](./hal/cocoa) |  macOS   | An example HAL implementation of FCS80 running on macOS.             |
+| [sndrec](./hal/sndrec)         |   Free   | Starts the specified ROM file and recording the audio to a wav file. |
