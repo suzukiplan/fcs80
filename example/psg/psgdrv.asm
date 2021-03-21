@@ -3,7 +3,7 @@
 defc PSGDRV_AY_LATCH = $A0      ; AY-3-8910 のレジスタ番号設定ポート番号
 defc PSGDRV_AY_WRITE = $A1      ; AY-3-8910 のデータ書き込みポート番号
 defc PSGDRV_AY_READ = $A2       ; AY-3-8910 のデータ読み込みポート番号
-defc PSGDRV_RAM_HEAD = $C000    ; 使用するRAMの先頭アドレス（そのアドレスから 9バイト のワーク領域を使用する）
+defc PSGDRV_RAM_HEAD = $C000    ; 使用するRAMの先頭アドレス（そのアドレスから 17バイト のワーク領域を使用する）
 defc PSGDRV_SEQUENCE_POSITION = PSGDRV_RAM_HEAD + 0
 defc PSGDRV_WAIT_COUNTER = PSGDRV_RAM_HEAD + 2
 defc PSGDRV_VOL_DOWN_INTERVAL_CH0 = PSGDRV_RAM_HEAD + 3
@@ -13,7 +13,12 @@ defc PSGDRV_VOL_DOWN_COUNTER_CH0 = PSGDRV_RAM_HEAD + 6
 defc PSGDRV_VOL_DOWN_COUNTER_CH1 = PSGDRV_RAM_HEAD + 7
 defc PSGDRV_VOL_DOWN_COUNTER_CH2 = PSGDRV_RAM_HEAD + 8
 defc PSGDRV_LOOP_MARK = PSGDRV_RAM_HEAD + 9
-defc PSGDRV_LOOP_MARK_H = PSGDRV_RAM_HEAD + 10
+defc PSGDRV_PITCH_DOWN_CH0 = PSGDRV_RAM_HEAD + 11
+defc PSGDRV_PITCH_DOWN_CH1 = PSGDRV_RAM_HEAD + 12
+defc PSGDRV_PITCH_DOWN_CH2 = PSGDRV_RAM_HEAD + 13
+defc PSGDRV_PITCH_UP_CH0 = PSGDRV_RAM_HEAD + 14
+defc PSGDRV_PITCH_UP_CH1 = PSGDRV_RAM_HEAD + 15
+defc PSGDRV_PITCH_UP_CH2 = PSGDRV_RAM_HEAD + 16
 
 ; Z80 + AY-3-8910 用のシンプルなサウンドドライバ
 ; - psgdrv_execute を 1秒間に60回 呼び出せば OK
@@ -35,15 +40,47 @@ defc PSGDRV_LOOP_MARK_H = PSGDRV_RAM_HEAD + 10
     jp z, psgdrv_execute_env1
     ld c, a
     ld a, (PSGDRV_VOL_DOWN_COUNTER_CH0)
-    jp z, psgdrv_execute_env1
+    jp z, psgdrv_execute_env0_pd
     inc a
     ld (PSGDRV_VOL_DOWN_COUNTER_CH0), a
     cp a, b
-    jp nz, psgdrv_execute_env1
+    jp nz, psgdrv_execute_env0_pd
     ld a, 0
     ld (PSGDRV_VOL_DOWN_COUNTER_CH0), a
     ld a, c
     dec a
+    out (PSGDRV_AY_WRITE), a
+psgdrv_execute_env0_pd:
+    ld a, (PSGDRV_PITCH_DOWN_CH0)
+    and $FF
+    jp z, psgdrv_execute_env0_pu
+    ld b, a
+    ld a, $00
+    out (PSGDRV_AY_LATCH), a
+    in a, (PSGDRV_AY_READ)
+    add b
+    out (PSGDRV_AY_WRITE), a
+    ld a, $01
+    out (PSGDRV_AY_LATCH), a
+    in a, (PSGDRV_AY_READ)
+    adc 0
+    and $0F
+    out (PSGDRV_AY_WRITE), a
+psgdrv_execute_env0_pu:
+    ld a, (PSGDRV_PITCH_UP_CH0)
+    and $FF
+    jp z, psgdrv_execute_env1
+    ld b, a
+    ld a, $00
+    out (PSGDRV_AY_LATCH), a
+    in a, (PSGDRV_AY_READ)
+    sub b
+    out (PSGDRV_AY_WRITE), a
+    ld a, $01
+    out (PSGDRV_AY_LATCH), a
+    in a, (PSGDRV_AY_READ)
+    sbc 0
+    and $0F
     out (PSGDRV_AY_WRITE), a
 psgdrv_execute_env1:
     ; Ch1 のソフトウェアエンベロープ処理を実行
@@ -58,15 +95,47 @@ psgdrv_execute_env1:
     jp z, psgdrv_execute_env2
     ld c, a
     ld a, (PSGDRV_VOL_DOWN_COUNTER_CH1)
-    jp z, psgdrv_execute_env2
+    jp z, psgdrv_execute_env1_pd
     inc a
     ld (PSGDRV_VOL_DOWN_COUNTER_CH1), a
     cp a, b
-    jp nz, psgdrv_execute_env2
+    jp nz, psgdrv_execute_env1_pd
     ld a, 0
     ld (PSGDRV_VOL_DOWN_COUNTER_CH1), a
     ld a, c
     dec a
+    out (PSGDRV_AY_WRITE), a
+psgdrv_execute_env1_pd:
+    ld a, (PSGDRV_PITCH_DOWN_CH1)
+    and $FF
+    jp z, psgdrv_execute_env1_pu
+    ld b, a
+    ld a, $02
+    out (PSGDRV_AY_LATCH), a
+    in a, (PSGDRV_AY_READ)
+    add b
+    out (PSGDRV_AY_WRITE), a
+    ld a, $03
+    out (PSGDRV_AY_LATCH), a
+    in a, (PSGDRV_AY_READ)
+    adc 0
+    and $0F
+    out (PSGDRV_AY_WRITE), a
+psgdrv_execute_env1_pu:
+    ld a, (PSGDRV_PITCH_UP_CH1)
+    and $FF
+    jp z, psgdrv_execute_env2
+    ld b, a
+    ld a, $02
+    out (PSGDRV_AY_LATCH), a
+    in a, (PSGDRV_AY_READ)
+    sub b
+    out (PSGDRV_AY_WRITE), a
+    ld a, $03
+    out (PSGDRV_AY_LATCH), a
+    in a, (PSGDRV_AY_READ)
+    sbc 0
+    and $0F
     out (PSGDRV_AY_WRITE), a
 psgdrv_execute_env2:
     ; Ch2 のソフトウェアエンベロープ処理を実行
@@ -248,6 +317,60 @@ psgdrv_parse_13:
     ld a, $FF ; keep sequence
     ret
 psgdrv_parse_14:
+    ld a, b
+    cp $70
+    jp nz, psgdrv_parse_15
+    ld a, (hl)
+    call psgdrv_increment_sequence_position
+    ld (PSGDRV_PITCH_DOWN_CH0), a
+    ld a, $FF ; keep sequence
+    ret
+psgdrv_parse_15:
+    ld a, b
+    cp $71
+    jp nz, psgdrv_parse_16
+    ld a, (hl)
+    call psgdrv_increment_sequence_position
+    ld (PSGDRV_PITCH_DOWN_CH1), a
+    ld a, $FF ; keep sequence
+    ret
+psgdrv_parse_16:
+    ld a, b
+    cp $72
+    jp nz, psgdrv_parse_17
+    ld a, (hl)
+    call psgdrv_increment_sequence_position
+    ld (PSGDRV_PITCH_DOWN_CH2), a
+    ld a, $FF ; keep sequence
+    ret
+psgdrv_parse_17:
+    ld a, b
+    cp $73
+    jp nz, psgdrv_parse_18
+    ld a, (hl)
+    call psgdrv_increment_sequence_position
+    ld (PSGDRV_PITCH_UP_CH0), a
+    ld a, $FF ; keep sequence
+    ret
+psgdrv_parse_18:
+    ld a, b
+    cp $74
+    jp nz, psgdrv_parse_19
+    ld a, (hl)
+    call psgdrv_increment_sequence_position
+    ld (PSGDRV_PITCH_UP_CH1), a
+    ld a, $FF ; keep sequence
+    ret
+psgdrv_parse_19:
+    ld a, b
+    cp $75
+    jp nz, psgdrv_parse_20
+    ld a, (hl)
+    call psgdrv_increment_sequence_position
+    ld (PSGDRV_PITCH_UP_CH2), a
+    ld a, $FF ; keep sequence
+    ret
+psgdrv_parse_20:
     ; シーケンス終了（シーケンス位置をデクリメントしてそこから先を参照しないようにする）
     ld hl, (PSGDRV_SEQUENCE_POSITION)
     dec hl

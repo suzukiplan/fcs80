@@ -39,6 +39,12 @@ make
 |  $65   |  $xx   | Mixing = $xx                                        |
 |  $66   |   -    | Set loop mark                                       |
 |  $67   |   -    | Jump to loop mark                                   |
+|  $70   |  $xx   | Ch0 pitch down (0: disabled, 1~255: down Hz/f)      |
+|  $71   |  $xx   | Ch1 pitch down (0: disabled, 1~255: down Hz/f)      |
+|  $72   |  $xx   | Ch2 pitch down (0: disabled, 1~255: down Hz/f)      |
+|  $73   |  $xx   | Ch0 pitch up (0: disabled, 1~255: up Hz/f)          |
+|  $74   |  $xx   | Ch1 pitch up (0: disabled, 1~255: up Hz/f)          |
+|  $75   |  $xx   | Ch2 pitch up (0: disabled, 1~255: up Hz/f)          |
 |  $FF   |   -    | End of sequence data                                |
 
 ## RAM usage

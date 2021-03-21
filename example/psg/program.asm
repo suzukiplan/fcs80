@@ -28,6 +28,7 @@ include "psgdrv.asm"
 ; シーケンスデータ（きらきら星）
 data_00: defb $65, %10111000 ; setup mixing (noise disable & tone enable)
 data_01: defb $60, $04, $61, $02 ; setup software evelope
+data_pb: defb $70, $00, $71, $00, $73, $00, $74, $00 ; pitch bend settings (off)
 data_st: defb $66 ; loop mark
 data_02: defb $01, $AC, $3F, $13, $57, $4F, $63, $10, $12, $3B, $4F, $63, $10, $3F, $12, $A7, $4F, $63, $10, $12, $3B, $4F, $63, $10 ; Ch0: c4 c4, Ch1: c8 g8 e8 g8
 data_03: defb $01, $1D, $3F, $13, $57, $4F, $63, $10, $12, $3B, $4F, $63, $10, $3F, $12, $A7, $4F, $63, $10, $12, $3B, $4F, $63, $10 ; Ch0: g4 g4, Ch1: c8 g8 e8 g8
