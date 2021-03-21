@@ -388,3 +388,4 @@ Please incorporate the [modules under the src directory of this repository](./sr
 ### 6-3. Example
 
 - [macOS (Cocoa)](./hal/cocoa)
+- [sndrec](./hal/sndrec)
