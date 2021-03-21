@@ -132,7 +132,7 @@ class FCS80 {
                 fclose(fp);
                 return false;
             }
-            if (romSize != fread(rom, romSize, 1, fp)) {
+            if (romSize != fread(rom, 1, romSize, fp)) {
                 fclose(fp);
                 free(rom);
                 return false;
