@@ -200,104 +200,104 @@ psgdrv_execute_2:
 .psgdrv_parse
     ld b, a
     and $F0
-    jp nz, psgdrv_parse_1
+    jp nz, psgdrv_parse_tone1
     call psgdrv_setup_tone_generator_Ch0
     ld a, $FF ; keep sequence
     ret
-psgdrv_parse_1:
+psgdrv_parse_tone1:
     ld a, b
     and $F0
     cp $10
-    jp nz, psgdrv_parse_2
+    jp nz, psgdrv_parse_tone2
     call psgdrv_setup_tone_generator_Ch1
     ld a, $FF ; keep sequence
     ret
-psgdrv_parse_2:
+psgdrv_parse_tone2:
     ld a, b
     and $F0
     cp $20
-    jp nz, psgdrv_parse_3
+    jp nz, psgdrv_parse_keyon0
     call psgdrv_setup_tone_generator_Ch2
     ld a, $FF ; keep sequence
     ret
-psgdrv_parse_3:
+psgdrv_parse_keyon0:
     ld a, b
     and $F0
     cp $30
-    jp nz, psgdrv_parse_4
+    jp nz, psgdrv_parse_keyon1
     call psgdrv_key_on_Ch0
     ld a, $FF ; keep sequence
     ret
-psgdrv_parse_4:
+psgdrv_parse_keyon1:
     ld a, b
     and $F0
     cp $40
-    jp nz, psgdrv_parse_5
+    jp nz, psgdrv_parse_keyon2
     call psgdrv_key_on_Ch1
     ld a, $FF ; keep sequence
     ret
-psgdrv_parse_5:
+psgdrv_parse_keyon2:
     ld a, b
     and $F0
     cp $50
-    jp nz, psgdrv_parse_6
+    jp nz, psgdrv_parse_senv0
     call psgdrv_key_on_Ch2
     ld a, $FF ; keep sequence
     ret
-psgdrv_parse_6:
+psgdrv_parse_senv0:
     ld a, b
     cp $60
-    jp nz, psgdrv_parse_7
+    jp nz, psgdrv_parse_senv1
     ld a, (hl)
     call psgdrv_increment_sequence_position
     ld (PSGDRV_VOL_DOWN_INTERVAL_CH0), a
     ld a, $FF ; keep sequence
     ret
-psgdrv_parse_7:
+psgdrv_parse_senv1:
     ld a, b
     cp $61
-    jp nz, psgdrv_parse_8
+    jp nz, psgdrv_parse_senv2
     ld a, (hl)
     call psgdrv_increment_sequence_position
     ld (PSGDRV_VOL_DOWN_INTERVAL_CH1), a
     ld a, $FF ; keep sequence
     ret
-psgdrv_parse_8:
+psgdrv_parse_senv2:
     ld a, b
     cp $62
-    jp nz, psgdrv_parse_9
+    jp nz, psgdrv_parse_wait
     ld a, (hl)
     call psgdrv_increment_sequence_position
     ld (PSGDRV_VOL_DOWN_INTERVAL_CH2), a
     ld a, $FF ; keep sequence
     ret
-psgdrv_parse_9:
+psgdrv_parse_wait:
     ld a, b
     cp $63
-    jp nz, psgdrv_parse_10
+    jp nz, psgdrv_parse_noise
     ld a, (hl)
     call psgdrv_increment_sequence_position
     ld (PSGDRV_WAIT_COUNTER), a
     ld a, $00 ; end sequence
     ret
-psgdrv_parse_10:
+psgdrv_parse_noise:
     ld a, b
     cp $64
-    jp nz, psgdrv_parse_11
+    jp nz, psgdrv_parse_mixing
     call psgdrv_set_noise
     ld a, $FF ; keep sequence
     ret
-psgdrv_parse_11:
+psgdrv_parse_mixing:
     ld a, b
     cp $65
-    jp nz, psgdrv_parse_12
+    jp nz, psgdrv_parse_loop_mark
     call psgdrv_set_mixing
     ld a, $FF ; keep sequence
     ret
-psgdrv_parse_12:
+psgdrv_parse_loop_mark:
     ld a, b
     cp $66
-    jp nz, psgdrv_parse_13
+    jp nz, psgdrv_parse_loop_jump
     ld bc, (PSGDRV_SEQUENCE_POSITION)
     ld a, c
     ld (PSGDRV_LOOP_MARK), a
@@ -305,10 +305,10 @@ psgdrv_parse_12:
     ld (PSGDRV_LOOP_MARK + 1), a
     ld a, $FF ; keep sequence
     ret
-psgdrv_parse_13:
+psgdrv_parse_loop_jump:
     ld a, b
     cp $67
-    jp nz, psgdrv_parse_14
+    jp nz, psgdrv_parse_pitch_down0
     ld hl, (PSGDRV_LOOP_MARK)
     ld a, l
     ld (PSGDRV_SEQUENCE_POSITION), a
@@ -316,61 +316,61 @@ psgdrv_parse_13:
     ld (PSGDRV_SEQUENCE_POSITION + 1), a
     ld a, $FF ; keep sequence
     ret
-psgdrv_parse_14:
+psgdrv_parse_pitch_down0:
     ld a, b
     cp $70
-    jp nz, psgdrv_parse_15
+    jp nz, psgdrv_parse_pitch_down1
     ld a, (hl)
     call psgdrv_increment_sequence_position
     ld (PSGDRV_PITCH_DOWN_CH0), a
     ld a, $FF ; keep sequence
     ret
-psgdrv_parse_15:
+psgdrv_parse_pitch_down1:
     ld a, b
     cp $71
-    jp nz, psgdrv_parse_16
+    jp nz, psgdrv_parse_pitch_down2
     ld a, (hl)
     call psgdrv_increment_sequence_position
     ld (PSGDRV_PITCH_DOWN_CH1), a
     ld a, $FF ; keep sequence
     ret
-psgdrv_parse_16:
+psgdrv_parse_pitch_down2:
     ld a, b
     cp $72
-    jp nz, psgdrv_parse_17
+    jp nz, psgdrv_parse_pitch_up0
     ld a, (hl)
     call psgdrv_increment_sequence_position
     ld (PSGDRV_PITCH_DOWN_CH2), a
     ld a, $FF ; keep sequence
     ret
-psgdrv_parse_17:
+psgdrv_parse_pitch_up0:
     ld a, b
     cp $73
-    jp nz, psgdrv_parse_18
+    jp nz, psgdrv_parse_pitch_up1
     ld a, (hl)
     call psgdrv_increment_sequence_position
     ld (PSGDRV_PITCH_UP_CH0), a
     ld a, $FF ; keep sequence
     ret
-psgdrv_parse_18:
+psgdrv_parse_pitch_up1:
     ld a, b
     cp $74
-    jp nz, psgdrv_parse_19
+    jp nz, psgdrv_parse_pitch_up2
     ld a, (hl)
     call psgdrv_increment_sequence_position
     ld (PSGDRV_PITCH_UP_CH1), a
     ld a, $FF ; keep sequence
     ret
-psgdrv_parse_19:
+psgdrv_parse_pitch_up2:
     ld a, b
     cp $75
-    jp nz, psgdrv_parse_20
+    jp nz, psgdrv_parse_end
     ld a, (hl)
     call psgdrv_increment_sequence_position
     ld (PSGDRV_PITCH_UP_CH2), a
     ld a, $FF ; keep sequence
     ret
-psgdrv_parse_20:
+psgdrv_parse_end:
     ; シーケンス終了（シーケンス位置をデクリメントしてそこから先を参照しないようにする）
     ld hl, (PSGDRV_SEQUENCE_POSITION)
     dec hl
