@@ -73,7 +73,8 @@ class AY8910
     }
 
     inline void latch(unsigned char value) { this->ctx.latch = value & 0x0F; }
-    inline unsigned char read() { return this->ctx.reg[this->ctx.latch]; }
+    inline unsigned char read() { return this->read(this->ctx.latch); }
+    inline unsigned char read(int n) { return this->ctx.reg[n]; }
     inline unsigned char getPad1() { return this->ctx.reg[0x0E]; }
     inline unsigned char getPad2() { return this->ctx.reg[0x0F]; }
 
@@ -85,8 +86,13 @@ class AY8910
 
     inline void write(unsigned char value)
     {
-        this->ctx.reg[this->ctx.latch] = value & this->regMask[this->ctx.latch];
-        switch (this->ctx.latch) {
+        this->write(this->ctx.latch, value);
+    }
+
+    inline void write(int n, unsigned char value)
+    {
+        this->ctx.reg[n] = value & this->regMask[n];
+        switch (n) {
             case 0: this->ctx.tPeriod[0] = (this->ctx.tPeriod[0] & 0xF000) | (value << 4); break;
             case 1: this->ctx.tPeriod[0] = (this->ctx.tPeriod[0] & 0x0FF0) | (value << 12); break;
             case 2: this->ctx.tPeriod[1] = (this->ctx.tPeriod[1] & 0xF000) | (value << 4); break;

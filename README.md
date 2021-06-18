@@ -206,8 +206,24 @@ Bit layout:
 | $B2  |  o  |  o  | PRG2 bank switch (default: $02)                       |
 | $B3  |  o  |  o  | PRG3 bank switch (default: $03)                       |
 | $C0  |  -  |  o  | High Speed DMA (ROM to VRAM: Character Pattern Table) |
+| $D0  |  o  |  o  | Direct read / write AY-3-8910 register #0             |
+| $D1  |  o  |  o  | Direct read / write AY-3-8910 register #1             |
+| $D2  |  o  |  o  | Direct read / write AY-3-8910 register #2             |
+| $D3  |  o  |  o  | Direct read / write AY-3-8910 register #3             |
+| $D4  |  o  |  o  | Direct read / write AY-3-8910 register #4             |
+| $D5  |  o  |  o  | Direct read / write AY-3-8910 register #5             |
+| $D6  |  o  |  o  | Direct read / write AY-3-8910 register #6             |
+| $D7  |  o  |  o  | Direct read / write AY-3-8910 register #7             |
+| $D8  |  o  |  o  | Direct read / write AY-3-8910 register #8             |
+| $D9  |  o  |  o  | Direct read / write AY-3-8910 register #9             |
+| $DA  |  o  |  o  | Direct read / write AY-3-8910 register #10            |
+| $DB  |  o  |  o  | Direct read / write AY-3-8910 register #11            |
+| $DC  |  o  |  o  | Direct read / write AY-3-8910 register #12            |
+| $DD  |  o  |  o  | Direct read / write AY-3-8910 register #13            |
+| $DE  |  o  |  o  | Direct read / write AY-3-8910 register #14            |
+| $DF  |  o  |  o  | Direct read / write AY-3-8910 register #15            |
 
-### 3-1. $A0~$A2: AY-3-8910
+### 3-1. $A0~$A2 or $D0~$DF: AY-3-8910
 
 | Register |  I  |  O  | Feature                        |
 | :------: | :-: | :-: | :----------------------------- |
@@ -227,6 +243,11 @@ Bit layout:
 |    13    |  o  |  o  | Envelope pattern               |
 |    14    |  o  |  -  | JoyPad 1                       |
 |    15    |  o  |  -  | JoyPad 2                       |
+
+The FCS80 supports 16-ports access to simplify the creation of new programs, while also supports 3-ports access for simplify the porting of programs with using legacy AY-3-8910 register access.
+
+- $A0~$A2: General AY-3-8910 register access port
+- $D0~$DF: Direct AY-3-8910 register access port
 
 #### Register 0~5: Tone generator
 
@@ -320,13 +341,14 @@ This chapter will guide you on how to implement a game that runs on the FCS80.
 
 ### 5-2. Example
 
-| Name                                     | Description                                                                                      |
-| :--------------------------------------- | :----------------------------------------------------------------------------------------------- |
-| [Hello, World!](./example/hello)         | Display "Hello, World!" in the BG, and scroll it by the input of JoyPad.                         |
-| [Sprite Test](./example/sprite)          | Render and move 256 sprites                                                                      |
-| [Map Scroll](./example/map_scroll)       | View and scroll through map data created with the [Tiled Map Editor](https://www.mapeditor.org). |
-| [Raster Scroll](./example/raster_scroll) | Shake the screen by rewriting the scroll X for each scanline.                                    |
-| [PSG Test](./example/psg)                | Play 8 bars of Twinkle Twinkle Little Star on PSG with accompaniment.                            |
+| Name                                           | Description                                                                                      |
+| :--------------------------------------------- | :----------------------------------------------------------------------------------------------- |
+| [Hello, World!](./example/hello)               | Display "Hello, World!" in the BG, and scroll it by the input of JoyPad.                         |
+| [Sprite Test](./example/sprite)                | Render and move 256 sprites                                                                      |
+| [Map Scroll](./example/map_scroll)             | View and scroll through map data created with the [Tiled Map Editor](https://www.mapeditor.org). |
+| [Raster Scroll](./example/raster_scroll)       | Shake the screen by rewriting the scroll X for each scanline.                                    |
+| [PSG Test (normal port)](./example/psg)        | Play 8 bars of Twinkle Twinkle Little Star on PSG with accompaniment. (using PSG port $A0 ~ $A2) |
+| [PSG Test (direct port)](./example/psg_direct) | Play 8 bars of Twinkle Twinkle Little Star on PSG with accompaniment. (using PSG port $Dx)       |
 
 ### 5-3. Notes for keeping the compatible
 
