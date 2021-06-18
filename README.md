@@ -244,6 +244,11 @@ Bit layout:
 |    14    |  o  |  -  | JoyPad 1                       |
 |    15    |  o  |  -  | JoyPad 2                       |
 
+The FCS80 supports 16-ports access to simplify the creation of new programs, while also supports 3-ports access for simplify the porting of programs with using legacy AY-3-8910 register access.
+
+- $A0~$A2: General AY-3-8910 register access port
+- $D0~$DF: Direct AY-3-8910 register access port
+
 #### Register 0~5: Tone generator
 
 | Tone | Oct-1 | Oct-2 | Oct-3 | Oct-4 | Oct-5 | Oct-6 | Oct-7 | Oct-8 |
