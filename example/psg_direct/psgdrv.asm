@@ -1,8 +1,5 @@
 ; AY-3-8910 Sound Driver for Z80
 ; Copyright 2021, SUZUKI PLAN (MIT License)
-defc PSGDRV_AY_LATCH = $A0      ; AY-3-8910 のレジスタ番号設定ポート番号
-defc PSGDRV_AY_WRITE = $A1      ; AY-3-8910 のデータ書き込みポート番号
-defc PSGDRV_AY_READ = $A2       ; AY-3-8910 のデータ読み込みポート番号
 defc PSGDRV_RAM_HEAD = $C000    ; 使用するRAMの先頭アドレス（そのアドレスから 17バイト のワーク領域を使用する）
 defc PSGDRV_SEQUENCE_POSITION = PSGDRV_RAM_HEAD + 0
 defc PSGDRV_WAIT_COUNTER = PSGDRV_RAM_HEAD + 2
@@ -33,9 +30,7 @@ defc PSGDRV_PITCH_UP_CH2 = PSGDRV_RAM_HEAD + 16
     ld b, a
     and $FF
     jp z, psgdrv_execute_env1
-    ld a, $08
-    out (PSGDRV_AY_LATCH), a
-    in a, (PSGDRV_AY_READ)
+    in a, ($D8)
     and $0F
     jp z, psgdrv_execute_env1
     ld c, a
@@ -49,48 +44,38 @@ defc PSGDRV_PITCH_UP_CH2 = PSGDRV_RAM_HEAD + 16
     ld (PSGDRV_VOL_DOWN_COUNTER_CH0), a
     ld a, c
     dec a
-    out (PSGDRV_AY_WRITE), a
+    out ($D8), a
 psgdrv_execute_env0_pd:
     ld a, (PSGDRV_PITCH_DOWN_CH0)
     and $FF
     jp z, psgdrv_execute_env0_pu
     ld b, a
-    ld a, $00
-    out (PSGDRV_AY_LATCH), a
-    in a, (PSGDRV_AY_READ)
+    in a, ($D0)
     add b
-    out (PSGDRV_AY_WRITE), a
-    ld a, $01
-    out (PSGDRV_AY_LATCH), a
-    in a, (PSGDRV_AY_READ)
+    out ($D0), a
+    in a, ($D1)
     adc 0
     and $0F
-    out (PSGDRV_AY_WRITE), a
+    out ($D1), a
 psgdrv_execute_env0_pu:
     ld a, (PSGDRV_PITCH_UP_CH0)
     and $FF
     jp z, psgdrv_execute_env1
     ld b, a
-    ld a, $00
-    out (PSGDRV_AY_LATCH), a
-    in a, (PSGDRV_AY_READ)
+    in a, ($D0)
     sub b
-    out (PSGDRV_AY_WRITE), a
-    ld a, $01
-    out (PSGDRV_AY_LATCH), a
-    in a, (PSGDRV_AY_READ)
+    out ($D0), a
+    in a, ($D1)
     sbc 0
     and $0F
-    out (PSGDRV_AY_WRITE), a
+    out ($D1), a
 psgdrv_execute_env1:
     ; Ch1 のソフトウェアエンベロープ処理を実行
     ld a, (PSGDRV_VOL_DOWN_INTERVAL_CH1)
     ld b, a
     and $FF
     jp z, psgdrv_execute_env2
-    ld a, $09
-    out (PSGDRV_AY_LATCH), a
-    in a, (PSGDRV_AY_READ)
+    in a, ($D9)
     and $0F
     jp z, psgdrv_execute_env2
     ld c, a
@@ -104,48 +89,38 @@ psgdrv_execute_env1:
     ld (PSGDRV_VOL_DOWN_COUNTER_CH1), a
     ld a, c
     dec a
-    out (PSGDRV_AY_WRITE), a
+    out ($D9), a
 psgdrv_execute_env1_pd:
     ld a, (PSGDRV_PITCH_DOWN_CH1)
     and $FF
     jp z, psgdrv_execute_env1_pu
     ld b, a
-    ld a, $02
-    out (PSGDRV_AY_LATCH), a
-    in a, (PSGDRV_AY_READ)
+    in a, ($D2)
     add b
-    out (PSGDRV_AY_WRITE), a
-    ld a, $03
-    out (PSGDRV_AY_LATCH), a
-    in a, (PSGDRV_AY_READ)
+    out ($D2), a
+    in a, ($D3)
     adc 0
     and $0F
-    out (PSGDRV_AY_WRITE), a
+    out ($D3), a
 psgdrv_execute_env1_pu:
     ld a, (PSGDRV_PITCH_UP_CH1)
     and $FF
     jp z, psgdrv_execute_env2
     ld b, a
-    ld a, $02
-    out (PSGDRV_AY_LATCH), a
-    in a, (PSGDRV_AY_READ)
+    in a, ($D2)
     sub b
-    out (PSGDRV_AY_WRITE), a
-    ld a, $03
-    out (PSGDRV_AY_LATCH), a
-    in a, (PSGDRV_AY_READ)
+    out ($D2), a
+    in a, ($D3)
     sbc 0
     and $0F
-    out (PSGDRV_AY_WRITE), a
+    out ($D3), a
 psgdrv_execute_env2:
     ; Ch2 のソフトウェアエンベロープ処理を実行
     ld a, (PSGDRV_VOL_DOWN_INTERVAL_CH2)
     ld b, a
     and $FF
     jp z, psgdrv_execute_env3
-    ld a, $0A
-    out (PSGDRV_AY_LATCH), a
-    in a, (PSGDRV_AY_READ)
+    in a, ($DA)
     and $0F
     jp z, psgdrv_execute_env3
     ld c, a
@@ -159,39 +134,31 @@ psgdrv_execute_env2:
     ld (PSGDRV_VOL_DOWN_COUNTER_CH2), a
     ld a, c
     dec a
-    out (PSGDRV_AY_WRITE), a
+    out ($DA), a
 psgdrv_execute_env2_pd:
     ld a, (PSGDRV_PITCH_DOWN_CH2)
     and $FF
     jp z, psgdrv_execute_env2_pu
     ld b, a
-    ld a, $04
-    out (PSGDRV_AY_LATCH), a
-    in a, (PSGDRV_AY_READ)
+    in a, ($D4)
     add b
-    out (PSGDRV_AY_WRITE), a
-    ld a, $05
-    out (PSGDRV_AY_LATCH), a
-    in a, (PSGDRV_AY_READ)
+    out ($D4), a
+    in a, ($D5)
     adc 0
     and $0F
-    out (PSGDRV_AY_WRITE), a
+    out ($D5), a
 psgdrv_execute_env2_pu:
     ld a, (PSGDRV_PITCH_UP_CH2)
     and $FF
     jp z, psgdrv_execute_env3
     ld b, a
-    ld a, $04
-    out (PSGDRV_AY_LATCH), a
-    in a, (PSGDRV_AY_READ)
+    in a, ($D4)
     sub b
-    out (PSGDRV_AY_WRITE), a
-    ld a, $05
-    out (PSGDRV_AY_LATCH), a
-    in a, (PSGDRV_AY_READ)
+    out ($D4), a
+    in a, ($D5)
     sbc 0
     and $0F
-    out (PSGDRV_AY_WRITE), a
+    out ($D5), a
 psgdrv_execute_env3:
     ; ウェイトカウンタの減算
     ld a, (PSGDRV_WAIT_COUNTER)
@@ -412,86 +379,64 @@ psgdrv_parse_end:
     ret
 
 .psgdrv_setup_tone_generator_Ch0
-    ld a, $01
-    out (PSGDRV_AY_LATCH), a
     ld a, b
     and $0F
-    out (PSGDRV_AY_WRITE), a
-    ld a, $00
-    out (PSGDRV_AY_LATCH), a
+    out ($D1), a
     ld a, (hl)
     call psgdrv_increment_sequence_position
-    out (PSGDRV_AY_WRITE), a
+    out ($D0), a
     ret
 
 .psgdrv_setup_tone_generator_Ch1
-    ld a, $03
-    out (PSGDRV_AY_LATCH), a
     ld a, b
     and $0F
-    out (PSGDRV_AY_WRITE), a
-    ld a, $02
-    out (PSGDRV_AY_LATCH), a
+    out ($D3), a
     ld a, (hl)
     call psgdrv_increment_sequence_position
-    out (PSGDRV_AY_WRITE), a
+    out ($D2), a
     ret
 
 .psgdrv_setup_tone_generator_Ch2
-    ld a, $05
-    out (PSGDRV_AY_LATCH), a
     ld a, b
     and $0F
-    out (PSGDRV_AY_WRITE), a
-    ld a, $04
-    out (PSGDRV_AY_LATCH), a
+    out ($D5), a
     ld a, (hl)
     call psgdrv_increment_sequence_position
-    out (PSGDRV_AY_WRITE), a
+    out ($D4), a
     ret
 
 .psgdrv_key_on_Ch0
-    ld a, $08
-    out (PSGDRV_AY_LATCH), a
     ld a, b
     and $0F
-    out (PSGDRV_AY_WRITE), a
+    out ($D8), a
     ld a, 0
     ld (PSGDRV_VOL_DOWN_COUNTER_CH0), a
     ret
 
 .psgdrv_key_on_Ch1
-    ld a, $09
-    out (PSGDRV_AY_LATCH), a
     ld a, b
     and $0F
-    out (PSGDRV_AY_WRITE), a
+    out ($D9), a
     ld a, 0
     ld (PSGDRV_VOL_DOWN_COUNTER_CH1), a
     ret
 
 .psgdrv_key_on_Ch2
-    ld a, $0A
-    out (PSGDRV_AY_LATCH), a
     ld a, b
     and $0F
-    out (PSGDRV_AY_WRITE), a
+    out ($DA), a
     ld a, 0
     ld (PSGDRV_VOL_DOWN_COUNTER_CH2), a
     ret
 
 .psgdrv_set_noise
-    ld a, $06
-    out (PSGDRV_AY_LATCH), a
     ld a, (hl)
     call psgdrv_increment_sequence_position
-    out (PSGDRV_AY_WRITE), a
+    out ($D6), a
     ret
 
 .psgdrv_set_mixing
-    ld a, $07
-    out (PSGDRV_AY_LATCH), a
     ld a, (hl)
     call psgdrv_increment_sequence_position
-    out (PSGDRV_AY_WRITE), a
+    out ($D7), a
     ret
