@@ -206,8 +206,24 @@ Bit layout:
 | $B2  |  o  |  o  | PRG2 bank switch (default: $02)                       |
 | $B3  |  o  |  o  | PRG3 bank switch (default: $03)                       |
 | $C0  |  -  |  o  | High Speed DMA (ROM to VRAM: Character Pattern Table) |
+| $D0  |  o  |  o  | Direct read / write AY-3-8910 register #0             |
+| $D1  |  o  |  o  | Direct read / write AY-3-8910 register #1             |
+| $D2  |  o  |  o  | Direct read / write AY-3-8910 register #2             |
+| $D3  |  o  |  o  | Direct read / write AY-3-8910 register #3             |
+| $D4  |  o  |  o  | Direct read / write AY-3-8910 register #4             |
+| $D5  |  o  |  o  | Direct read / write AY-3-8910 register #5             |
+| $D6  |  o  |  o  | Direct read / write AY-3-8910 register #6             |
+| $D7  |  o  |  o  | Direct read / write AY-3-8910 register #7             |
+| $D8  |  o  |  o  | Direct read / write AY-3-8910 register #8             |
+| $D9  |  o  |  o  | Direct read / write AY-3-8910 register #9             |
+| $DA  |  o  |  o  | Direct read / write AY-3-8910 register #10            |
+| $DB  |  o  |  o  | Direct read / write AY-3-8910 register #11            |
+| $DC  |  o  |  o  | Direct read / write AY-3-8910 register #12            |
+| $DD  |  o  |  o  | Direct read / write AY-3-8910 register #13            |
+| $DE  |  o  |  o  | Direct read / write AY-3-8910 register #14            |
+| $DF  |  o  |  o  | Direct read / write AY-3-8910 register #15            |
 
-### 3-1. $A0~$A2: AY-3-8910
+### 3-1. $A0~$A2 or $D0~$DF: AY-3-8910
 
 | Register |  I  |  O  | Feature                        |
 | :------: | :-: | :-: | :----------------------------- |

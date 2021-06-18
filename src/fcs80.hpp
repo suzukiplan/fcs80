@@ -229,6 +229,22 @@ class FCS80 {
                 case 0xB1: return this->ctx.romBank[1];
                 case 0xB2: return this->ctx.romBank[2];
                 case 0xB3: return this->ctx.romBank[3];
+                case 0xD0: return this->psg->read(0);
+                case 0xD1: return this->psg->read(1);
+                case 0xD2: return this->psg->read(2);
+                case 0xD3: return this->psg->read(3);
+                case 0xD4: return this->psg->read(4);
+                case 0xD5: return this->psg->read(5);
+                case 0xD6: return this->psg->read(6);
+                case 0xD7: return this->psg->read(7);
+                case 0xD8: return this->psg->read(8);
+                case 0xD9: return this->psg->read(9);
+                case 0xDA: return this->psg->read(10);
+                case 0xDB: return this->psg->read(11);
+                case 0xDC: return this->psg->read(12);
+                case 0xDD: return this->psg->read(13);
+                case 0xDE: return this->psg->read(14);
+                case 0xDF: return this->psg->read(15);
                 default: return 0xFF;
             }
         }
@@ -247,6 +263,22 @@ class FCS80 {
                     if (addr + 0x2000 <= this->romSize) memcpy(&this->vdp->ctx.ram[0x2000], &this->rom[addr], 0x2000);
                     else memset(&this->vdp->ctx.ram[0x2000], 0xFF, 0x2000);
                 }
+                case 0xD0: this->psg->write(0, value); break;
+                case 0xD1: this->psg->write(1, value); break;
+                case 0xD2: this->psg->write(2, value); break;
+                case 0xD3: this->psg->write(3, value); break;
+                case 0xD4: this->psg->write(4, value); break;
+                case 0xD5: this->psg->write(5, value); break;
+                case 0xD6: this->psg->write(6, value); break;
+                case 0xD7: this->psg->write(7, value); break;
+                case 0xD8: this->psg->write(8, value); break;
+                case 0xD9: this->psg->write(9, value); break;
+                case 0xDA: this->psg->write(10, value); break;
+                case 0xDB: this->psg->write(11, value); break;
+                case 0xDC: this->psg->write(12, value); break;
+                case 0xDD: this->psg->write(13, value); break;
+                case 0xDE: this->psg->write(14, value); break;
+                case 0xDF: this->psg->write(15, value); break;
             }
         }
 };
