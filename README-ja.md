@@ -9,6 +9,7 @@ FAIRY COMPUTER SYSTEM 80(FCS80)は、8 ビット時代の技術である Z80 と
 - [2. Memory Map](#2-memory-map) (メモリマップ)
   - [2-1. CPU Memory](#2-1-cpu-memory) (CPU メモリ)
   - [2-2. VRAM](#2-2-vram) (ビデオメモリ)
+  - [2-3. RAM](#2-3-ram)
 - [3. I/O map](#3-io-map) (I/O マップ)
   - [3-1. $A0~$A2 or $D0~$DF: AY-3-8910](#3-1-a0a2-or-d0df-ay-3-8910) (AY-3-8910: PSG 音源)
   - [3-2. $B0~$B3: Bank switch](#3-2-b0b3-bank-switch) (バンク切り替え)
