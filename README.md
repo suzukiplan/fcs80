@@ -9,6 +9,7 @@ This repository provides an official emulator for the FCS80 core system.
 - [2. Memory Map](#2-memory-map)
   - [2-1. CPU Memory](#2-1-cpu-memory)
   - [2-2. VRAM](#2-2-vram)
+  - [2-3. RAM](#2-3-ram)
 - [3. I/O map](#3-io-map)
   - [3-1. $A0~$A2 or $D0~$DF: AY-3-8910](#3-1-a0a2-or-d0df-ay-3-8910)
   - [3-2. $B0~$B3: Bank switch](#3-2-b0b3-bank-switch)
@@ -93,18 +94,20 @@ This memory size is sufficient for full assembly language and even C language ga
 | $9608 ~ $9FFF | $1608 ~ $1FFF | Reserved                                                |
 | $A000 ~ $BFFF | $2000 ~ $3FFF | Character Pattern Table (32 x 256)                      |
 
-#### Writing priorities
+#### Graphic Layered Structure
 
-1. FG
-2. Sprite
-3. BG
+| Priority | Name                    | Description                                                                                                                                                           |
+| :------: | :---------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|    1     | FG; Foreground Graphics | Graphics to be drawn at the highest priority. It is intended for use in drawing game screen frames, displaying scores, etc.                                           |
+|    2     | Sprites                 | These graphics are designed to be used for drawing characters that move around on the screen. Unlike BG and FG, drawing data is managed by OAM instead of Name Table. |
+|    3     | BG; Background Graphics | This is the graphics with the lowest drawing priority, intended for drawing the background of the game screen.                                                        |
 
 #### Name Table & Scroll (BG/FG)
 
 - 32 x 32 characters = 256 x 256 pixels
 - masked the edge 8px of left, right and top
 - masked the bottom edge 56px
-- scrollable with Scroll Register (#2 ~ E5)
+- scrollable with Scroll Register (#2 ~ #5)
 
 #### Attribute bit-layout (BG/FG/Sprite)
 
@@ -205,10 +208,15 @@ Bit layout:
 | H24 | L24 | H25 | L25 | H26 | L26 | H27 | L27 | Line 6      |
 | H28 | L28 | H29 | L29 | H30 | L30 | H31 | L31 | Line 7      |
 
-- `Hxx` : High 4bit of byte index at xx
-- `Lxx` : Low 4bit of byte index at xx
-- `xx` : Color code (0 ~ 15)
+- `Hxx` : High 4bit (0 ~ 15 = Color Code) of byte index at xx (0 ~ 31)
+- `Lxx` : Low 4bit (0 ~ 15 = Color Code) of byte index at xx (0 ~ 31)
 - Color code 0 is transparent in FG and/or Sprite (not transparent in BG)
+
+### 2-3. RAM
+
+|  CPU address  |  RAM address  | Map                  |
+| :-----------: | :-----------: | :------------------- |
+| $C000 ~ $FFFF | $0000 ~ $3FFF | Random Access Memory |
 
 ## 3. I/O map
 
