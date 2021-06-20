@@ -20,6 +20,7 @@ This repository provides an official emulator for the FCS80 core system.
   - [5-1. Make your development environment](#5-1-make-your-development-environment)
   - [5-2. Example](#5-2-example)
   - [5-3. Notes for keeping the compatible](#5-3-notes-for-keeping-the-compatible)
+  - [5-4. Toolchain](#5-4-toolchain)
 - [6. HAL Implementation Guide](#6-hal-implementation-guide)
   - [6-1. Integrate it into your project](#6-1-integrate-it-into-your-project)
   - [6-2. How to use the FCS80 emulator](#6-2-how-to-use-the-fcs80-emulator)
@@ -371,6 +372,16 @@ This chapter will guide you on how to implement a game that runs on the FCS80.
 - Do not access to the undocumented [I/O](#3-io-map)
 - Do not use the Refresh Register (`LD A, R` instruction)
   - RefreshRegister (RR) has different values depending on the type of Z80 CPU. Compatibility will be maintained as long as you continue to use the official emulator, but there is a possibility that compatibility will not be maintained when the actual device or an unofficial emulator appears in the future.
+
+### 5-4. Toolchain
+
+This repository provides a CLI toolchain that is useful for developing games that run on the FCS80.
+
+| Name                           | Description                                                                                       |
+| :----------------------------- | :------------------------------------------------------------------------------------------------ |
+| [bmp2chr](tools/src/bmp2chr.c) | Converts a 128x128 pixel 8-bit color Bitmap to a Character Pattern Table format byte array file.  |
+| [csv2bin](tools/src/csv2bin.c) | Converts a CSV file output by [Tiled Map Editor](https://www.mapeditor.org) to a byte array file. |
+| [makerom](tools/src/makerom.c) | Concatenate binary files into a single file (ROM file) with mod 8KB                               |
 
 ## 6. HAL Implementation Guide
 

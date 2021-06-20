@@ -20,6 +20,7 @@ FAIRY COMPUTER SYSTEM 80(FCS80)は、8 ビット時代の技術である Z80 と
   - [5-1. Make your development environment](#5-1-make-your-development-environment) (開発環境の準備)
   - [5-2. Example](#5-2-example) (実装例)
   - [5-3. Notes for keeping the compatible](#5-3-notes-for-keeping-the-compatible) (互換性維持のための注意点)
+  - [5-4. Toolchain](#5-4-toolchain) (ツールチェイン)
 - [6. HAL Implementation Guide](#6-hal-implementation-guide) (HAL 実装ガイド)
   - [6-1. Integrate it into your project](#6-1-integrate-it-into-your-project) (FCS80 コアモジュールをプロジェクトへ統合)
   - [6-2. How to use the FCS80 emulator](#6-2-how-to-use-the-fcs80-emulator) (FCS80 エミュレータの使い方)
@@ -371,6 +372,16 @@ FCS80 は新規プログラムの作成を容易にする 16 ポートアクセ�
 - ドキュメント化されていない [I/O](#3-io-map) にアクセスしない
 - リフレッシュレジスタ (RR) へのアクセス (`LD A, R` 命令) をしない
   - リフレッシュレジスタ (RR) は、Z80 CPU の種類によって値が異なるため、公式エミュレータを使い続ける限り互換性は保たれますが、今後、実機や非公式エミュレータが登場した場合には互換性が保たれない恐れがあります
+
+### 5-4. Toolchain
+
+このリポジトリは、FCS80 上で動作するゲームを開発するのに便利な CLI ツールチェインを提供します。
+
+| Name                           | Description                                                                                         |
+| :----------------------------- | :-------------------------------------------------------------------------------------------------- |
+| [bmp2chr](tools/src/bmp2chr.c) | 128x128 ピクセルの 8bit カラー Bitmap を Character Pattern Table 形式のバイナリファイルに変換します |
+| [csv2bin](tools/src/csv2bin.c) | [Tiled Map Editor](https://www.mapeditor.org) が出力する CSV ファイルをバイナリファイルに変換します |
+| [makerom](tools/src/makerom.c) | バイナリファイルを 8KB 区切りで 1 つの ROM ファイルに連結します                                     |
 
 ## 6. HAL Implementation Guide
 
