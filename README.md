@@ -40,6 +40,15 @@ This repository provides an official emulator for the FCS80 core system.
 
 ## 2. Memory Map
 
+The FCS80 allocates the upper 32KB of the Z80's memory space (64KB) to the program and the lower 32KB to the random access memory map.
+
+- The program (upper 32KB) is divided into four banks of 8KB each.
+  - The program area is read-only.
+  - Bank switching is possible by [3-2. $B0~$B3: Bank switch](#3-2-b0b3-bank-switch).
+- In the random access memory map (lower 32KB), the upper 16KB is allocated to VRAM and the lower 16KB to RAM.
+  - The memory map can be read and written.
+  - There is no mechanism to switch banks of RAM.
+
 ### 2-1. CPU Memory
 
 |    Address    | Map                                 |
@@ -51,10 +60,17 @@ This repository provides an official emulator for the FCS80 core system.
 | $8000 ~ $BFFF | VRAM (16KB)                         |
 | $C000 ~ $FFFF | RAM (16KB)                          |
 
-> _Discussion about there is no SRAM:_
-> The FCS80 does not have Static-RAM (also known as battery backup).
-> This is based on the idea that saves and loads are satisfied by state saves and state loads.
-> There may be cases where you want to keep high scores locally, but for leaderboards, I believe it is preferable to get them from outside the FCS80 (by reading RAM, etc.) and implement them outside the game.
+#### Discussion about there is no SRAM
+
+The FCS80 does not have Static-RAM (also known as battery backup).
+This is based on the idea that saves and loads are satisfied by state saves and state loads.
+There may be cases where you want to keep high scores locally, but for leaderboards, I believe it is preferable to get them from outside the FCS80 (by reading RAM, etc.) and implement them outside the game.
+
+#### Discussion about RAM size (16KB)
+
+In today's programming environment, it is impossible to develop programs properly with only 16KB of RAM, but in the 8-bit era, 2KB of RAM was the norm for targeted game consoles.
+Therefore, 16KB is more than enough memory for game development.
+This memory size is sufficient for full assembly language and even C language game development.
 
 ### 2-2. VRAM
 
