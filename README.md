@@ -10,7 +10,7 @@ This repository provides an official emulator for the FCS80 core system.
   - [2-1. CPU Memory](#2-1-cpu-memory)
   - [2-2. VRAM](#2-2-vram)
 - [3. I/O map](#3-io-map)
-  - [3-1. $A0~$A2: AY-3-8910](#3-1-a0a2-ay-3-8910)
+  - [3-1. $A0~$A2 or $D0~$DF: AY-3-8910](#3-1-a0a2-or-d0df-ay-3-8910)
   - [3-2. $B0~$B3: Bank switch](#3-2-b0b3-bank-switch)
   - [3-3. $C0: High Speed DMA (Bank to VRAM)](3-3-c0-high-speed-dma-bank-to-vram)
 - [4. ROM](#4-rom)
