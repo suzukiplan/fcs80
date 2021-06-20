@@ -94,6 +94,12 @@ This memory size is sufficient for full assembly language and even C language ga
 | $9608 ~ $9FFF | $1608 ~ $1FFF | Reserved                                                |
 | $A000 ~ $BFFF | $2000 ~ $3FFF | Character Pattern Table (32 x 256)                      |
 
+#### VRAM access
+
+In the case of typical 8-bit console VDPs (such as the PPU of the Family Computer and the VDP of the MSX), it is common to set the VRAM access address by writing a value twice to the address setting port, and then access it via the write and read ports.
+
+In FCS80-VIDEO, since all addresses of VRAM are mapped to CPU memory, it is possible to write and read VRAM with instructions such as LD and LDIR, just as when accessing RAM.
+
 #### Graphic Layered Structure
 
 | Priority | Name                    | Description                                                                                                                                                           |
