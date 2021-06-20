@@ -27,7 +27,7 @@ This repository provides an official emulator for the FCS80 core system.
 ## 1. Specification
 
 - CPU: Z80A (3579545Hz)
-- PPU: FCS80-VDP (4024320Hz)
+- VDP: FCS80-VDP (4024320Hz)
   - Screen Resolution: 240 x 192
   - Background & Foreground 8x8 tiled graphics (both virtual screen: 256 x 256)
   - 256 sprites (size: 8x8) & max horizontal limit: 256 (unlimited)
