@@ -33,7 +33,6 @@
 class AY8910
 {
   private:
-    unsigned int clock;
     unsigned char regMask[16];
     unsigned int levels[32];
 
