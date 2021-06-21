@@ -377,11 +377,11 @@ This chapter will guide you on how to implement a game that runs on the FCS80.
 
 This repository provides a CLI toolchain that is useful for developing games that run on the FCS80.
 
-| Name                           | Description                                                                                       |
-| :----------------------------- | :------------------------------------------------------------------------------------------------ |
-| [bmp2chr](tools/src/bmp2chr.c) | Converts a 128x128 pixel 8-bit color Bitmap to a Character Pattern Table format byte array file.  |
-| [csv2bin](tools/src/csv2bin.c) | Converts a CSV file output by [Tiled Map Editor](https://www.mapeditor.org) to a byte array file. |
-| [makerom](tools/src/makerom.c) | Concatenate binary files into a single file (ROM file) with mod 8KB                               |
+| Name                           | Description                                                                                   |
+| :----------------------------- | :-------------------------------------------------------------------------------------------- |
+| [bmp2chr](tools/src/bmp2chr.c) | Converts a 128x128 pixel 8-bit color Bitmap to a Character Pattern Table format binary file.  |
+| [csv2bin](tools/src/csv2bin.c) | Converts a CSV file output by [Tiled Map Editor](https://www.mapeditor.org) to a binary file. |
+| [makerom](tools/src/makerom.c) | Concatenate binary files into a single file (ROM file) with mod 8KB                           |
 
 ## 6. HAL Implementation Guide
 
