@@ -13,7 +13,8 @@ FAIRY COMPUTER SYSTEM 80(FCS80)は、8 ビット時代の技術である Z80 と
 - [3. I/O map](#3-io-map) (I/O マップ)
   - [3-1. $A0~$A2 or $D0~$DF: AY-3-8910](#3-1-a0a2-or-d0df-ay-3-8910) (AY-3-8910: PSG 音源)
   - [3-2. $B0~$B3: Bank switch](#3-2-b0b3-bank-switch) (バンク切り替え)
-  - [3-3. $C0: High Speed DMA (Bank to VRAM)](3-3-c0-high-speed-dma-bank-to-vram) (高速 DMA)
+  - [3-3. $C0: High Speed DMA (Bank to VRAM)](#3-3-c0-high-speed-dma-bank-to-vram) (高速 DMA)
+  - [3-4. $C1: CPU boost flag](#3-4-c1-cpu-boost-flag) (CPU 高速化フラグ)
 - [4. ROM](#4-rom)
   - [4-1. File Format](#4-1-file-format) (ファイル構造)
 - [5. Programming Guide](#5-programming-guide) (プログラミングガイド)
@@ -327,6 +328,10 @@ FCS80 は新規プログラムの作成を容易にする 16 ポートアクセ�
     ld a, $03
     out ($C0), a
 ```
+
+### 3-4. $C1: CPU boost flag
+
+通常、[consumeClock](src/z80.hpp#L340-L346)は 4Hz または 3Hz（GBZ80 の場合は 4Hz に固定）の間隔でコールバックされますが、cpuBoostFlag が 0 でない間は常に 1Hz に固定されることで、CPU の実行速度が 4 ～ 3 倍になります。
 
 ## 4. ROM
 
