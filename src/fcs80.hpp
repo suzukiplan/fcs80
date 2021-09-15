@@ -271,6 +271,7 @@ class FCS80 {
                     addr *= 0x2000;
                     if (addr + 0x2000 <= this->romSize) memcpy(&this->vdp->ctx.ram[0x2000], &this->rom[addr], 0x2000);
                     else memset(&this->vdp->ctx.ram[0x2000], 0xFF, 0x2000);
+                    break;
                 }
                 case 0xC1: this->ctx.cpuBoostFlag = value; break;
                 case 0xD0: this->psg->write(0, value); break;
