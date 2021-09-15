@@ -49,6 +49,8 @@ class FCS80 {
             int bobo;
             unsigned char ram[0x4000];
             unsigned char romBank[4];
+            unsigned char cpuBoostFlag;
+            unsigned char reserved[3];
         } ctx;
 
         FCS80() {
@@ -185,6 +187,12 @@ class FCS80 {
 
     private:
         inline void consumeClock(int clocks) {
+            if (this->ctx.cpuBoostFlag) {
+                // Normally, consumeClock is called back at an interval of 4Hz or 3Hz (fixed at 4Hz in the case of GBZ80),
+                // but by always fixing it to 1Hz during cpuBoostFlag is not zero,
+                // so the CPU execution speed can be accelerated by 4 to 3 times.
+                clocks = 1;
+            }
             this->vdp->ctx.bobo += clocks * FCS80_VDP_CLOCK_PER_SEC;
             while (0 < this->vdp->ctx.bobo) {
                 this->vdp->tick();
@@ -229,6 +237,7 @@ class FCS80 {
                 case 0xB1: return this->ctx.romBank[1];
                 case 0xB2: return this->ctx.romBank[2];
                 case 0xB3: return this->ctx.romBank[3];
+                case 0xC1: return this->ctx.cpuBoostFlag;
                 case 0xD0: return this->psg->read(0);
                 case 0xD1: return this->psg->read(1);
                 case 0xD2: return this->psg->read(2);
@@ -262,7 +271,9 @@ class FCS80 {
                     addr *= 0x2000;
                     if (addr + 0x2000 <= this->romSize) memcpy(&this->vdp->ctx.ram[0x2000], &this->rom[addr], 0x2000);
                     else memset(&this->vdp->ctx.ram[0x2000], 0xFF, 0x2000);
+                    break;
                 }
+                case 0xC1: this->ctx.cpuBoostFlag = value; break;
                 case 0xD0: this->psg->write(0, value); break;
                 case 0xD1: this->psg->write(1, value); break;
                 case 0xD2: this->psg->write(2, value); break;
