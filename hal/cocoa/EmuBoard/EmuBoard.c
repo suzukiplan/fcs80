@@ -90,13 +90,13 @@ void emu_vsync()
     pthread_mutex_unlock(&sound_locker);
 }
 
-unsigned int emu_getScore()
+unsigned int emu_getScore(void)
 {
     if (!emu_initialized) return 0;
     return 0;
 }
 
-int emu_isGameOver()
+int emu_isGameOver(void)
 {
     if (!emu_initialized) return 0;
     return 0;
