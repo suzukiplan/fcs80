@@ -164,7 +164,7 @@ class FCS80 {
             return this->soundBuffer;
         }
 
-        size_t getStateSize() { return sizeof(this->ctx) + sizeof(this->cpu->reg) + sizeof(this->psg->ctx) + sizeof(this->vdp->ctx); }
+        size_t getStateSize() { return sizeof(this->ctx) + sizeof(this->cpu->reg) + sizeof(this->psg->ctx) + sizeof(this->vdp->ctx) + sizeof(this->scc->ctx); }
  
         void saveState(void* buffer) {
             unsigned char* bufferPtr = (unsigned char*)buffer;
@@ -175,6 +175,8 @@ class FCS80 {
             memcpy(bufferPtr, &this->psg->ctx, sizeof(this->psg->ctx));
             bufferPtr += sizeof(this->psg->ctx);
             memcpy(bufferPtr, &this->vdp->ctx, sizeof(this->vdp->ctx));
+            bufferPtr += sizeof(this->vdp->ctx);
+            memcpy(bufferPtr, &this->scc->ctx, sizeof(this->scc->ctx));
         }
 
         void loadState(const void* buffer) {
@@ -188,6 +190,8 @@ class FCS80 {
             bufferPtr += sizeof(this->psg->ctx);
             memcpy(&this->vdp->ctx, bufferPtr, sizeof(this->vdp->ctx));
             this->vdp->refreshDisplay();
+            bufferPtr += sizeof(this->vdp->ctx);
+            memcpy(&this->scc->ctx, bufferPtr, sizeof(this->scc->ctx));
         }
 
     private:
