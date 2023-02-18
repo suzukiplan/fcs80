@@ -24,15 +24,12 @@
  * THE SOFTWARE.
  * -----------------------------------------------------------------------------
  */
-
 #ifndef INCLUDE_SCC_HPP
 #define INCLUDE_SCC_HPP
 #include <string.h>
 
 class SCC {
 public:
-    bool enabled;
-
     struct Channel {
         signed char waveforms[32];
         int counter;
@@ -44,80 +41,40 @@ public:
     struct Context {
         struct Channel ch[5];
         int sw;
-        int mode;
     } ctx;
 
     SCC() {
         this->reset();
-        this->enabled = false;
     }
 
     void reset() { memset(&this->ctx, 0, sizeof(this->ctx)); }
 
     inline unsigned char read(unsigned short addr) {
         addr &= 0xFF;
-        if (addr < 0x20) {
-            return this->ctx.ch[0].waveforms[addr & 0x1F];
-        } else if (addr < 0x40) {
-            return this->ctx.ch[1].waveforms[addr & 0x1F];
-        } else if (addr < 0x60) {
-            return this->ctx.ch[2].waveforms[addr & 0x1F];
-        } else if (addr < 0x80) {
-            return this->ctx.ch[3].waveforms[addr & 0x1F];
-        } else {
-            return 0xFF;
-        }
+        return addr < 0x80 ? this->ctx.ch[addr / 0x20].waveforms[addr & 0x1F] : 0xFF;
     }
 
     inline void write(unsigned short addr, unsigned char value) {
         addr &= 0xFF;
         if (addr & 0x80) {
             addr &= 0x3F;
-            switch (addr) {
-                case 0x00:
-                case 0x02:
-                case 0x04:
-                case 0x06:
-                case 0x08: {
-                    Channel* ch = &this->ctx.ch[addr >> 1];
-                    ch->period = (ch->period & 0xf00) | value;
-                    break;
-                }
-                case 0x01:
-                case 0x03:
-                case 0x05:
-                case 0x07:
-                case 0x09: {
-                    Channel* ch = &this->ctx.ch[addr >> 1];
-                    ch->period = (ch->period & 0xff) | ((value & 0x0F) << 8);
-                    break;
-                }
-                case 0x0A:
-                case 0x0B:
-                case 0x0C:
-                case 0x0D:
-                case 0x0E:
-                    this->ctx.ch[addr - 0x0A].volume = value & 0x0F;
-                    break;
-                case 0x0F:
-                    this->ctx.sw = value & 0x1F;
-                    break;
+            if (addr < 0x0A) {
+                Channel* ch = &this->ctx.ch[addr >> 1];
+                ch->period = addr & 0x01 ? (ch->period & 0xff) | ((value & 0x0F) << 8) : (ch->period & 0xf00) | value;
+            } else if (addr < 0x0F) {
+                this->ctx.ch[addr - 0x0A].volume = value & 0x0F;
+            } else if (0x0F == addr) {
+                this->ctx.sw = value & 0x1F;
             }
         } else {
             this->ctx.ch[addr >> 5].waveforms[addr & 0x1F] = (signed char)value;
         }
     }
-    
-    inline void setMode(unsigned char mode) {
-        this->ctx.mode = mode;
-    }
 
     inline void tick(short* left, short* right, unsigned int cycles) {
-        if (!this->enabled) return;
         int mix[5];
-        int i;
         int sw = this->ctx.sw;
-        for(i = 0; i < 5; i++) {
+        for(int i = 0; i < 5; i++) {
             Channel* ch = &this->ctx.ch[i];
             if (ch->period) {
                 ch->counter += cycles;
@@ -130,12 +87,7 @@ public:
                 ch->index++;
                 ch->index &= 0x1F;
             }
-            if (sw & 1) {
-                int si = (4 == i && 0 == (this->ctx.mode & 0x20)) ? 3 : i;
-                mix[i] = this->ctx.ch[si].waveforms[ch->index] * ch->volume;
-            } else {
-                mix[i] = 0;
-            }
+            mix[i] = sw & 1 ? this->ctx.ch[4 == i ? 3 : i].waveforms[ch->index] * ch->volume : 0;
             sw >>= 1;
         }
         int result = (mix[0] + mix[1] + mix[2]) & 0xFFFF;
