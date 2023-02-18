@@ -9,7 +9,8 @@ FAIRY COMPUTER SYSTEM 80(FCS80)は、8 ビット時代の技術である Z80 と
 - [2. Memory Map](#2-memory-map) (メモリマップ)
   - [2-1. CPU Memory](#2-1-cpu-memory) (CPU メモリ)
   - [2-2. VRAM](#2-2-vram) (ビデオメモリ)
-  - [2-3. RAM](#2-3-ram)
+  - [2-3. SCC](#2-3-scc) (SCC)
+  - [2-4. RAM](#2-4-ram)
 - [3. I/O map](#3-io-map) (I/O マップ)
   - [3-1. $A0~$A2 or $D0~$DF: AY-3-8910](#3-1-a0a2-or-d0df-ay-3-8910) (AY-3-8910: PSG 音源)
   - [3-2. $B0~$B3: Bank switch](#3-2-b0b3-bank-switch) (バンク切り替え)
@@ -60,7 +61,9 @@ FCS80 は、Z80 のメモリ空間（64KB）の上位 32KB を プログラム�
 | $2000 ~ $3FFF | PRG1: ROM Bank #1 (Program or Data) |
 | $4000 ~ $5FFF | PRG2: ROM Bank #2 (Program or Data) |
 | $6000 ~ $7FFF | PRG3: ROM Bank #3 (Program or Data) |
-| $8000 ~ $BFFF | VRAM (16KB)                         |
+| $8000 ~ $97FF | VRAM (Name Table, OAM, Registers)   |
+| $9800 ~ $98FF | SCC                                 |
+| $A000 ~ $BFFF | VRAM (Character Pattern)            |
 | $C000 ~ $FFFF | RAM (16KB)                          |
 
 #### コラム: SRAM がないことについて
@@ -93,7 +96,6 @@ FCS80 は Static-RAM（バッテリーバックアップ）を搭載していま
 |     $9605     |     $1605     | Register #5: FG スクロール位置 Y                   |
 |     $9606     |     $1606     | Register #6: IRQ スキャンライン位置 (0: 無効)      |
 |     $9607     |     $1607     | Register #7: Status (読み取り専用)                 |
-| $9608 ~ $9FFF | $1608 ~ $1FFF | Reserved                                           |
 | $A000 ~ $BFFF | $2000 ~ $3FFF | Character Pattern Table (32 x 256)                 |
 
 #### VRAM アクセス
@@ -220,7 +222,41 @@ wait_vblank_loop:
 - `Lxx` : xx バイト目の上位 4bit (ピクセルの色コード)
 - 色コード 0 は FG またはスプライトの場合は透明になります
 
-### 2-3. RAM
+### 2-3. SCC
+
+FCS80 では KONAMI の SCC (SOUND CREATIVE CHIP) と互換性のある波形メモリ音源を使うことができます。
+
+仕様:
+
+- チャネル数: 5
+- 波形メモリ:
+  - 4 waveforms x 32 bytes signed
+  - 4 waveforms: Ch1 ~ Ch3 は独立した波形テーブルを定義, Ch4 と Ch5 は共通の波形テーブルを定義
+- 音程: PSG と同様 ([Register 0~5: Tone generator - 音程](#register-05-tone-generator---音程)を参照)
+- 音量: 0 ~ 15 (4bits) ※各チャネル毎独立
+
+| Address | r | w | Desciption |
+|:-----------:|:-:|:-:|:-|
+| $9800~$981F | o | o | 32 bytes signed to define the envelope (waveform) of the channel 1 |
+| $9820~$983F | o | o | 32 bytes signed to define the envelope (waveform) of the channel 2 |
+| $9840~$985F | o | o | 32 bytes signed to define the envelope (waveform) of the channel 3 |
+| $9860~$987F | o | o | 32 bytes signed to define the envelope (waveform) of the channel 4 and 5 |
+| $9880~$9881 | - | o | Channel 1 frequency on 12bit |
+| $9882~$9883 | - | o | Channel 2 frequency on 12bit |
+| $9884~$9885 | - | o | Channel 3 frequency on 12bit |
+| $9886~$9887 | - | o | Channel 4 frequency on 12bit |
+| $9888~$9889 | - | o | Channel 5 frequency on 12bit |
+|    $988A    | - | o | Channel 1 volume (bits 4~7 are ignored) |
+|    $988B    | - | o | Channel 2 volume (bits 4~7 are ignored) |
+|    $988C    | - | o | Channel 3 volume (bits 4~7 are ignored) |
+|    $988D    | - | o | Channel 4 volume (bits 4~7 are ignored) |
+|    $988E    | - | o | Channel 5 volume (bits 4~7 are ignored) |
+|    $988F    | - | o | ON/OFF switch for each channel from 1 to 5 (bits 0~4 = Channels 1~5) |
+| $9890~$98FF | - | - | Reserved |
+
+> 上記のアドレスマップは KONAMI の 大半の SCC 対応 MSX ゲームソフト（※スナッチャーを除く）と互換性があります。
+
+### 2-4. RAM
 
 |  CPU address  |  RAM address  | Map                  |
 | :-----------: | :-----------: | :------------------- |

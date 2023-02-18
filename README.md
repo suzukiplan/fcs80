@@ -9,7 +9,8 @@ This repository provides an official emulator for the FCS80 core system.
 - [2. Memory Map](#2-memory-map)
   - [2-1. CPU Memory](#2-1-cpu-memory)
   - [2-2. VRAM](#2-2-vram)
-  - [2-3. RAM](#2-3-ram)
+  - [2-3. SCC](#2-3-scc)
+  - [2-4. RAM](#2-4-ram)
 - [3. I/O map](#3-io-map)
   - [3-1. $A0~$A2 or $D0~$DF: AY-3-8910](#3-1-a0a2-or-d0df-ay-3-8910)
   - [3-2. $B0~$B3: Bank switch](#3-2-b0b3-bank-switch)
@@ -60,7 +61,9 @@ The FCS80 allocates the upper 32KB of the Z80's memory space (64KB) to the progr
 | $2000 ~ $3FFF | PRG1: ROM Bank #1 (Program or Data) |
 | $4000 ~ $5FFF | PRG2: ROM Bank #2 (Program or Data) |
 | $6000 ~ $7FFF | PRG3: ROM Bank #3 (Program or Data) |
-| $8000 ~ $BFFF | VRAM (16KB)                         |
+| $8000 ~ $97FF | VRAM (Name Table, OAM, Registers)   |
+| $9800 ~ $98FF | SCC                                 |
+| $A000 ~ $BFFF | VRAM (Character Pattern)            |
 | $C000 ~ $FFFF | RAM (16KB)                          |
 
 #### Discussion about there is no SRAM
@@ -93,7 +96,6 @@ This memory size is sufficient for full assembly language and even C language ga
 |     $9605     |     $1605     | Register #5: FG Scroll Y                                |
 |     $9606     |     $1606     | Register #6: IRQ scanline position (NOTE: 0 is disable) |
 |     $9607     |     $1607     | Register #7: Status (read only)                         |
-| $9608 ~ $9FFF | $1608 ~ $1FFF | Reserved                                                |
 | $A000 ~ $BFFF | $2000 ~ $3FFF | Character Pattern Table (32 x 256)                      |
 
 #### VRAM access
@@ -220,7 +222,37 @@ Bit layout:
 - `Lxx` : Low 4bit (0 ~ 15 = Color Code) of byte index at xx (0 ~ 31)
 - Color code 0 is transparent in FG and/or Sprite (not transparent in BG)
 
-### 2-3. RAM
+### 2-3. SCC
+
+Waveform memory sound sources compatible with KONAMI's SCC can be used in FCS80.
+
+| Address | r | w | Desciption |
+|:-----------:|:-:|:-:|:-|
+| $9800~$981F | o | o | 32 bytes signed to define the envelope (waveform) of the channel 1 |
+| $9820~$983F | o | o | 32 bytes signed to define the envelope (waveform) of the channel 2 |
+| $9840~$985F | o | o | 32 bytes signed to define the envelope (waveform) of the channel 3 |
+| $9860~$987F | o | o | 32 bytes signed to define the envelope (waveform) of the channel 4 and 5 |
+| $9880~$9881 | - | o | Channel 1 frequency on 12bit |
+| $9882~$9883 | - | o | Channel 2 frequency on 12bit |
+| $9884~$9885 | - | o | Channel 3 frequency on 12bit |
+| $9886~$9887 | - | o | Channel 4 frequency on 12bit |
+| $9888~$9889 | - | o | Channel 5 frequency on 12bit |
+|    $988A    | - | o | Channel 1 volume (bits 4~7 are ignored) |
+|    $988B    | - | o | Channel 2 volume (bits 4~7 are ignored) |
+|    $988C    | - | o | Channel 3 volume (bits 4~7 are ignored) |
+|    $988D    | - | o | Channel 4 volume (bits 4~7 are ignored) |
+|    $988E    | - | o | Channel 5 volume (bits 4~7 are ignored) |
+|    $988F    | - | o | ON/OFF switch for each channel from 1 to 5 (bits 0~4 = Channels 1~5) |
+| $9890~$989F | - | o | Same as $9880~$988F (mirrors) |
+| $98A0~$98DF | o | - | Channel 5 envelope data |
+| $98E0~$98FF | - | - | Reserved (for Deformation register) |
+
+NOTES:
+
+- Frequencies ($9880~$9889) are the same format as for the [PSG frequency (registers 0~5)](#register-05-tone-generator)
+- The address map is the same as most of KONAMI's MSX game software (*except Snatcher).
+
+### 2-4. RAM
 
 |  CPU address  |  RAM address  | Map                  |
 | :-----------: | :-----------: | :------------------- |

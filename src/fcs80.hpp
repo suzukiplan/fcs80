@@ -32,6 +32,7 @@
 #include "ay8910.hpp"
 #include "fcs80video.hpp"
 #include "z80.hpp"
+#include "scc.hpp"
 
 class FCS80 {
     private:
@@ -44,6 +45,7 @@ class FCS80 {
         Z80* cpu;
         AY8910* psg;
         FCS80Video* vdp;
+        SCC* scc;
 
         struct Context {
             int bobo;
@@ -72,6 +74,7 @@ class FCS80 {
                 ((FCS80*)arg)->cpu->generateIRQ(0x07);
             });
             this->psg = new AY8910();
+            this->scc = new SCC();
             this->rom = NULL;
             this->romSize = 0;
             this->reset();
@@ -85,6 +88,7 @@ class FCS80 {
         }
 
         ~FCS80() {
+            delete this->scc;
             delete this->psg;
             delete this->vdp;
             delete this->cpu;
@@ -95,6 +99,7 @@ class FCS80 {
             for (int i = 0; i < 4; i++) this->ctx.romBank[i] = i;
             this->vdp->reset();
             this->psg->reset(4);
+            this->scc->reset();
             memset(&this->cpu->reg, 0, sizeof(this->cpu->reg));
             this->cpu->reg.SP = 0xFFFF;
             memset(this->soundBuffer, 0, sizeof(this->soundBuffer));
@@ -205,6 +210,7 @@ class FCS80 {
                 short* r = &this->soundBuffer[this->soundCursor];
                 this->soundCursor++;
                 this->psg->tick(l, r, 81);
+                this->scc->tick(l, r, 81);
                 this->psg->ctx.bobo -= FCS80_CPU_CLOCK_PER_SEC;
             }
         }
@@ -214,7 +220,11 @@ class FCS80 {
                 int ptr = this->ctx.romBank[addr / 0x2000] * 0x2000 + (addr & 0x1FFF);
                 return (this->romSize <= ptr) ? 0xFF : this->rom[ptr];
             } else if (addr < 0xC000) {
-                return this->vdp->read(addr);
+                if (0x9800 <= addr && addr < 0x9900) {
+                    return this->scc->read(addr);
+                } else {
+                    return this->vdp->read(addr);
+                }
             } else {
                 return this->ctx.ram[addr & 0x3FFF];
             }
@@ -224,7 +234,11 @@ class FCS80 {
             if (addr < 0x8000) {
                 this->ctx.romBank[addr / 0x2000] = value;
             } else if (addr < 0xC000) {
-                this->vdp->write(addr, value);
+                if (0x9800 <= addr && addr < 0x9900) {
+                    this->scc->write(addr, value);
+                } else {
+                    this->vdp->write(addr, value);
+                }
             } else {
                 this->ctx.ram[addr & 0x3FFF] = value;
             }
