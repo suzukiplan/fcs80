@@ -90,10 +90,16 @@ public:
             mix[i] = sw & 1 ? this->ctx.ch[4 == i ? 3 : i].waveforms[ch->index] * ch->volume : 0;
             sw >>= 1;
         }
-        int result = (mix[0] + mix[1] + mix[2]) & 0xFFFF;
-        result |= ((mix[0] + mix[3] + mix[4]) & 0xffff) << 16;
-        *left = (short)((*left) + result);
-        *right = (short)((*right) + result);
+        int result = mix[0] + mix[1] + mix[2] + mix[3] + mix[4];
+        *left = this->to_short((*left) + result);
+        *right = this->to_short((*right) + result);
+    }
+
+private:
+    inline short to_short(int i) {
+        if (32767 < i) return (short)32767;
+        if (i < -32768) return (short)-32768;
+        return (short)i;
     }
 };
 
