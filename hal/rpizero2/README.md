@@ -1,12 +1,12 @@
-# FCS80 for RaspberryPi Zero (Bare Metal)
+# FCS80 for RaspberryPi Zero 2W (Bare Metal)
 
 - This is an FCS80 emulator that runs in a RaspberryPi Zero bare-metal environment.
-- Compatible with RaspberryPiZero series Zero, Zero W and Zero WH.
-- Does not work with RaspberryPi Zero 2W.
+- Compatible with RaspberryPi Zero 2W.
+- Does not work with RaspberryPi Zero, Zero W, Zero WH.
 
 ## Required Hardware
 
-- RaspberryPi Zero, Zero 1W or Zero WH
+- RaspberryPi Zero 2W
 - Display device (e.g., TV) capable of outputting video and audio via HDMI input
 - Gamepad with USB connection
 - FAT-formatted SD card with at least 4MB (NOT 4GB) of free space
@@ -22,7 +22,7 @@
 > **NOTE: Build is usually not required.**
 
 - Install XCode CLI Tools (macOS) or build-essential (Linux)
-- Install [GNU Arm Embedded Toolchain (arm-none-eabi)](https://developer.arm.com/downloads/-/gnu-rm)
+- Install [Arm GNU Toolchain (aarch64-none-elf)](https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads)
 - Execute `make`
 
 ## Licenses

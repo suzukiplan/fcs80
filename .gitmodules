@@ -1,3 +1,6 @@
 [submodule "hal/rpizero/src/circle"]
 	path = hal/rpizero/src/circle
 	url = https://github.com/rsta2/circle
+[submodule "hal/rpizero2/src/circle"]
+	path = hal/rpizero2/src/circle
+	url = https://github.com/rsta2/circle.git
