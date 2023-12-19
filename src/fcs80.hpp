@@ -55,7 +55,7 @@ class FCS80 {
             unsigned char reserved[3];
         } ctx;
 
-        FCS80() {
+        FCS80(FCS80Video::ColorMode colorMode = FCS80Video::ColorMode::RGB555) {
             this->cpu = new Z80([](void* arg, unsigned short addr) {
                 return ((FCS80*)arg)->readMemory(addr);
             }, [](void* arg, unsigned short addr, unsigned char value) {
@@ -68,7 +68,7 @@ class FCS80 {
             this->cpu->setConsumeClockCallback([](void* arg, int clocks) {
                 ((FCS80*)arg)->consumeClock(clocks);
             });
-            this->vdp = new FCS80Video(this, [](void* arg) {
+            this->vdp = new FCS80Video(colorMode, this, [](void* arg) {
                 ((FCS80*)arg)->cpu->requestBreak();
             }, [](void* arg) {
                 ((FCS80*)arg)->cpu->generateIRQ(0x07);

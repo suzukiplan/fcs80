@@ -156,7 +156,7 @@ TShutdownMode CKernel::run(void)
     auto buffer = screen.GetFrameBuffer();
     auto hdmiPitch = buffer->GetPitch() / sizeof(TScreenColor);
     auto hdmiBuffer = (uint16_t*)buffer->GetBuffer();
-    FCS80 fcs80;
+    FCS80 fcs80(FCS80Video::ColorMode::RGB565);
     fcs80.loadRom(rom_, romSize_);
     int swap = 0;
     while (1) {
