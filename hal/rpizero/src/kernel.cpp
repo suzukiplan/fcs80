@@ -29,16 +29,21 @@
 
 #define TAG "kernel"
 static uint8_t pad1_;
+static uint8_t rom_[2097152];
+static UINT romSize_;
+#define MOUNT_DRIVE "SD:"
+#define ROM_FILE "/game.rom"
 
 CKernel::CKernel(void) : screen(240, 192),
                          timer(&interrupt),
-                         logger(options.GetLogLevel(), &timer),
+                         logger(options.GetLogLevel(), nullptr),
                          usb(&interrupt, &timer, TRUE),
                          vchiq(CMemorySystem::Get(), &interrupt),
                          sound(&vchiq, (TVCHIQSoundDestination)options.GetSoundOption()),
+                         emmc(&interrupt, &timer, &led),
                          gamePad(nullptr)
 {
-    led.Blink(3);
+    led.Blink(5);
 }
 
 CKernel::~CKernel(void)
@@ -87,6 +92,11 @@ boolean CKernel::initialize(void)
     }
 
     if (bOK) {
+        logger.Write(TAG, LogNotice, "init emmc");
+        bOK = emmc.Initialize();
+    }
+
+    if (bOK) {
         led.Off();
     }
     return bOK;
@@ -121,14 +131,33 @@ void CKernel::updateUsbStatus(void)
 
 TShutdownMode CKernel::run(void)
 {
+    logger.Write(TAG, LogNotice, "loading game.rom...");
+    FRESULT result = f_mount(&fatFs, MOUNT_DRIVE, 1);
+    if (FR_OK != result) {
+        logger.Write(TAG, LogPanic, "Mount failed! (%d)", (int)result);
+        return ShutdownHalt;
+    }
+    FIL gameRom;
+    result = f_open(&gameRom, MOUNT_DRIVE ROM_FILE, FA_READ | FA_OPEN_EXISTING);
+    if (FR_OK != result) {
+        logger.Write(TAG, LogPanic, "File not found! (%d)", (int)result);
+        return ShutdownHalt;
+    }
+    result = f_read(&gameRom, rom_, sizeof(rom_), &romSize_);
+    if (FR_OK != result) {
+        logger.Write(TAG, LogPanic, "File read error! (%d)", (int)result);
+        return ShutdownHalt;
+    }
+    logger.Write(TAG, LogNotice, "Load success: %d bytes", (int)romSize_);
+    f_close(&gameRom);
+    f_unmount(MOUNT_DRIVE);
+
     sound.SetControl(VCHIQ_SOUND_VOLUME_MAX);
     auto buffer = screen.GetFrameBuffer();
     auto hdmiPitch = buffer->GetPitch() / sizeof(TScreenColor);
     auto hdmiBuffer = (uint16_t*)buffer->GetBuffer();
     FCS80 fcs80;
-
-    // TODO: read game.rom
-
+    fcs80.loadRom(rom_, romSize_);
     int swap = 0;
     while (1) {
         updateUsbStatus();

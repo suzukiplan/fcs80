@@ -25,6 +25,8 @@ LIBS += $(CIRCLEHOME)/addon/linux/liblinuxemu.a
 LIBS += $(CIRCLEHOME)/addon/linux/liblinuxemu.a
 LIBS += $(CIRCLEHOME)/lib/input/libinput.a
 LIBS += $(CIRCLEHOME)/lib/fs/libfs.a
+LIBS += $(CIRCLEHOME)/addon/fatfs/libfatfs.a
+LIBS += $(CIRCLEHOME)/addon/SDCard/libsdcard.a
 LIBS += $(CIRCLEHOME)/lib/usb/libusb.a
 include $(CIRCLEHOME)/Rules.mk
 -include $(DEPS)

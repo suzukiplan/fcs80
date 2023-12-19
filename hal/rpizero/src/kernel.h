@@ -39,9 +39,11 @@
 #include <circle/types.h>
 #include <circle/usb/usbgamepad.h>
 #include <circle/usb/usbhcidevice.h>
+#include <fatfs/ff.h>
 #include <vc4/sound/vchiqsoundbasedevice.h>
 #include <vc4/sound/vchiqsounddevice.h>
 #include <vc4/vchiq/vchiqdevice.h>
+#include <SDCard/emmc.h>
 
 enum TShutdownMode {
     ShutdownNone,
@@ -73,6 +75,8 @@ class CKernel
     CScheduler scheduler;
     CVCHIQDevice vchiq;
     CVCHIQSoundDevice sound;
+    CEMMCDevice emmc;
+	FATFS fatFs;
     CUSBGamePadDevice* volatile gamePad;
     void updateUsbStatus(void);
 };
