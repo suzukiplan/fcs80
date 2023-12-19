@@ -139,7 +139,7 @@ class FCS80 {
                 fclose(fp);
                 return false;
             }
-            if (romSize != fread(rom, 1, romSize, fp)) {
+            if (romSize != (long)fread(rom, 1, romSize, fp)) {
                 fclose(fp);
                 free(rom);
                 return false;
@@ -222,7 +222,7 @@ class FCS80 {
         inline unsigned char readMemory(unsigned short addr) {
             if (addr < 0x8000) {
                 int ptr = this->ctx.romBank[addr / 0x2000] * 0x2000 + (addr & 0x1FFF);
-                return (this->romSize <= ptr) ? 0xFF : this->rom[ptr];
+                return ((int)this->romSize <= ptr) ? 0xFF : this->rom[ptr];
             } else if (addr < 0xC000) {
                 if (0x9800 <= addr && addr < 0x9900) {
                     return this->scc->read(addr);
@@ -287,7 +287,7 @@ class FCS80 {
                 case 0xC0: {
                     int addr = this->cpu->reg.pair.A;
                     addr *= 0x2000;
-                    if (addr + 0x2000 <= this->romSize) memcpy(&this->vdp->ctx.ram[0x2000], &this->rom[addr], 0x2000);
+                    if (addr + 0x2000 <= (int)this->romSize) memcpy(&this->vdp->ctx.ram[0x2000], &this->rom[addr], 0x2000);
                     else memset(&this->vdp->ctx.ram[0x2000], 0xFF, 0x2000);
                     break;
                 }
