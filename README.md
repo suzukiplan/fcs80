@@ -477,5 +477,8 @@ Please incorporate the [modules under the src directory of this repository](./sr
 | :- | :-: | :- |
 | [FCS80 for SDL2](./hal/sdl2) | macOS & Linux | FCS80 for SDL2 (Support macOS and Linux both) |
 | [FCS80 for RPI0](./hal/rpizero/) | RaspberryPi Zero | Bare metal environment of RaspberryPi Zero |
+| [FCS80 for RPI0-2W](./hal/rpizero2/) | RaspberryPi Zero 2W | Bare metal environment of RaspberryPi Zero 2W |
+| [FCS80 for RPI1](./hal/rpizero/) | RaspberryPi | Bare metal environment of RaspberryPi _(Same as RPI0)_ |
+| [FCS80 for RPI3](./hal/rpizero2/) | RaspberryPi 3 | Bare metal environment of RaspberryPi 3 _(Same as RPI0-2W)_ |
 | [FCS80 for Cocoa](./hal/cocoa) | macOS | An example HAL implementation of FCS80 running on macOS. |
 | [sndrec](./hal/sndrec) | Free | Starts the specified ROM file and recording the audio to a wav file. |
