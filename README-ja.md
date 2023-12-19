@@ -480,5 +480,6 @@ FCS80 は新規プログラムの作成を容易にする 16 ポートアクセ�
 |Name|Platform|Description|
 |:-|:-:|:-|
 |[FCS80 for SDL2](./hal/sdl2)|macOS & Linux| SDL2 (macOS & Linux) で動作する FCS80 エミュレータ |
+|[FCS80 for RPI0](./hal/rpizero/) | RaspberryPi Zero | RaspberryPi Zero のベアメタル環境で動作する FCS80 エミュレータ |
 |[FCS80 for Cocoa](./hal/cocoa)|macOS| macOS (Cocoa) で動作する FCS80 エミュレータ |
 |[sndrec](./hal/sndrec)|Free|ROM ファイルの音声を録音して wav 形式で保存 |
