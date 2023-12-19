@@ -48,3 +48,15 @@ make
 # execute
 ./fcs80 ../../example/hello/hello.rom
 ```
+
+## Usage
+
+```
+usage: fcs80 /path/to/file.rom ..... Specify ROM file to be used
+             [-g { None ............ GPU: Do not use
+                 | OpenGL .......... GPU: OpenGL <default>
+                 | Vulkan .......... GPU: Vulkan
+                 | Metal ........... GPU: Metal
+                 }]
+             [-f] .................. Full Screen Mode
+```

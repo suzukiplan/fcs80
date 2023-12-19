@@ -130,13 +130,13 @@ int main(int argc, char* argv[])
         }
     }
     if (cliError || !romPath) {
-        puts("usage: fcs80 /path/to/file.rom ............. Use ROM");
-        puts("             [-g { None .................... GPU: Do not use");
-        puts("                 | OpenGL .................. GPU: OpenGL <default>");
-        puts("                 | Vulkan .................. GPU: Vulkan");
-        puts("                 | Metal ................... GPU: Metal");
+        puts("usage: fcs80 /path/to/file.rom ..... Specify ROM file to be used");
+        puts("             [-g { None ............ GPU: Do not use");
+        puts("                 | OpenGL .......... GPU: OpenGL <default>");
+        puts("                 | Vulkan .......... GPU: Vulkan");
+        puts("                 | Metal ........... GPU: Metal");
         puts("                 }]");
-        puts("             [-f] .......................... Full Screen Mode");
+        puts("             [-f] .................. Full Screen Mode");
         return 1;
     }
 
