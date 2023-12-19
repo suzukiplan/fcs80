@@ -59,11 +59,11 @@ class FCS80 {
             this->cpu = new Z80([](void* arg, unsigned short addr) {
                 return ((FCS80*)arg)->readMemory(addr);
             }, [](void* arg, unsigned short addr, unsigned char value) {
-                return ((FCS80*)arg)->writeMemory(addr, value);
-            }, [](void* arg, unsigned char port) {
+                ((FCS80*)arg)->writeMemory(addr, value);
+            }, [](void* arg, unsigned short port) {
                 return ((FCS80*)arg)->inPort(port);
-            }, [](void* arg, unsigned char port, unsigned char value) {
-                return ((FCS80*)arg)->outPort(port, value);
+            }, [](void* arg, unsigned short port, unsigned char value) {
+                ((FCS80*)arg)->outPort(port, value);
             }, this);
             this->cpu->setConsumeClockCallback([](void* arg, int clocks) {
                 ((FCS80*)arg)->consumeClock(clocks);
