@@ -24,8 +24,8 @@
  * THE SOFTWARE.
  * -----------------------------------------------------------------------------
  */
-#include "kernel.h"
 #include "fcs80.hpp"
+#include "kernel.h"
 
 #define TAG "kernel"
 static uint8_t pad1_;
