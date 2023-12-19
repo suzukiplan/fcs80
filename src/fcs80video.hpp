@@ -31,10 +31,16 @@
 #include <string.h>
 
 class FCS80Video {
+    public:
+        enum class ColorMode {
+            RGB555,
+            RGB565
+        };
     private:
         void (*detectEndOfFrame)(void* arg);
         void (*detectIRQ)(void* arg);
         void* arg;
+        ColorMode colorMode;
         inline unsigned char* getBgNameTableAddr() { return &this->ctx.ram[0x0000]; }
         inline unsigned char* getBgAttrTableAddr() { return &this->ctx.ram[0x0400]; }
         inline unsigned char* getFgNameTableAddr() { return &this->ctx.ram[0x0800]; }
@@ -62,7 +68,8 @@ class FCS80Video {
             unsigned char ram[0x4000];
         } ctx;
 
-        FCS80Video(void* arg, void (*detectEndOfFrame)(void* arg), void (*detectIRQ)(void* arg)) {
+        FCS80Video(ColorMode colorMode_, void* arg, void (*detectEndOfFrame)(void* arg), void (*detectIRQ)(void* arg)) {
+            this->colorMode = colorMode_;
             this->detectEndOfFrame = detectEndOfFrame;
             this->detectIRQ = detectIRQ;
             this->arg = arg;
@@ -87,6 +94,12 @@ class FCS80Video {
         inline void write(unsigned short addr, unsigned char value) {
             addr &= 0x3FFF;
             this->ctx.ram[addr] = value;
+            if (this->colorMode == ColorMode::RGB565 && 0x1400 <= addr && addr < 0x1600) {
+                unsigned short rgb555;
+                memcpy(&rgb555, &this->ctx.ram[addr & 0x3FFE], 2);
+                unsigned short rgb565 = ((rgb555 & 0xFFE0) << 1) | (rgb555 & 0x1F);
+                memcpy(&this->ctx.ram[addr & 0x3FFE], &rgb565, 2);
+            }
         }
 
         inline void tick() {
