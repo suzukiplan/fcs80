@@ -1,5 +1,5 @@
 /*
- * micro MSX2+ - Simple Buffer Queue
+ * FCS80 - Simple Buffer Queue
  * -----------------------------------------------------------------------------
  * The MIT License (MIT)
  *
