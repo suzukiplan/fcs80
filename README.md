@@ -473,7 +473,8 @@ Please incorporate the [modules under the src directory of this repository](./sr
 
 ### 6-3. Example
 
-| Name                           | Platform | Description                                                          |
-| :----------------------------- | :------: | :------------------------------------------------------------------- |
-| [FCS80 for Cocoa](./hal/cocoa) |  macOS   | An example HAL implementation of FCS80 running on macOS.             |
-| [sndrec](./hal/sndrec)         |   Free   | Starts the specified ROM file and recording the audio to a wav file. |
+| Name                           |   Platform    | Description                                                          |
+| :----------------------------- | :-----------: | :------------------------------------------------------------------- |
+| [FCS80 for SDL2](./hal/sdl2)   | macOS & Linux | An example HAL implementation of FCS80 running on SDL2.              |
+| [FCS80 for Cocoa](./hal/cocoa) |     macOS     | An example HAL implementation of FCS80 running on macOS.             |
+| [sndrec](./hal/sndrec)         |     Free      | Starts the specified ROM file and recording the audio to a wav file. |
