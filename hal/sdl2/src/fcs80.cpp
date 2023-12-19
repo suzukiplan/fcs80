@@ -183,8 +183,8 @@ int main(int argc, char* argv[])
         WINDOW_TITLE,
         SDL_WINDOWPOS_UNDEFINED,
         SDL_WINDOWPOS_UNDEFINED,
-        240 * 2,
-        192 * 2,
+        fullScreen ? 640 : 480,
+        fullScreen ? 480 : 384,
         gpuType | fullScreen);
     if (fullScreen) {
         SDL_ShowCursor(SDL_DISABLE);
@@ -262,6 +262,9 @@ int main(int argc, char* argv[])
         auto fcs80Display = fcs80.getDisplay();
         auto pcDisplay = (unsigned int*)windowSurface->pixels;
         auto pitch = windowSurface->pitch / windowSurface->format->BytesPerPixel;
+        int offsetY = fullScreen ? 48 * pitch : 0;
+        int offsetX = fullScreen ? 80 : 0;
+        pcDisplay += offsetY;
         for (int y = 0; y < 192; y++) {
             for (int x = 0; x < 240; x++) {
                 unsigned int rgb555 = fcs80Display[x];
@@ -272,11 +275,11 @@ int main(int argc, char* argv[])
                 rgb888 <<= 8;
                 rgb888 |= bit5To8(rgb555 & 0b0000000000011111);
                 rgb888 |= windowSurface->format->Amask;
-                pcDisplay[x * 2] = rgb888;
-                pcDisplay[x * 2 + 1] = rgb888;
+                pcDisplay[offsetX + x * 2] = rgb888;
+                pcDisplay[offsetX + x * 2 + 1] = rgb888;
             }
             fcs80Display += 240;
-            memcpy(&pcDisplay[pitch], &pcDisplay[0], 240 * 2 * windowSurface->format->BytesPerPixel);
+            memcpy(&pcDisplay[pitch], &pcDisplay[0], windowSurface->pitch);
             pcDisplay += pitch * 2;
         }
         SDL_UpdateWindowSurface(window);
