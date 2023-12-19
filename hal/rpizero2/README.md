@@ -2,7 +2,7 @@
 
 - This is an FCS80 emulator that runs in a RaspberryPi Zero bare-metal environment.
 - Compatible with RaspberryPi Zero 2W.
-- Does not work with RaspberryPi Zero, Zero W, Zero WH.
+- Does not compatible with RaspberryPi Zero, Zero W, Zero WH.
 
 ## Required Hardware
 
@@ -15,7 +15,7 @@
 
 1. Copy files under the [`image`](image) directory to the root directory of the SD card
 2. Replace `game.rom` with the ROM file you want to run
-3. Insert SD card into RaspberryPi Zero and launch
+3. Insert SD card into RaspberryPi Zero 2W and launch
 
 ## How to Build
 

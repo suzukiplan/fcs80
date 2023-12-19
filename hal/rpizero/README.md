@@ -2,7 +2,7 @@
 
 - This is an FCS80 emulator that runs in a RaspberryPi Zero bare-metal environment.
 - Compatible with RaspberryPiZero series Zero, Zero W and Zero WH.
-- Does not work with RaspberryPi Zero 2W.
+- Does not compatible with RaspberryPi Zero 2W.
 
 ## Required Hardware
 
