@@ -25,6 +25,7 @@
  * -----------------------------------------------------------------------------
  */
 #pragma once
+#include <SDCard/emmc.h>
 #include <circle/actled.h>
 #include <circle/devicenameservice.h>
 #include <circle/exceptionhandler.h>
@@ -43,7 +44,6 @@
 #include <vc4/sound/vchiqsoundbasedevice.h>
 #include <vc4/sound/vchiqsounddevice.h>
 #include <vc4/vchiq/vchiqdevice.h>
-#include <SDCard/emmc.h>
 
 enum TShutdownMode {
     ShutdownNone,
@@ -76,7 +76,7 @@ class CKernel
     CVCHIQDevice vchiq;
     CVCHIQSoundDevice sound;
     CEMMCDevice emmc;
-	FATFS fatFs;
+    FATFS fatFs;
     CUSBGamePadDevice* volatile gamePad;
     void updateUsbStatus(void);
 };

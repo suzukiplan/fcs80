@@ -2,19 +2,19 @@
  * FAIRY COMPUTER SYSTEM 80 - SOUND CREATIVE CHIP Emulator
  * -----------------------------------------------------------------------------
  * The MIT License (MIT)
- * 
+ *
  * Copyright (c) 2023 Yoji Suzuki.
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,8 +28,9 @@
 #define INCLUDE_SCC_HPP
 #include <string.h>
 
-class SCC {
-public:
+class SCC
+{
+  public:
     struct Channel {
         signed char waveforms[32];
         int counter;
@@ -37,24 +38,27 @@ public:
         unsigned char volume;
         unsigned char index;
     };
-    
+
     struct Context {
         struct Channel ch[5];
         int sw;
     } ctx;
 
-    SCC() {
+    SCC()
+    {
         this->reset();
     }
 
     void reset() { memset(&this->ctx, 0, sizeof(this->ctx)); }
 
-    inline unsigned char read(unsigned short addr) {
+    inline unsigned char read(unsigned short addr)
+    {
         addr &= 0xFF;
         return addr < 0x80 ? this->ctx.ch[addr / 0x20].waveforms[addr & 0x1F] : 0xFF;
     }
 
-    inline void write(unsigned short addr, unsigned char value) {
+    inline void write(unsigned short addr, unsigned char value)
+    {
         addr &= 0xFF;
         if (addr & 0x80) {
             addr &= 0x3F;
@@ -71,10 +75,11 @@ public:
         }
     }
 
-    inline void tick(short* left, short* right, unsigned int cycles) {
+    inline void tick(short* left, short* right, unsigned int cycles)
+    {
         int mix[5];
         int sw = this->ctx.sw;
-        for(int i = 0; i < 5; i++) {
+        for (int i = 0; i < 5; i++) {
             Channel* ch = &this->ctx.ch[i];
             if (ch->period) {
                 ch->counter += cycles;
@@ -95,8 +100,9 @@ public:
         *right = this->to_short((*right) + result);
     }
 
-private:
-    inline short to_short(int i) {
+  private:
+    inline short to_short(int i)
+    {
         if (32767 < i) return (short)32767;
         if (i < -32768) return (short)-32768;
         return (short)i;

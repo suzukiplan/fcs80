@@ -25,10 +25,11 @@
  * -----------------------------------------------------------------------------
  */
 #include "BufferQueue.h"
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 
-BufferQueue::BufferQueue(size_t iSize) {
+BufferQueue::BufferQueue(size_t iSize)
+{
     size = ((iSize / BUFFER_BLOCK_SIZE) + 1) * BUFFER_BLOCK_SIZE;
     cursor = 0;
     buffer = malloc(size);
@@ -43,17 +44,19 @@ BufferQueue::BufferQueue(size_t iSize) {
     }
 }
 
-BufferQueue::~BufferQueue() {
+BufferQueue::~BufferQueue()
+{
     if (buffer) free(buffer);
     if (resultBuffer) free(resultBuffer);
 }
 
-bool BufferQueue::enqueue(const void *aBuffer, const size_t aSize) {
+bool BufferQueue::enqueue(const void* aBuffer, const size_t aSize)
+{
     if (size - cursor < aSize) {
         size_t newSize = ((size + aSize) / BUFFER_BLOCK_SIZE + 1) * BUFFER_BLOCK_SIZE;
-        void *newBuffer = malloc(newSize);
+        void* newBuffer = malloc(newSize);
         if (!newBuffer) return false;
-        void *newResultBuffer = malloc(newSize);
+        void* newResultBuffer = malloc(newSize);
         if (!newResultBuffer) {
             free(newBuffer);
             return false;
@@ -65,12 +68,13 @@ bool BufferQueue::enqueue(const void *aBuffer, const size_t aSize) {
         resultBuffer = newResultBuffer;
         size = newSize;
     }
-    memcpy(((char *) this->buffer) + cursor, aBuffer, aSize);
+    memcpy(((char*)this->buffer) + cursor, aBuffer, aSize);
     cursor += aSize;
     return true;
 }
 
-void BufferQueue::dequeue(void **oBuffer, size_t *oSize, size_t limit) {
+void BufferQueue::dequeue(void** oBuffer, size_t* oSize, size_t limit)
+{
     if (cursor) {
         *oBuffer = resultBuffer;
         if (limit < cursor) {
