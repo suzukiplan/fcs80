@@ -1,5 +1,7 @@
 # FAIRY COMPUTER SYSTEM 80
 
+![fcs80-logo.png](fcs80-logo.png)
+
 FAIRY COMPUTER SYSTEM 80(FCS80)は、8 ビット時代の技術である Z80 と AY-3-8910、そして Z80 での使いやすさを追求した新しい VDP (FCS80-VIDEO) を搭載した新しいレトロゲーム機です。
 このリポジトリでは、FCS80 コアシステムの公式エミュレータを提供しています。
 
