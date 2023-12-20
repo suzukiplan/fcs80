@@ -33,10 +33,11 @@ static uint8_t rom_[2097152];
 static UINT romSize_;
 #define MOUNT_DRIVE "SD:"
 #define ROM_FILE "/game.rom"
+extern "C" const unsigned short splash[46080];
 
 CKernel::CKernel(void) : screen(240, 192),
                          timer(&interrupt),
-                         logger(options.GetLogLevel(), nullptr),
+                         logger(LogPanic, nullptr),
                          usb(&interrupt, &timer, TRUE),
                          vchiq(CMemorySystem::Get(), &interrupt),
                          sound(&vchiq, (TVCHIQSoundDestination)options.GetSoundOption()),
@@ -57,6 +58,18 @@ boolean CKernel::initialize(void)
 
     if (bOK) {
         bOK = screen.Initialize();
+    }
+
+    auto buffer = screen.GetFrameBuffer();
+    auto hdmiPitch = buffer->GetPitch() / sizeof(TScreenColor);
+    unsigned long ptr = buffer->GetBuffer();
+    auto hdmiBuffer = (uint16_t*)ptr;
+    uint16_t* splashPtr = (uint16_t*)splash;
+    buffer->WaitForVerticalSync();
+    for (int y = 0; y < 192; y++) {
+        memcpy(hdmiBuffer, splashPtr, 240 * 2);
+        hdmiBuffer += hdmiPitch;
+        splashPtr += 240;
     }
 
     if (bOK) {

@@ -16,6 +16,7 @@ CPPFLAGS += -D_TIME_T_DECLARED
 OBJS = main.o
 OBJS += std.o
 OBJS += kernel.o
+OBJS += splash.o
 LIBS = $(CIRCLEHOME)/lib/libcircle.a
 LIBS += $(CIRCLEHOME)/lib/sound/libsound.a
 LIBS += $(CIRCLEHOME)/lib/sched/libsched.a
