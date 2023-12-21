@@ -59,6 +59,28 @@ class FCS80Video
     inline bool isAttrFlipH(unsigned char attr) { return attr & 0x40; }
     inline bool isAttrFlipV(unsigned char attr) { return attr & 0x20; }
     inline int paletteFromAttr(unsigned char attr) { return (attr & 0x0F) << 4; }
+    unsigned short paletteCache[256];
+
+    inline void updatePaletteCache(unsigned char idx)
+    {
+        unsigned short* ptr = this->getColorTableAddr();
+        ptr += idx;
+        if (ColorMode::RGB555 == this->colorMode) {
+            this->paletteCache[idx] = *ptr;
+        } else {
+            // RGB555 -> RGB565 (Green bit 0 = 0)
+            this->paletteCache[idx] = ((*ptr) & 0x7C00) << 1;
+            this->paletteCache[idx] |= ((*ptr) & 0x03E0) << 1;
+            this->paletteCache[idx] |= (*ptr) & 0x001F;
+        }
+    }
+
+    void resetPaletteCache()
+    {
+        for (int idx = 0; idx < 256; idx++) {
+            this->updatePaletteCache((unsigned char)idx);
+        }
+    }
 
   public:
     unsigned short display[240 * 192];
@@ -79,7 +101,11 @@ class FCS80Video
         this->arg = arg;
     }
 
-    void reset() { memset(&this->ctx, 0, sizeof(this->ctx)); }
+    void reset()
+    {
+        memset(&this->ctx, 0, sizeof(this->ctx));
+        this->resetPaletteCache();
+    }
 
     inline unsigned char read(unsigned short addr)
     {
@@ -100,11 +126,8 @@ class FCS80Video
     {
         addr &= 0x3FFF;
         this->ctx.ram[addr] = value;
-        if (this->colorMode == ColorMode::RGB565 && 0x1400 <= addr && addr < 0x1600) {
-            unsigned short rgb555;
-            memcpy(&rgb555, &this->ctx.ram[addr & 0x3FFE], 2);
-            unsigned short rgb565 = ((rgb555 & 0xFFE0) << 1) | (rgb555 & 0x1F);
-            memcpy(&this->ctx.ram[addr & 0x3FFE], &rgb565, 2);
+        if (0x1400 <= addr && addr < 0x1600) {
+            this->updatePaletteCache((addr - 0x1400) / 2);
         }
     }
 
@@ -127,6 +150,7 @@ class FCS80Video
 
     void refreshDisplay()
     {
+        this->resetPaletteCache();
         for (int i = 8; i < 200; i++) this->renderScanline(i);
     }
 
@@ -146,7 +170,6 @@ class FCS80Video
         int offset = (((y + 8) / 8) & 0x1F) * 32;
         unsigned char* nametbl = this->getBgNameTableAddr() + offset;
         unsigned char* attrtbl = this->getBgAttrTableAddr() + offset;
-        unsigned short* colortbl = this->getColorTableAddr();
         for (int x = this->getRegisterBgScrollX() + 8, xx = 0; xx < 240; x++, xx++, display++) {
             offset = (x >> 3) & 0x1F;
             unsigned char ptn = nametbl[offset];
@@ -162,7 +185,7 @@ class FCS80Video
                 chrtbl += (x & 7) >> 1;
                 pal = x & 1 ? (*chrtbl) & 0x0F : ((*chrtbl) & 0xF0) >> 4;
             }
-            *display = colortbl[pal + this->paletteFromAttr(attr)];
+            *display = this->paletteCache[pal + this->paletteFromAttr(attr)];
         }
     }
 
@@ -173,7 +196,6 @@ class FCS80Video
         int offset = (((y + 8) / 8) & 0x1F) * 32;
         unsigned char* nametbl = this->getFgNameTableAddr() + offset;
         unsigned char* attrtbl = this->getFgAttrTableAddr() + offset;
-        unsigned short* colortbl = this->getColorTableAddr();
         for (int x = this->getRegisterFgScrollX() + 8, xx = 0; xx < 240; x++, xx++, display++) {
             offset = (x >> 3) & 0x1F;
             unsigned char ptn = nametbl[offset];
@@ -191,7 +213,7 @@ class FCS80Video
                 pal = x & 1 ? (*chrtbl) & 0x0F : ((*chrtbl) & 0xF0) >> 4;
             }
             if (pal) {
-                *display = colortbl[pal + this->paletteFromAttr(attr)];
+                *display = this->paletteCache[pal + this->paletteFromAttr(attr)];
             }
         }
     }
@@ -200,7 +222,6 @@ class FCS80Video
     {
         unsigned char* oam = this->getOamAddr();
         unsigned short* display = &this->display[(scanline - 8) * 240];
-        unsigned short* colortbl = this->getColorTableAddr();
         oam += 255 * 4;
         for (int i = 0; i < 256; i++, oam -= 4) {
             if (!this->isAttrVisible(oam[3])) continue;
@@ -220,7 +241,7 @@ class FCS80Video
                     pal = j & 1 ? chrtbl[j >> 1] & 0x0F : (chrtbl[j >> 1] & 0xF0) >> 4;
                 }
                 if (pal) {
-                    display[x - 8] = colortbl[pal + this->paletteFromAttr(oam[3])];
+                    display[x - 8] = this->paletteCache[pal + this->paletteFromAttr(oam[3])];
                 }
             }
         }
