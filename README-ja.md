@@ -401,6 +401,7 @@ FCS80 は新規プログラムの作成を容易にする 16 ポートアクセ�
 | Name                                           | Description                                                                            |
 | :--------------------------------------------- | :------------------------------------------------------------------------------------- |
 | [Hello, World!](./example/hello)               | BG に `Hello, World!` を表示 & ジョイパッドでスクロール                                |
+| [Hello, World! (SDCC)](./example/hello-sdcc)  | BG に `Hello, World!` を表示 & ジョイパッドでスクロール (SDCCを用いたC言語版)|
 | [Sprite Test](./example/sprite)                | 256 個のスプライトを描画して動かす                                                     |
 | [Map Scroll](./example/map_scroll)             | [Tiled Map Editor](https://www.mapeditor.org) で作ったマップデータを描画してスクロール |
 | [Raster Scroll](./example/raster_scroll)       | スクロール X をスキャンライン毎に更新して画面をシェイク                                |

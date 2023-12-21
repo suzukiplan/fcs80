@@ -61,5 +61,5 @@
         "vector": "cpp"
     },
     "C_Cpp.default.cppStandard": "c++14",
-    "editor.formatOnSave": true
+    "editor.formatOnSave": false
 }
