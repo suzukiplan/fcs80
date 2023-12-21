@@ -13,6 +13,9 @@ all:
 	make execute-format FILENAME=./hal/rpizero/src/kernel.h
 	make execute-format FILENAME=./hal/rpizero/src/main.cpp
 	make execute-format FILENAME=./hal/rpizero/src/std.c
+	cd hal/sdl2 && make
+	cd hal/rpizero && make
+	cd hal/rpizero2 && make
 
 execute-format:
 	clang-format -style=file < ${FILENAME} > ${FILENAME}.bak
