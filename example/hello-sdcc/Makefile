@@ -26,7 +26,7 @@ ${MAKEROM}:
 
 hello.rom: hello.c fcs80.c fcs80.h crt0.s font.chr
 	sdasz80 -o crt0.s
-	sdcc -mz80 --code-loc 0x0100 --no-std-crt0 -Wlcrt0.rel -c fcs80.c
+	sdcc -mz80 --code-loc 0x0100 --no-std-crt0 -c fcs80.c
 	sdcc -mz80 --code-loc 0x1000 --no-std-crt0 -Wlcrt0.rel -Wlfcs80.rel hello.c
 	makebin -s 8192 hello.ihx hello.bin
 	${MAKEROM} hello.rom hello.bin font.chr
