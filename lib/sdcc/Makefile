@@ -1,6 +1,7 @@
 all:
 	sdasz80 -o crt0.s
 	sdcc -mz80 --code-loc 0x0100 --no-std-crt0 -c fcs80.c
+	sdar -rc fcs80.lib crt0.rel fcs80.rel
 
 clean:
 	rm -f *.rel
@@ -13,4 +14,4 @@ clean:
 	rm -f *.bin
 	rm -f *.lk
 	rm -f *.noi
-	rm -f *.rom
+	rm -f *.lib
