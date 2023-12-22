@@ -93,6 +93,20 @@ typedef unsigned long long uint64_t;
 typedef signed long long int64_t;
 
 /**
+ * Object Attribute Memory record
+ */
+typedef struct OAM_ {
+    //! Y-coordinate
+    uint8_t y;
+    //! X-coordinate
+    uint8_t x;
+    //! Character pattern number
+    uint8_t ptn;
+    //! Attribute value https://github.com/suzukiplan/fcs80/blob/master/README.md#attribute-bit-layout-bgfgsprite
+    uint8_t attr;
+} OAM;
+
+/**
  * @brief Wait until V-Blank is detected
  */
 void fcs80_wait_vsync(void);
@@ -140,6 +154,13 @@ void fcs80_bg_scroll_x(uint8_t x);
  * @param y Y-coordinate (0-255)
  */
 void fcs80_bg_scroll_y(uint8_t y);
+
+/**
+ * @brief Acquire the first address of OAM
+ * @return first address of OAM
+ * @note about OAM: https://github.com/suzukiplan/fcs80/blob/master/README.md#object-attribute-memory-sprite
+ */
+OAM* fcs80_get_oam(void);
 
 /**
  * @brief Acquire joypad input status
