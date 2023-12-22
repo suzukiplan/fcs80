@@ -160,6 +160,13 @@ NameTable* fcs80_bg_get_nametbl(void);
 void fcs80_bg_putstr(uint8_t x, uint8_t y, uint8_t attr, const char* str);
 
 /**
+ * @brief Set hardware scroll (X and Y coordinate) for BG
+ * @param x X-coordinate (0-255)
+ * @param y Y-coordinate (0-255)
+ */
+void fcs80_bg_scroll(uint8_t x, uint8_t y);
+
+/**
  * @brief Set hardware scroll (X coordinate) for BG
  * @param x X-coordinate (0-255)
  */
