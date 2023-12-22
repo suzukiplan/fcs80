@@ -31,9 +31,6 @@ void fcs80_palette_set(uint8_t pn, uint8_t pi, uint8_t r, uint8_t g, uint8_t b)
 void fcs80_dma(uint8_t prg)
 {
 __asm
-    ld ix, #2
-    add ix, sp
-    ld a, (ix)
     out (#0xC0), a
 __endasm;
 }
