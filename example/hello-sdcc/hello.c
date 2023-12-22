@@ -23,17 +23,17 @@ void main(void)
         pad = fcs80_joypad_get();
         if (pad & FCS80_JOYPAD_LE) {
             scrollX++;
-            fcs80_scroll_x(scrollX);
+            fcs80_bg_scroll_x(scrollX);
         } else if (pad & FCS80_JOYPAD_RI) {
             scrollX--;
-            fcs80_scroll_x(scrollX);
+            fcs80_bg_scroll_x(scrollX);
         }
         if (pad & FCS80_JOYPAD_UP) {
             scrollY++;
-            fcs80_scroll_y(scrollY);
+            fcs80_bg_scroll_y(scrollY);
         } else if (pad & FCS80_JOYPAD_DW) {
             scrollY--;
-            fcs80_scroll_y(scrollY);
+            fcs80_bg_scroll_y(scrollY);
         }
     }
 }

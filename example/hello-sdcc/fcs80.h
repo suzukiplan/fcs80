@@ -23,8 +23,8 @@ void fcs80_wait_vsync(void);
 void fcs80_palette_set(uint8_t pn, uint8_t pi, uint8_t r, uint8_t g, uint8_t b);
 void fcs80_dma(uint8_t prg);
 void fcs80_bg_putstr(uint8_t x, uint8_t y, uint8_t attr, const char* str);
+void fcs80_bg_scroll_x(uint8_t x);
+void fcs80_bg_scroll_y(uint8_t y);
 uint8_t fcs80_joypad_get(void);
-void fcs80_scroll_x(uint8_t x);
-void fcs80_scroll_y(uint8_t y);
 
 #endif

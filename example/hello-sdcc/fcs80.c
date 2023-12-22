@@ -50,6 +50,16 @@ void fcs80_bg_putstr(uint8_t x, uint8_t y, uint8_t attr, const char* str)
     }
 }
 
+void fcs80_bg_scroll_x(uint8_t x)
+{
+    *((uint8_t*)0x9602) = x;
+}
+
+void fcs80_bg_scroll_y(uint8_t y)
+{
+    *((uint8_t*)0x9603) = y;
+}
+
 uint8_t fcs80_joypad_get(void)
 {
 __asm
@@ -60,14 +70,4 @@ __asm
     ld l, a
     ret
 __endasm;
-}
-
-void fcs80_scroll_x(uint8_t x)
-{
-    *((uint8_t*)0x9602) = x;
-}
-
-void fcs80_scroll_y(uint8_t y)
-{
-    *((uint8_t*)0x9603) = y;
 }
