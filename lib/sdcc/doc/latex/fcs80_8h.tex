@@ -1,0 +1,365 @@
+\doxysection{fcs80.\+h File Reference}
+\hypertarget{fcs80_8h}{}\label{fcs80_8h}\index{fcs80.h@{fcs80.h}}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_o_a_m}{OAM}}
+\item 
+struct \mbox{\hyperlink{struct_name_table}{Name\+Table}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{fcs80_8h_a19cef9b8c5c066daa2547929a1d4455b}\label{fcs80_8h_a19cef9b8c5c066daa2547929a1d4455b} 
+\#define {\bfseries FCS80\+\_\+\+JOYPAD\+\_\+\+UP}~0b10000000
+\item 
+\Hypertarget{fcs80_8h_a09e999ece099af892d1b87df13b4669e}\label{fcs80_8h_a09e999ece099af892d1b87df13b4669e} 
+\#define {\bfseries FCS80\+\_\+\+JOYPAD\+\_\+\+DW}~0b01000000
+\item 
+\Hypertarget{fcs80_8h_a972dea1b734d73ec26f9ac42b96fe06b}\label{fcs80_8h_a972dea1b734d73ec26f9ac42b96fe06b} 
+\#define {\bfseries FCS80\+\_\+\+JOYPAD\+\_\+\+LE}~0b00100000
+\item 
+\Hypertarget{fcs80_8h_a26d14880979c8d1b04436c82be333548}\label{fcs80_8h_a26d14880979c8d1b04436c82be333548} 
+\#define {\bfseries FCS80\+\_\+\+JOYPAD\+\_\+\+RI}~0b00010000
+\item 
+\Hypertarget{fcs80_8h_a5ab90737bac4269a50818c1f4f217f33}\label{fcs80_8h_a5ab90737bac4269a50818c1f4f217f33} 
+\#define {\bfseries FCS80\+\_\+\+JOYPAD\+\_\+\+ST}~0b00001000
+\item 
+\Hypertarget{fcs80_8h_a1d2df99fd4d20b74f809d08c7bb31e94}\label{fcs80_8h_a1d2df99fd4d20b74f809d08c7bb31e94} 
+\#define {\bfseries FCS80\+\_\+\+JOYPAD\+\_\+\+SE}~0b00000100
+\item 
+\Hypertarget{fcs80_8h_a1af07b236862d59414501f5b73dba925}\label{fcs80_8h_a1af07b236862d59414501f5b73dba925} 
+\#define {\bfseries FCS80\+\_\+\+JOYPAD\+\_\+\+T1}~0b00000010
+\item 
+\Hypertarget{fcs80_8h_a13991278d54e8aa6a4e6d67e41accd9b}\label{fcs80_8h_a13991278d54e8aa6a4e6d67e41accd9b} 
+\#define {\bfseries FCS80\+\_\+\+JOYPAD\+\_\+\+T2}~0b00000001
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}\label{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5} 
+typedef unsigned char {\bfseries uint8\+\_\+t}
+\begin{DoxyCompactList}\small\item\em stdint compatible (8bit unsigned) \end{DoxyCompactList}\item 
+\Hypertarget{fcs80_8h_aef44329758059c91c76d334e8fc09700}\label{fcs80_8h_aef44329758059c91c76d334e8fc09700} 
+typedef signed char {\bfseries int8\+\_\+t}
+\begin{DoxyCompactList}\small\item\em stdint compatible (8bit signed) \end{DoxyCompactList}\item 
+\Hypertarget{fcs80_8h_a273cf69d639a59973b6019625df33e30}\label{fcs80_8h_a273cf69d639a59973b6019625df33e30} 
+typedef unsigned short {\bfseries uint16\+\_\+t}
+\begin{DoxyCompactList}\small\item\em stdint compatible (16bit unsigned) \end{DoxyCompactList}\item 
+\Hypertarget{fcs80_8h_a269259c924dce846340ddbb810db2e3c}\label{fcs80_8h_a269259c924dce846340ddbb810db2e3c} 
+typedef signed short {\bfseries int16\+\_\+t}
+\begin{DoxyCompactList}\small\item\em stdint compatible (16bit signed) \end{DoxyCompactList}\item 
+\Hypertarget{fcs80_8h_a06896e8c53f721507066c079052171f8}\label{fcs80_8h_a06896e8c53f721507066c079052171f8} 
+typedef unsigned long {\bfseries uint32\+\_\+t}
+\begin{DoxyCompactList}\small\item\em stdint compatible (32bit unsigned) \end{DoxyCompactList}\item 
+\Hypertarget{fcs80_8h_a2ba621978a511250f7250fb10e05ffbe}\label{fcs80_8h_a2ba621978a511250f7250fb10e05ffbe} 
+typedef signed long {\bfseries int32\+\_\+t}
+\begin{DoxyCompactList}\small\item\em stdint compatible (32bit signed) \end{DoxyCompactList}\item 
+\Hypertarget{fcs80_8h_aaa5d1cd013383c889537491c3cfd9aad}\label{fcs80_8h_aaa5d1cd013383c889537491c3cfd9aad} 
+typedef unsigned long long {\bfseries uint64\+\_\+t}
+\begin{DoxyCompactList}\small\item\em stdint compatible (64bit unsigned) \end{DoxyCompactList}\item 
+\Hypertarget{fcs80_8h_adec1df1b8b51cb32b77e5b86fff46471}\label{fcs80_8h_adec1df1b8b51cb32b77e5b86fff46471} 
+typedef signed long long {\bfseries int64\+\_\+t}
+\begin{DoxyCompactList}\small\item\em stdint compatible (64bit signed) \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{fcs80_8h_a359e17203c254254be4250024ceb611c}\label{fcs80_8h_a359e17203c254254be4250024ceb611c} 
+void {\bfseries fcs80\+\_\+wait\+\_\+vsync} (void)
+\begin{DoxyCompactList}\small\item\em Wait until V-\/\+Blank is detected. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{fcs80_8h_a32d961eddd6805d7f14bab8db7c043fe}{fcs80\+\_\+wait\+\_\+scanline}} (\mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}} n)
+\begin{DoxyCompactList}\small\item\em Wait until specified scanline position. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{fcs80_8h_a6775821cb810fba7f340615f758957f6}{fcs80\+\_\+palette\+\_\+set}} (\mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}} pn, \mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}} pi, \mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}} r, \mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}} g, \mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}} b)
+\begin{DoxyCompactList}\small\item\em Set palette. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{fcs80_8h_a9e2b20a846303c45ad9fd733488b94e8}{fcs80\+\_\+dma}} (\mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}} prg)
+\begin{DoxyCompactList}\small\item\em High-\/speed DMA transfer of the contents of the specified ROM Bank to the Character Pattern Table in VRAM. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{struct_name_table}{Name\+Table}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{fcs80_8h_aa7dae717e428bd9e90f9394317d9bdbe}{fcs80\+\_\+bg\+\_\+nametbl\+\_\+get}} (void)
+\begin{DoxyCompactList}\small\item\em Acquire BG name table. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{fcs80_8h_ad0a2232cff44c531c3fc17b8fa64a271}{fcs80\+\_\+bg\+\_\+putstr}} (\mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}} x, \mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}} y, \mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}} attr, const char \texorpdfstring{$\ast$}{*}str)
+\begin{DoxyCompactList}\small\item\em Continuously writes the specified ASCII code and attribute values to BG\textquotesingle{}s \doxylink{struct_name_table}{Name\+Table}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{fcs80_8h_a9d0337ff7b40ce8c3e0a4f9ec7dabf30}{fcs80\+\_\+bg\+\_\+scroll}} (\mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}} x, \mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}} y)
+\begin{DoxyCompactList}\small\item\em Set hardware scroll (X and Y coordinate) for BG. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{fcs80_8h_a89b6196a124153c4ebe3032809741327}{fcs80\+\_\+bg\+\_\+scroll\+\_\+x}} (\mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}} x)
+\begin{DoxyCompactList}\small\item\em Set hardware scroll (X coordinate) for BG. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{fcs80_8h_ac324717543d27846e35ccacfb374f2db}{fcs80\+\_\+bg\+\_\+scroll\+\_\+y}} (\mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}} y)
+\begin{DoxyCompactList}\small\item\em Set hardware scroll (X coordinate) for BG. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{struct_name_table}{Name\+Table}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{fcs80_8h_a905db29ed3dff0e56a0c30d98de552ae}{fcs80\+\_\+fg\+\_\+nametbl\+\_\+get}} (void)
+\begin{DoxyCompactList}\small\item\em Acquire FG name table. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{fcs80_8h_a769f56019e9f981e0bc2a2fa5e47b836}{fcs80\+\_\+fg\+\_\+putstr}} (\mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}} x, \mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}} y, \mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}} attr, const char \texorpdfstring{$\ast$}{*}str)
+\begin{DoxyCompactList}\small\item\em Continuously writes the specified ASCII code and attribute values to FG\textquotesingle{}s \doxylink{struct_name_table}{Name\+Table}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{fcs80_8h_a4755fbaafc8832cacf98f5957ef4db32}{fcs80\+\_\+fg\+\_\+scroll}} (\mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}} x, \mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}} y)
+\begin{DoxyCompactList}\small\item\em Set hardware scroll (X and Y coordinate) for FG. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{fcs80_8h_a36d2685986d87f89d7db0c0a0e0a1cee}{fcs80\+\_\+fg\+\_\+scroll\+\_\+x}} (\mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}} x)
+\begin{DoxyCompactList}\small\item\em Set hardware scroll (X coordinate) for FG. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{fcs80_8h_a14471109c521bf663fce149d491e5998}{fcs80\+\_\+fg\+\_\+scroll\+\_\+y}} (\mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}} y)
+\begin{DoxyCompactList}\small\item\em Set hardware scroll (X coordinate) for FG. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{struct_o_a_m}{OAM}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{fcs80_8h_a40cff8854a526e548917f5c6f7656e90}{fcs80\+\_\+oam\+\_\+get}} (void)
+\begin{DoxyCompactList}\small\item\em Acquire the first address of \doxylink{struct_o_a_m}{OAM}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}} \mbox{\hyperlink{fcs80_8h_a9496d6c915cd3e4df76c916e1c2cdf2c}{fcs80\+\_\+joypad\+\_\+get}} (void)
+\begin{DoxyCompactList}\small\item\em Acquire joypad input status. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\hypertarget{fcs80_8h_autotoc_md0}{}\doxysubsubsection{\texorpdfstring{@brief FCS80 system call implementation for SDCC}{@brief FCS80 system call implementation for SDCC}}\label{fcs80_8h_autotoc_md0}
+The MIT License (MIT)
+
+Copyright (c) 2023 Yoji Suzuki.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "{}\+Software"{}), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions\+:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "{}\+AS IS"{}, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN \hypertarget{fcs80_8h_autotoc_md1}{}\doxysubsubsection{\texorpdfstring{THE SOFTWARE.}{THE SOFTWARE.}}\label{fcs80_8h_autotoc_md1}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{fcs80_8h_aa7dae717e428bd9e90f9394317d9bdbe}\label{fcs80_8h_aa7dae717e428bd9e90f9394317d9bdbe} 
+\index{fcs80.h@{fcs80.h}!fcs80\_bg\_nametbl\_get@{fcs80\_bg\_nametbl\_get}}
+\index{fcs80\_bg\_nametbl\_get@{fcs80\_bg\_nametbl\_get}!fcs80.h@{fcs80.h}}
+\doxysubsubsection{\texorpdfstring{fcs80\_bg\_nametbl\_get()}{fcs80\_bg\_nametbl\_get()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct_name_table}{Name\+Table}} \texorpdfstring{$\ast$}{*} fcs80\+\_\+bg\+\_\+nametbl\+\_\+get (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Acquire BG name table. 
+
+\begin{DoxyReturn}{Returns}
+BG name table 
+\end{DoxyReturn}
+\Hypertarget{fcs80_8h_ad0a2232cff44c531c3fc17b8fa64a271}\label{fcs80_8h_ad0a2232cff44c531c3fc17b8fa64a271} 
+\index{fcs80.h@{fcs80.h}!fcs80\_bg\_putstr@{fcs80\_bg\_putstr}}
+\index{fcs80\_bg\_putstr@{fcs80\_bg\_putstr}!fcs80.h@{fcs80.h}}
+\doxysubsubsection{\texorpdfstring{fcs80\_bg\_putstr()}{fcs80\_bg\_putstr()}}
+{\footnotesize\ttfamily void fcs80\+\_\+bg\+\_\+putstr (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}}}]{x,  }\item[{\mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}}}]{y,  }\item[{\mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}}}]{attr,  }\item[{const char \texorpdfstring{$\ast$}{*}}]{str }\end{DoxyParamCaption})}
+
+
+
+Continuously writes the specified ASCII code and attribute values to BG\textquotesingle{}s \doxylink{struct_name_table}{Name\+Table}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x} & X-\/coordinate (0-\/31) \\
+\hline
+{\em y} & Y-\/coordinate (0-\/31) \\
+\hline
+{\em attr} & attribute value \href{https://github.com/suzukiplan/fcs80/blob/master/README.md\#attribute-bit-layout-bgfgsprite}{\texttt{ https\+://github.\+com/suzukiplan/fcs80/blob/master/\+README.\+md\#attribute-\/bit-\/layout-\/bgfgsprite}} \\
+\hline
+{\em str} & \textquotesingle{}\textbackslash{}0\textquotesingle{} terminated string \\
+\hline
+\end{DoxyParams}
+\Hypertarget{fcs80_8h_a9d0337ff7b40ce8c3e0a4f9ec7dabf30}\label{fcs80_8h_a9d0337ff7b40ce8c3e0a4f9ec7dabf30} 
+\index{fcs80.h@{fcs80.h}!fcs80\_bg\_scroll@{fcs80\_bg\_scroll}}
+\index{fcs80\_bg\_scroll@{fcs80\_bg\_scroll}!fcs80.h@{fcs80.h}}
+\doxysubsubsection{\texorpdfstring{fcs80\_bg\_scroll()}{fcs80\_bg\_scroll()}}
+{\footnotesize\ttfamily void fcs80\+\_\+bg\+\_\+scroll (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}}}]{x,  }\item[{\mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}}}]{y }\end{DoxyParamCaption})}
+
+
+
+Set hardware scroll (X and Y coordinate) for BG. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x} & X-\/coordinate (0-\/255) \\
+\hline
+{\em y} & Y-\/coordinate (0-\/255) \\
+\hline
+\end{DoxyParams}
+\Hypertarget{fcs80_8h_a89b6196a124153c4ebe3032809741327}\label{fcs80_8h_a89b6196a124153c4ebe3032809741327} 
+\index{fcs80.h@{fcs80.h}!fcs80\_bg\_scroll\_x@{fcs80\_bg\_scroll\_x}}
+\index{fcs80\_bg\_scroll\_x@{fcs80\_bg\_scroll\_x}!fcs80.h@{fcs80.h}}
+\doxysubsubsection{\texorpdfstring{fcs80\_bg\_scroll\_x()}{fcs80\_bg\_scroll\_x()}}
+{\footnotesize\ttfamily void fcs80\+\_\+bg\+\_\+scroll\+\_\+x (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}}}]{x }\end{DoxyParamCaption})}
+
+
+
+Set hardware scroll (X coordinate) for BG. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x} & X-\/coordinate (0-\/255) \\
+\hline
+\end{DoxyParams}
+\Hypertarget{fcs80_8h_ac324717543d27846e35ccacfb374f2db}\label{fcs80_8h_ac324717543d27846e35ccacfb374f2db} 
+\index{fcs80.h@{fcs80.h}!fcs80\_bg\_scroll\_y@{fcs80\_bg\_scroll\_y}}
+\index{fcs80\_bg\_scroll\_y@{fcs80\_bg\_scroll\_y}!fcs80.h@{fcs80.h}}
+\doxysubsubsection{\texorpdfstring{fcs80\_bg\_scroll\_y()}{fcs80\_bg\_scroll\_y()}}
+{\footnotesize\ttfamily void fcs80\+\_\+bg\+\_\+scroll\+\_\+y (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}}}]{y }\end{DoxyParamCaption})}
+
+
+
+Set hardware scroll (X coordinate) for BG. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em y} & Y-\/coordinate (0-\/255) \\
+\hline
+\end{DoxyParams}
+\Hypertarget{fcs80_8h_a9e2b20a846303c45ad9fd733488b94e8}\label{fcs80_8h_a9e2b20a846303c45ad9fd733488b94e8} 
+\index{fcs80.h@{fcs80.h}!fcs80\_dma@{fcs80\_dma}}
+\index{fcs80\_dma@{fcs80\_dma}!fcs80.h@{fcs80.h}}
+\doxysubsubsection{\texorpdfstring{fcs80\_dma()}{fcs80\_dma()}}
+{\footnotesize\ttfamily void fcs80\+\_\+dma (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}}}]{prg }\end{DoxyParamCaption})}
+
+
+
+High-\/speed DMA transfer of the contents of the specified ROM Bank to the Character Pattern Table in VRAM. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em prg} & ROM Bank number (0-\/255) \\
+\hline
+\end{DoxyParams}
+\Hypertarget{fcs80_8h_a905db29ed3dff0e56a0c30d98de552ae}\label{fcs80_8h_a905db29ed3dff0e56a0c30d98de552ae} 
+\index{fcs80.h@{fcs80.h}!fcs80\_fg\_nametbl\_get@{fcs80\_fg\_nametbl\_get}}
+\index{fcs80\_fg\_nametbl\_get@{fcs80\_fg\_nametbl\_get}!fcs80.h@{fcs80.h}}
+\doxysubsubsection{\texorpdfstring{fcs80\_fg\_nametbl\_get()}{fcs80\_fg\_nametbl\_get()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct_name_table}{Name\+Table}} \texorpdfstring{$\ast$}{*} fcs80\+\_\+fg\+\_\+nametbl\+\_\+get (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Acquire FG name table. 
+
+\begin{DoxyReturn}{Returns}
+FG name table 
+\end{DoxyReturn}
+\Hypertarget{fcs80_8h_a769f56019e9f981e0bc2a2fa5e47b836}\label{fcs80_8h_a769f56019e9f981e0bc2a2fa5e47b836} 
+\index{fcs80.h@{fcs80.h}!fcs80\_fg\_putstr@{fcs80\_fg\_putstr}}
+\index{fcs80\_fg\_putstr@{fcs80\_fg\_putstr}!fcs80.h@{fcs80.h}}
+\doxysubsubsection{\texorpdfstring{fcs80\_fg\_putstr()}{fcs80\_fg\_putstr()}}
+{\footnotesize\ttfamily void fcs80\+\_\+fg\+\_\+putstr (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}}}]{x,  }\item[{\mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}}}]{y,  }\item[{\mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}}}]{attr,  }\item[{const char \texorpdfstring{$\ast$}{*}}]{str }\end{DoxyParamCaption})}
+
+
+
+Continuously writes the specified ASCII code and attribute values to FG\textquotesingle{}s \doxylink{struct_name_table}{Name\+Table}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x} & X-\/coordinate (0-\/31) \\
+\hline
+{\em y} & Y-\/coordinate (0-\/31) \\
+\hline
+{\em attr} & attribute value \href{https://github.com/suzukiplan/fcs80/blob/master/README.md\#attribute-bit-layout-bgfgsprite}{\texttt{ https\+://github.\+com/suzukiplan/fcs80/blob/master/\+README.\+md\#attribute-\/bit-\/layout-\/bgfgsprite}} \\
+\hline
+{\em str} & \textquotesingle{}\textbackslash{}0\textquotesingle{} terminated string \\
+\hline
+\end{DoxyParams}
+\Hypertarget{fcs80_8h_a4755fbaafc8832cacf98f5957ef4db32}\label{fcs80_8h_a4755fbaafc8832cacf98f5957ef4db32} 
+\index{fcs80.h@{fcs80.h}!fcs80\_fg\_scroll@{fcs80\_fg\_scroll}}
+\index{fcs80\_fg\_scroll@{fcs80\_fg\_scroll}!fcs80.h@{fcs80.h}}
+\doxysubsubsection{\texorpdfstring{fcs80\_fg\_scroll()}{fcs80\_fg\_scroll()}}
+{\footnotesize\ttfamily void fcs80\+\_\+fg\+\_\+scroll (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}}}]{x,  }\item[{\mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}}}]{y }\end{DoxyParamCaption})}
+
+
+
+Set hardware scroll (X and Y coordinate) for FG. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x} & X-\/coordinate (0-\/255) \\
+\hline
+{\em y} & Y-\/coordinate (0-\/255) \\
+\hline
+\end{DoxyParams}
+\Hypertarget{fcs80_8h_a36d2685986d87f89d7db0c0a0e0a1cee}\label{fcs80_8h_a36d2685986d87f89d7db0c0a0e0a1cee} 
+\index{fcs80.h@{fcs80.h}!fcs80\_fg\_scroll\_x@{fcs80\_fg\_scroll\_x}}
+\index{fcs80\_fg\_scroll\_x@{fcs80\_fg\_scroll\_x}!fcs80.h@{fcs80.h}}
+\doxysubsubsection{\texorpdfstring{fcs80\_fg\_scroll\_x()}{fcs80\_fg\_scroll\_x()}}
+{\footnotesize\ttfamily void fcs80\+\_\+fg\+\_\+scroll\+\_\+x (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}}}]{x }\end{DoxyParamCaption})}
+
+
+
+Set hardware scroll (X coordinate) for FG. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x} & X-\/coordinate (0-\/255) \\
+\hline
+\end{DoxyParams}
+\Hypertarget{fcs80_8h_a14471109c521bf663fce149d491e5998}\label{fcs80_8h_a14471109c521bf663fce149d491e5998} 
+\index{fcs80.h@{fcs80.h}!fcs80\_fg\_scroll\_y@{fcs80\_fg\_scroll\_y}}
+\index{fcs80\_fg\_scroll\_y@{fcs80\_fg\_scroll\_y}!fcs80.h@{fcs80.h}}
+\doxysubsubsection{\texorpdfstring{fcs80\_fg\_scroll\_y()}{fcs80\_fg\_scroll\_y()}}
+{\footnotesize\ttfamily void fcs80\+\_\+fg\+\_\+scroll\+\_\+y (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}}}]{y }\end{DoxyParamCaption})}
+
+
+
+Set hardware scroll (X coordinate) for FG. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em y} & Y-\/coordinate (0-\/255) \\
+\hline
+\end{DoxyParams}
+\Hypertarget{fcs80_8h_a9496d6c915cd3e4df76c916e1c2cdf2c}\label{fcs80_8h_a9496d6c915cd3e4df76c916e1c2cdf2c} 
+\index{fcs80.h@{fcs80.h}!fcs80\_joypad\_get@{fcs80\_joypad\_get}}
+\index{fcs80\_joypad\_get@{fcs80\_joypad\_get}!fcs80.h@{fcs80.h}}
+\doxysubsubsection{\texorpdfstring{fcs80\_joypad\_get()}{fcs80\_joypad\_get()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}} fcs80\+\_\+joypad\+\_\+get (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Acquire joypad input status. 
+
+\begin{DoxyReturn}{Returns}
+joypad input status 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+that the input bit is originally reset (0) and the uninput bit is set (1), but when this function is used, it is inverted. 
+\end{DoxyNote}
+\Hypertarget{fcs80_8h_a40cff8854a526e548917f5c6f7656e90}\label{fcs80_8h_a40cff8854a526e548917f5c6f7656e90} 
+\index{fcs80.h@{fcs80.h}!fcs80\_oam\_get@{fcs80\_oam\_get}}
+\index{fcs80\_oam\_get@{fcs80\_oam\_get}!fcs80.h@{fcs80.h}}
+\doxysubsubsection{\texorpdfstring{fcs80\_oam\_get()}{fcs80\_oam\_get()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct_o_a_m}{OAM}} \texorpdfstring{$\ast$}{*} fcs80\+\_\+oam\+\_\+get (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Acquire the first address of \doxylink{struct_o_a_m}{OAM}. 
+
+\begin{DoxyReturn}{Returns}
+first address of \doxylink{struct_o_a_m}{OAM} 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+about \doxylink{struct_o_a_m}{OAM}\+: \href{https://github.com/suzukiplan/fcs80/blob/master/README.md\#object-attribute-memory-sprite}{\texttt{ https\+://github.\+com/suzukiplan/fcs80/blob/master/\+README.\+md\#object-\/attribute-\/memory-\/sprite}} 
+\end{DoxyNote}
+\Hypertarget{fcs80_8h_a6775821cb810fba7f340615f758957f6}\label{fcs80_8h_a6775821cb810fba7f340615f758957f6} 
+\index{fcs80.h@{fcs80.h}!fcs80\_palette\_set@{fcs80\_palette\_set}}
+\index{fcs80\_palette\_set@{fcs80\_palette\_set}!fcs80.h@{fcs80.h}}
+\doxysubsubsection{\texorpdfstring{fcs80\_palette\_set()}{fcs80\_palette\_set()}}
+{\footnotesize\ttfamily void fcs80\+\_\+palette\+\_\+set (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}}}]{pn,  }\item[{\mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}}}]{pi,  }\item[{\mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}}}]{r,  }\item[{\mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}}}]{g,  }\item[{\mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}}}]{b }\end{DoxyParamCaption})}
+
+
+
+Set palette. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em pn} & number of palette (0-\/15) \\
+\hline
+{\em pi} & index of palette (0-\/15) \\
+\hline
+{\em r} & color depth of red (0-\/31) \\
+\hline
+{\em g} & color depth of green (0-\/31) \\
+\hline
+{\em b} & color depth of blue (0-\/31) \\
+\hline
+\end{DoxyParams}
+\Hypertarget{fcs80_8h_a32d961eddd6805d7f14bab8db7c043fe}\label{fcs80_8h_a32d961eddd6805d7f14bab8db7c043fe} 
+\index{fcs80.h@{fcs80.h}!fcs80\_wait\_scanline@{fcs80\_wait\_scanline}}
+\index{fcs80\_wait\_scanline@{fcs80\_wait\_scanline}!fcs80.h@{fcs80.h}}
+\doxysubsubsection{\texorpdfstring{fcs80\_wait\_scanline()}{fcs80\_wait\_scanline()}}
+{\footnotesize\ttfamily void fcs80\+\_\+wait\+\_\+scanline (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}}}]{n }\end{DoxyParamCaption})}
+
+
+
+Wait until specified scanline position. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em n} & scanline position (0-\/191) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+A value of 192 or more for {\ttfamily n} causes an immediate return. 
+\end{DoxyNote}
