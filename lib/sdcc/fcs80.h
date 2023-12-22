@@ -304,7 +304,7 @@ uint8_t fcs80_psg_mixing_get(void);
  * @brief PSG: Set Ch0 volume
  * @param volume volume
  */
-void fcs80_psg_volume_ch0_et(uint8_t volume);
+void fcs80_psg_volume_ch0_set(uint8_t volume);
 
 /**
  * @brief PSG: Get Ch0 volume
@@ -316,7 +316,7 @@ uint8_t fcs80_psg_volume_ch0_get(void);
  * @brief PSG: Set Ch0 volume
  * @param volume volume
  */
-void fcs80_psg_volume_ch1_et(uint8_t volume);
+void fcs80_psg_volume_ch1_set(uint8_t volume);
 
 /**
  * @brief PSG: Get Ch1 volume
@@ -328,7 +328,7 @@ uint8_t fcs80_psg_volume_ch1_get(void);
  * @brief PSG: Set Ch2 volume
  * @param volume volume
  */
-void fcs80_psg_volume_ch2_et(uint8_t volume);
+void fcs80_psg_volume_ch2_set(uint8_t volume);
 
 /**
  * @brief PSG: Get Ch2 volume
