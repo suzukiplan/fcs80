@@ -13,6 +13,16 @@ wait_vblank_loop:
 __endasm;
 }
 
+void fcs80_wait_scanline(uint8_t n)
+{
+    if (192 <= n) {
+        return; // invalid line number
+    }
+    while (n != *((volatile uint8_t*)0x9600)) {
+        ;
+    }
+}
+
 void fcs80_palette_set(uint8_t pn, uint8_t pi, uint8_t r, uint8_t g, uint8_t b)
 {
     uint16_t col;
