@@ -364,7 +364,7 @@ uint16_t fcs80_psg_envelope_period_get(void);
 
 /**
  * @brief PSG: Set envelope pattern
- * @param period envelope pattern
+ * @param pattern envelope pattern
  */
 void fcs80_psg_envelope_pattern_set(uint8_t pattern);
 
