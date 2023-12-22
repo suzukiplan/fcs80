@@ -226,4 +226,152 @@ OAM* fcs80_oam_get(void);
  */
 uint8_t fcs80_joypad_get(void);
 
+/**
+ * @brief PSG: Set Ch0 tone
+ * @param tone tone
+ */
+void fcs80_psg_tone_ch0_set(uint16_t tone);
+
+/**
+ * @brief PSG: Get Ch0 tone
+ * @return tone
+ */
+uint16_t fcs80_psg_tone_ch0_get(void);
+
+/**
+ * @brief PSG: Set Ch1 tone
+ * @param tone tone
+ */
+void fcs80_psg_tone_ch1_set(uint16_t tone);
+
+/**
+ * @brief PSG: Get Ch1 tone
+ * @return tone
+ */
+uint16_t fcs80_psg_tone_ch1_get(void);
+
+/**
+ * @brief PSG: Set Ch2 tone
+ * @param tone tone
+ */
+void fcs80_psg_tone_ch2_set(uint16_t tone);
+
+/**
+ * @brief PSG: Get Ch2 tone
+ * @return tone
+ */
+uint16_t fcs80_psg_tone_ch2_get(void);
+
+/**
+ * @brief PSG: Set tone
+ * @param ch channel (0-2)
+ * @param tone tone
+ */
+void fcs80_psg_tone_set(uint8_t ch, uint16_t tone);
+
+/**
+ * @brief PSG: Get tone
+ * @param ch channel (0-2)
+ * @return tone
+ */
+uint16_t fcs80_psg_tone_get(uint8_t ch);
+
+/**
+ * @brief PSG: Set noise
+ * @param noise noise
+ */
+void fcs80_psg_noise_set(uint8_t noise);
+
+/**
+ * @brief PSG: Get noise
+ * @return noise
+ */
+uint8_t fcs80_psg_noise_get(void);
+
+/**
+ * @brief PSG: Set mixing
+ * @param mixing mixing
+ */
+void fcs80_psg_mixing_set(uint8_t mixing);
+
+/**
+ * @brief PSG: Get mixing
+ * @return mixing
+ */
+uint8_t fcs80_psg_mixing_get(void);
+
+/**
+ * @brief PSG: Set Ch0 volume
+ * @param volume volume
+ */
+void fcs80_psg_volume_ch0_et(uint8_t volume);
+
+/**
+ * @brief PSG: Get Ch0 volume
+ * @return volume
+ */
+uint8_t fcs80_psg_volume_ch0_get(void);
+
+/**
+ * @brief PSG: Set Ch0 volume
+ * @param volume volume
+ */
+void fcs80_psg_volume_ch1_et(uint8_t volume);
+
+/**
+ * @brief PSG: Get Ch1 volume
+ * @return volume
+ */
+uint8_t fcs80_psg_volume_ch1_get(void);
+
+/**
+ * @brief PSG: Set Ch2 volume
+ * @param volume volume
+ */
+void fcs80_psg_volume_ch2_et(uint8_t volume);
+
+/**
+ * @brief PSG: Get Ch2 volume
+ * @return volume
+ */
+uint8_t fcs80_psg_volume_ch2_get(void);
+
+/**
+ * @brief PSG: Set volume
+ * @param ch channel
+ * @param volume volume
+ */
+void fcs80_psg_volume_set(uint8_t ch, uint8_t volume);
+
+/**
+ * @brief PSG: Get volume
+ * @param ch channel
+ * @return volume
+ */
+uint8_t fcs80_psg_volume_get(uint8_t ch);
+
+/**
+ * @brief PSG: Set envelope period
+ * @param period envelope period
+ */
+void fcs80_psg_envelope_period_set(uint16_t period);
+
+/**
+ * @brief PSG: Get envelope period
+ * @return envelope period
+ */
+uint16_t fcs80_psg_envelope_period_get(void);
+
+/**
+ * @brief PSG: Set envelope pattern
+ * @param period envelope pattern
+ */
+void fcs80_psg_envelope_pattern_set(uint8_t pattern);
+
+/**
+ * @brief PSG: Get envelope pattern
+ * @return envelope pattern
+ */
+uint8_t fcs80_psg_envelope_pattern_get(void);
+
 #endif

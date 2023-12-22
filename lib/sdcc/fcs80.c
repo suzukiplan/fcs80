@@ -160,3 +160,229 @@ __asm
     ret
 __endasm;
 }
+
+void fcs80_psg_tone_ch0_set(uint16_t tone)
+{
+__asm
+    ld a, l
+    out (#0xD0), a
+    ld a, h
+    out (#0xD1), a
+__endasm;
+}
+
+uint16_t fcs80_psg_tone_ch0_get(void)
+{
+__asm
+    in a, (#0xD0)
+    ld l, a
+    in a, (#0xD1)
+    ld h, a
+    ret
+__endasm;
+}
+
+void fcs80_psg_tone_ch1_set(uint16_t tone)
+{
+__asm
+    ld a, l
+    out (#0xD2), a
+    ld a, h
+    out (#0xD3), a
+__endasm;
+}
+
+uint16_t fcs80_psg_tone_ch1_get(void)
+{
+__asm
+    in a, (#0xD2)
+    ld l, a
+    in a, (#0xD3)
+    ld h, a
+    ret
+__endasm;
+}
+
+void fcs80_psg_tone_ch2_set(uint16_t tone)
+{
+__asm
+    ld a, l
+    out (#0xD4), a
+    ld a, h
+    out (#0xD5), a
+__endasm;
+}
+
+uint16_t fcs80_psg_tone_ch2_get(void)
+{
+__asm
+    in a, (#0xD4)
+    ld l, a
+    in a, (#0xD5)
+    ld h, a
+    ret
+__endasm;
+}
+
+void fcs80_psg_tone_set(uint8_t ch, uint16_t tone)
+{
+    if (0 == ch) {
+        fcs80_psg_tone_ch0_set(tone);
+    } else if (1 == ch) {
+        fcs80_psg_tone_ch1_set(tone);
+    } else if (2 == ch) {
+        fcs80_psg_tone_ch2_set(tone);
+    }
+}
+
+uint16_t fcs80_psg_tone_get(uint8_t ch)
+{
+    if (0 == ch) {
+        return fcs80_psg_tone_ch0_get();
+    } else if (1 == ch) {
+        return fcs80_psg_tone_ch1_get();
+    } else if (2 == ch) {
+        return fcs80_psg_tone_ch2_get();
+    }
+    return 0xFFFF;
+}
+
+void fcs80_psg_noise_set(uint8_t noise)
+{
+__asm
+    out (#0xD6), a
+__endasm;
+}
+
+uint8_t fcs80_psg_noise_get(void)
+{
+__asm
+    in a, (#0xD6)
+    ld l, a
+    ret
+__endasm;
+}
+
+void fcs80_psg_mixing_set(uint8_t mixing)
+{
+__asm
+    out (#0xD7), a
+__endasm;
+}
+
+uint8_t fcs80_psg_mixing_get(void)
+{
+__asm
+    in a, (#0xD7)
+    ld l, a
+    ret
+__endasm;
+}
+
+void fcs80_psg_volume_ch0_set(uint8_t volume)
+{
+__asm
+    out (#0xD8), a
+__endasm;
+}
+
+uint8_t fcs80_psg_volume_ch0_get(void)
+{    
+__asm
+    in a, (#0xD8)
+    ld l, a
+    ret
+__endasm;
+}
+
+void fcs80_psg_volume_ch1_set(uint8_t volume)
+{
+__asm
+    out (#0xD9), a
+__endasm;
+}
+
+uint8_t fcs80_psg_volume_ch1_get(void)
+{    
+__asm
+    in a, (#0xD9)
+    ld l, a
+    ret
+__endasm;
+}
+
+void fcs80_psg_volume_ch2_set(uint8_t volume)
+{
+__asm
+    out (#0xDA), a
+__endasm;
+}
+
+uint8_t fcs80_psg_volume_ch2_get(void)
+{    
+__asm
+    in a, (#0xDA)
+    ld l, a
+    ret
+__endasm;
+}
+
+void fcs80_psg_volume_set(uint8_t ch, uint8_t volume)
+{
+    if (0 == ch) {
+        fcs80_psg_volume_ch0_set(volume);
+    } else if (1 == ch) {
+        fcs80_psg_volume_ch1_set(volume);
+    } else if (2 == ch) {
+        fcs80_psg_volume_ch2_set(volume);
+    }
+}
+
+uint8_t fcs80_psg_volume_get(uint8_t ch)
+{
+    if (0 == ch) {
+        return fcs80_psg_volume_ch0_get();
+    } else if (1 == ch) {
+        return fcs80_psg_volume_ch1_get();
+    } else if (2 == ch) {
+        return fcs80_psg_volume_ch2_get();
+    }
+    return 0xFF;
+}
+
+void fcs80_psg_envelope_period_set(uint16_t period)
+{
+__asm
+    ld a, l
+    out (#0xDB), a
+    ld a, h
+    out (#0xDC), a
+__endasm;
+}
+
+uint16_t fcs80_psg_envelope_period_get(void)
+{
+__asm
+    in a, (#0xDB)
+    ld l, a
+    in a, (#0xDC)
+    ld h, a
+    ret
+__endasm;
+}
+
+void fcs80_psg_envelope_pattern_set(uint8_t pattern)
+{
+__asm
+    out (#0xDD), a
+__endasm;
+}
+
+uint8_t fcs80_psg_envelope_pattern_get(void)
+{
+__asm
+    in a, (#0xDD)
+    ld l, a
+    ret
+__endasm;
+}
