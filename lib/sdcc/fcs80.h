@@ -95,7 +95,7 @@ typedef signed long long int64_t;
 /**
  * Object Attribute Memory record
  */
-typedef struct OAM_ {
+typedef struct {
     //! Y-coordinate
     uint8_t y;
     //! X-coordinate
@@ -105,6 +105,16 @@ typedef struct OAM_ {
     //! Attribute value https://github.com/suzukiplan/fcs80/blob/master/README.md#attribute-bit-layout-bgfgsprite
     uint8_t attr;
 } OAM;
+
+/**
+ * Name Table
+ */
+typedef struct {
+    //! Character pattern number
+    uint8_t ptn[32][32];
+    //! Attribute value https://github.com/suzukiplan/fcs80/blob/master/README.md#attribute-bit-layout-bgfgsprite
+    uint8_t attr[32][32];
+} NameTable;
 
 /**
  * @brief Wait until V-Blank is detected
@@ -133,6 +143,12 @@ void fcs80_palette_set(uint8_t pn, uint8_t pi, uint8_t r, uint8_t g, uint8_t b);
  * @param prg ROM Bank number (0-255)
  */
 void fcs80_dma(uint8_t prg);
+
+/**
+ * @brief Acquire BG name table
+ * @return BG name table
+ */
+NameTable* fcs80_bg_get_nametbl(void);
 
 /**
  * @brief Continuously writes the specified ASCII code and attribute values to BG's NameTable

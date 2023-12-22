@@ -72,6 +72,11 @@ __asm
 __endasm;
 }
 
+NameTable* fcs80_bg_get_nametbl(void)
+{
+    return (NameTable*)0x8000;
+}
+
 void fcs80_bg_putstr(uint8_t x, uint8_t y, uint8_t attr, const char* str)
 {
     x &= 0x1F;
