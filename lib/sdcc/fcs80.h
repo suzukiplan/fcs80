@@ -145,6 +145,22 @@ void fcs80_palette_set(uint8_t pn, uint8_t pi, uint8_t r, uint8_t g, uint8_t b);
 void fcs80_dma(uint8_t prg);
 
 /**
+ * @brief DMA equivalent to `memset` in C language
+ * @param dst destination address
+ * @param value set value
+ * @param cnt transfer count in byte
+ */
+void fcs80_memset(uint16_t dst, uint8_t value, uint16_t cnt);
+
+/**
+ * @brief DMA equivalent to `memcpy` in C language
+ * @param dst destination address
+ * @param src source address
+ * @param cnt transfer count in byte
+ */
+void fcs80_memcpy(uint16_t dst, uint16_t src, uint16_t cnt);
+
+/**
  * @brief Acquire BG name table
  * @return BG name table
  */
@@ -373,5 +389,21 @@ void fcs80_psg_envelope_pattern_set(uint8_t pattern);
  * @return envelope pattern
  */
 uint8_t fcs80_psg_envelope_pattern_get(void);
+
+/**
+ * @brief SCC: Set waveform
+ * @param ch channel (0-3)
+ * @param waveform waveform array data (32 bytes)
+ * @note ch4's waveform is save as ch3
+ */
+void fcs80_scc_waveform_set(uint8_t ch, const void* waveform);
+
+/**
+ * @brief SCC: Get waveform
+ * @param ch channel (0-3)
+ * @param waveform waveform array data (32 bytes buffer)
+ * @note ch4's waveform is save as ch3
+ */
+void fcs80_scc_waveform_get(uint8_t ch, void* waveform);
 
 #endif

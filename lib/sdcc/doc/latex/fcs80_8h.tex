@@ -73,6 +73,10 @@ void \mbox{\hyperlink{fcs80_8h_a6775821cb810fba7f340615f758957f6}{fcs80\+\_\+pal
 \begin{DoxyCompactList}\small\item\em Set palette. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{fcs80_8h_a9e2b20a846303c45ad9fd733488b94e8}{fcs80\+\_\+dma}} (\mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}} prg)
 \begin{DoxyCompactList}\small\item\em High-\/speed DMA transfer of the contents of the specified ROM Bank to the Character Pattern Table in VRAM. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{fcs80_8h_a710239ca5d89b92e13d670645e361f47}{fcs80\+\_\+memset}} (\mbox{\hyperlink{fcs80_8h_a273cf69d639a59973b6019625df33e30}{uint16\+\_\+t}} dst, \mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}} value, \mbox{\hyperlink{fcs80_8h_a273cf69d639a59973b6019625df33e30}{uint16\+\_\+t}} cnt)
+\begin{DoxyCompactList}\small\item\em DMA equivalent to {\ttfamily memset} in C language. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{fcs80_8h_a4c2537a42f136965bd16abaa63e20746}{fcs80\+\_\+memcpy}} (\mbox{\hyperlink{fcs80_8h_a273cf69d639a59973b6019625df33e30}{uint16\+\_\+t}} dst, \mbox{\hyperlink{fcs80_8h_a273cf69d639a59973b6019625df33e30}{uint16\+\_\+t}} src, \mbox{\hyperlink{fcs80_8h_a273cf69d639a59973b6019625df33e30}{uint16\+\_\+t}} cnt)
+\begin{DoxyCompactList}\small\item\em DMA equivalent to {\ttfamily memcpy} in C language. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{struct_name_table}{Name\+Table}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{fcs80_8h_aa7dae717e428bd9e90f9394317d9bdbe}{fcs80\+\_\+bg\+\_\+nametbl\+\_\+get}} (void)
 \begin{DoxyCompactList}\small\item\em Acquire BG name table. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{fcs80_8h_ad0a2232cff44c531c3fc17b8fa64a271}{fcs80\+\_\+bg\+\_\+putstr}} (\mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}} x, \mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}} y, \mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}} attr, const char \texorpdfstring{$\ast$}{*}str)
@@ -144,7 +148,11 @@ void \mbox{\hyperlink{fcs80_8h_af560e809f6dd952dfd0c6f6d42657ac0}{fcs80\+\_\+psg
 void \mbox{\hyperlink{fcs80_8h_a2679eb5f06246c8a606683a1bbbf1299}{fcs80\+\_\+psg\+\_\+envelope\+\_\+pattern\+\_\+set}} (\mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}} pattern)
 \begin{DoxyCompactList}\small\item\em PSG\+: Set envelope pattern. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}} \mbox{\hyperlink{fcs80_8h_aebebdb4171d996b377c11369ac2095f5}{fcs80\+\_\+psg\+\_\+envelope\+\_\+pattern\+\_\+get}} (void)
-\begin{DoxyCompactList}\small\item\em PSG\+: Get envelope pattern. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em PSG\+: Get envelope pattern. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{fcs80_8h_af1208ff8e821e9563364fbce37e9b5b1}{fcs80\+\_\+scc\+\_\+waveform\+\_\+set}} (\mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}} ch, const void \texorpdfstring{$\ast$}{*}waveform)
+\begin{DoxyCompactList}\small\item\em SCC\+: Set waveform. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{fcs80_8h_a1d1a0d9e2588a7cb0a011629175afbb8}{fcs80\+\_\+scc\+\_\+waveform\+\_\+get}} (\mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}} ch, void \texorpdfstring{$\ast$}{*}waveform)
+\begin{DoxyCompactList}\small\item\em SCC\+: Get waveform. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
@@ -354,6 +362,44 @@ joypad input status
 \begin{DoxyNote}{Note}
 that the input bit is originally reset (0) and the uninput bit is set (1), but when this function is used, it is inverted. 
 \end{DoxyNote}
+\Hypertarget{fcs80_8h_a4c2537a42f136965bd16abaa63e20746}\label{fcs80_8h_a4c2537a42f136965bd16abaa63e20746} 
+\index{fcs80.h@{fcs80.h}!fcs80\_memcpy@{fcs80\_memcpy}}
+\index{fcs80\_memcpy@{fcs80\_memcpy}!fcs80.h@{fcs80.h}}
+\doxysubsubsection{\texorpdfstring{fcs80\_memcpy()}{fcs80\_memcpy()}}
+{\footnotesize\ttfamily void fcs80\+\_\+memcpy (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fcs80_8h_a273cf69d639a59973b6019625df33e30}{uint16\+\_\+t}}}]{dst,  }\item[{\mbox{\hyperlink{fcs80_8h_a273cf69d639a59973b6019625df33e30}{uint16\+\_\+t}}}]{src,  }\item[{\mbox{\hyperlink{fcs80_8h_a273cf69d639a59973b6019625df33e30}{uint16\+\_\+t}}}]{cnt }\end{DoxyParamCaption})}
+
+
+
+DMA equivalent to {\ttfamily memcpy} in C language. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dst} & destination address \\
+\hline
+{\em src} & source address \\
+\hline
+{\em cnt} & transfer count in byte \\
+\hline
+\end{DoxyParams}
+\Hypertarget{fcs80_8h_a710239ca5d89b92e13d670645e361f47}\label{fcs80_8h_a710239ca5d89b92e13d670645e361f47} 
+\index{fcs80.h@{fcs80.h}!fcs80\_memset@{fcs80\_memset}}
+\index{fcs80\_memset@{fcs80\_memset}!fcs80.h@{fcs80.h}}
+\doxysubsubsection{\texorpdfstring{fcs80\_memset()}{fcs80\_memset()}}
+{\footnotesize\ttfamily void fcs80\+\_\+memset (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fcs80_8h_a273cf69d639a59973b6019625df33e30}{uint16\+\_\+t}}}]{dst,  }\item[{\mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}}}]{value,  }\item[{\mbox{\hyperlink{fcs80_8h_a273cf69d639a59973b6019625df33e30}{uint16\+\_\+t}}}]{cnt }\end{DoxyParamCaption})}
+
+
+
+DMA equivalent to {\ttfamily memset} in C language. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dst} & destination address \\
+\hline
+{\em value} & set value \\
+\hline
+{\em cnt} & transfer count in byte \\
+\hline
+\end{DoxyParams}
 \Hypertarget{fcs80_8h_a40cff8854a526e548917f5c6f7656e90}\label{fcs80_8h_a40cff8854a526e548917f5c6f7656e90} 
 \index{fcs80.h@{fcs80.h}!fcs80\_oam\_get@{fcs80\_oam\_get}}
 \index{fcs80\_oam\_get@{fcs80\_oam\_get}!fcs80.h@{fcs80.h}}
@@ -743,6 +789,46 @@ PSG\+: Set volume.
 {\em volume} & volume \\
 \hline
 \end{DoxyParams}
+\Hypertarget{fcs80_8h_a1d1a0d9e2588a7cb0a011629175afbb8}\label{fcs80_8h_a1d1a0d9e2588a7cb0a011629175afbb8} 
+\index{fcs80.h@{fcs80.h}!fcs80\_scc\_waveform\_get@{fcs80\_scc\_waveform\_get}}
+\index{fcs80\_scc\_waveform\_get@{fcs80\_scc\_waveform\_get}!fcs80.h@{fcs80.h}}
+\doxysubsubsection{\texorpdfstring{fcs80\_scc\_waveform\_get()}{fcs80\_scc\_waveform\_get()}}
+{\footnotesize\ttfamily void fcs80\+\_\+scc\+\_\+waveform\+\_\+get (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}}}]{ch,  }\item[{void \texorpdfstring{$\ast$}{*}}]{waveform }\end{DoxyParamCaption})}
+
+
+
+SCC\+: Get waveform. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ch} & channel (0-\/3) \\
+\hline
+{\em waveform} & waveform array data (32 bytes buffer) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+ch4\textquotesingle{}s waveform is save as ch3 
+\end{DoxyNote}
+\Hypertarget{fcs80_8h_af1208ff8e821e9563364fbce37e9b5b1}\label{fcs80_8h_af1208ff8e821e9563364fbce37e9b5b1} 
+\index{fcs80.h@{fcs80.h}!fcs80\_scc\_waveform\_set@{fcs80\_scc\_waveform\_set}}
+\index{fcs80\_scc\_waveform\_set@{fcs80\_scc\_waveform\_set}!fcs80.h@{fcs80.h}}
+\doxysubsubsection{\texorpdfstring{fcs80\_scc\_waveform\_set()}{fcs80\_scc\_waveform\_set()}}
+{\footnotesize\ttfamily void fcs80\+\_\+scc\+\_\+waveform\+\_\+set (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fcs80_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}}}]{ch,  }\item[{const void \texorpdfstring{$\ast$}{*}}]{waveform }\end{DoxyParamCaption})}
+
+
+
+SCC\+: Set waveform. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ch} & channel (0-\/3) \\
+\hline
+{\em waveform} & waveform array data (32 bytes) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+ch4\textquotesingle{}s waveform is save as ch3 
+\end{DoxyNote}
 \Hypertarget{fcs80_8h_a32d961eddd6805d7f14bab8db7c043fe}\label{fcs80_8h_a32d961eddd6805d7f14bab8db7c043fe} 
 \index{fcs80.h@{fcs80.h}!fcs80\_wait\_scanline@{fcs80\_wait\_scanline}}
 \index{fcs80\_wait\_scanline@{fcs80\_wait\_scanline}!fcs80.h@{fcs80.h}}

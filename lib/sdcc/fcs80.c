@@ -72,6 +72,40 @@ __asm
 __endasm;
 }
 
+void fcs80_memset(uint16_t dst, uint8_t value, uint16_t cnt)
+{
+__asm
+    ld b, h
+    ld c, l
+    push ix
+    ld ix, #4
+    add ix, sp
+    ld a, (ix)
+    inc ix
+    ld l, (ix)
+    inc ix
+    ld h, (ix)
+    pop ix
+    out (#0xC2), a
+__endasm;
+}
+
+void fcs80_memcpy(uint16_t dst, uint16_t src, uint16_t cnt)
+{
+__asm
+    ld b, h
+    ld c, l
+    push ix
+    ld ix, #4
+    add ix, sp
+    ld l, (ix)
+    inc ix
+    ld h, (ix)
+    pop ix
+    out (#0xC3), a
+__endasm;
+}
+
 NameTable* fcs80_bg_nametbl_get(void)
 {
     return (NameTable*)0x8000;
@@ -385,4 +419,16 @@ __asm
     ld l, a
     ret
 __endasm;
+}
+
+void fcs80_scc_waveform_set(uint8_t ch, const void* waveform)
+{
+    if (4 <= ch) return;
+    fcs80_memcpy(0x9800 + (ch << 5), (uint16_t)waveform, 32);
+}
+
+void fcs80_scc_waveform_get(uint8_t ch, void* waveform)
+{
+    if (4 <= ch) return;
+    fcs80_memcpy((uint16_t)waveform, 0x9800 + (ch << 5), 32);
 }
