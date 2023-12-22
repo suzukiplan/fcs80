@@ -16,6 +16,8 @@ FAIRY COMPUTER SYSTEM 80(FCS80)は、8 ビット時代の技術である Z80 と
   - [3-2. $B0~$B3: Bank switch](#3-2-b0b3-bank-switch) (バンク切り替え)
   - [3-3. $C0: High Speed DMA (Bank to VRAM)](#3-3-c0-high-speed-dma-bank-to-vram) (高速 DMA)
   - [3-4. $C1: CPU boost flag](#3-4-c1-cpu-boost-flag) (CPU 高速化フラグ)
+  - [3-5. $C2: memset](#3-5-c2-memset)
+  - [3-6. $C3: memcpy](#3-6-c3-memcpy)
 - [4. ROM](#4-rom)
   - [4-1. File Format](#4-1-file-format) (ファイル構造)
 - [5. Programming Guide](#5-programming-guide) (プログラミングガイド)
@@ -368,6 +370,23 @@ FCS80 は新規プログラムの作成を容易にする 16 ポートアクセ�
 ### 3-4. $C1: CPU boost flag
 
 通常、[consumeClock](src/z80.hpp#L340-L346)は 4Hz または 3Hz（GBZ80 の場合は 4Hz に固定）の間隔でコールバックされますが、cpuBoostFlag が 0 でない間は常に 1Hz に固定されることで、CPU の実行速度が 4 ～ 3 倍になります。
+
+### 3-5. $C2: memset
+
+C言語の `memset` 関数に相当するDMA転送機能です。
+
+- Register A: セットする値
+- Register BC: 転送先アドレス
+- Register HL: 転送サイズ
+
+### 3-6. $C3: memcpy
+
+C言語の `memcpy` 関数に相当するDMA転送機能です。
+
+- Register A: 無視されます
+- Register BC: 転送先アドレス
+- Register DE: 転送元アドレス
+- Register HL: 転送サイズ
 
 ## 4. ROM
 

@@ -297,6 +297,33 @@ class FCS80
                 break;
             }
             case 0xC1: this->ctx.cpuBoostFlag = value; break;
+            case 0xC2: {
+                unsigned short addrTo = this->cpu->reg.pair.B;
+                addrTo <<= 8;
+                addrTo |= this->cpu->reg.pair.C;
+                unsigned short count = this->cpu->reg.pair.H;
+                count <<= 8;
+                count |= this->cpu->reg.pair.L;
+                for (int i = 0; i < count; i++, addrTo++) {
+                    this->writeMemory(addrTo, this->cpu->reg.pair.A);
+                }
+                break;
+            }
+            case 0xC3: {
+                unsigned short addrTo = this->cpu->reg.pair.B;
+                addrTo <<= 8;
+                addrTo |= this->cpu->reg.pair.C;
+                unsigned short addrFrom = this->cpu->reg.pair.D;
+                addrFrom <<= 8;
+                addrFrom |= this->cpu->reg.pair.E;
+                unsigned short count = this->cpu->reg.pair.H;
+                count <<= 8;
+                count |= this->cpu->reg.pair.L;
+                for (int i = 0; i < count; i++, addrTo++, addrFrom++) {
+                    this->writeMemory(addrTo, this->readMemory(addrFrom));
+                }
+                break;
+            }
             case 0xD0: this->psg->write(0, value); break;
             case 0xD1: this->psg->write(1, value); break;
             case 0xD2: this->psg->write(2, value); break;

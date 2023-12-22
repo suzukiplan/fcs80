@@ -16,6 +16,8 @@ This repository provides an official emulator for the FCS80 core system.
   - [3-2. $B0~$B3: Bank switch](#3-2-b0b3-bank-switch)
   - [3-3. $C0: High Speed DMA (Bank to VRAM)](#3-3-c0-high-speed-dma-bank-to-vram)
   - [3-4. $C1: CPU boost flag](#3-4-c1-cpu-boost-flag)
+  - [3-5. $C2: memset](#3-5-c2-memset)
+  - [3-6. $C3: memcpy](#3-6-c3-memcpy)
 - [4. ROM](#4-rom)
   - [4-1. File Format](#4-1-file-format)
 - [5. Programming Guide](#5-programming-guide)
@@ -271,6 +273,8 @@ NOTES:
 |    $B3    |  o  |  o  | PRG3 bank switch (default: $03)                               |
 |    $C0    |  -  |  o  | High Speed DMA (ROM to VRAM: Character Pattern Table)         |
 |    $C1    |  o  |  o  | CPU boost flag                                                |
+|    $C2    |  -  |  o  | High Speed DMA (memset)                                       |
+|    $C3    |  -  |  o  | High Speed DMA (memcpy)                                       |
 | $D0 ~ $DF |  o  |  o  | Direct read / write AY-3-8910 registers: #0 ($D0) ~ #15 ($DF) |
 
 ### 3-1. $A0~$A2 or $D0~$DF: AY-3-8910
@@ -365,6 +369,23 @@ The ROM of the bank number corresponding to the value written to the port is tra
 ### 3-4. $C1: CPU boost flag
 
 Normally, [consumeClock](src/z80.hpp#L340-L346) is called back at an interval of 4Hz or 3Hz (fixed at 4Hz in the case of LR35902), but by always fixing it to 1Hz during cpuBoostFlag is not zero, so the CPU execution speed can be accelerated by 4 to 3 times.
+
+### 3-5. $C2: memset
+
+It is a DMA equivalent to `memset` in C language:
+
+- Register A: set value
+- Register BC: destination address
+- Register HL: transfer count in byte
+
+### 3-6. $C3: memcpy
+
+It is a DMA equivalent to `memcpy` in C language:
+
+- Register A: ignored
+- Register BC: destination address
+- Register DE: source address
+- Register HL: transfer count in byte
 
 ## 4. ROM
 
