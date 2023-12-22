@@ -72,7 +72,7 @@ __asm
 __endasm;
 }
 
-NameTable* fcs80_bg_get_nametbl(void)
+NameTable* fcs80_bg_nametbl_get(void)
 {
     return (NameTable*)0x8000;
 }
@@ -108,7 +108,7 @@ void fcs80_bg_scroll_y(uint8_t y)
     *((uint8_t*)0x9603) = y;
 }
 
-NameTable* fcs80_fg_get_nametbl(void)
+NameTable* fcs80_fg_nametbl_get(void)
 {
     return (NameTable*)0x8800;
 }
@@ -144,7 +144,7 @@ void fcs80_fg_scroll_y(uint8_t y)
     *((uint8_t*)0x9605) = y;
 }
 
-OAM* fcs80_get_oam(void)
+OAM* fcs80_oam_get(void)
 {
     return (OAM*)0x9000;
 }

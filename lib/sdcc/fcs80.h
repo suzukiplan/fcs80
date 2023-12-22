@@ -148,7 +148,7 @@ void fcs80_dma(uint8_t prg);
  * @brief Acquire BG name table
  * @return BG name table
  */
-NameTable* fcs80_bg_get_nametbl(void);
+NameTable* fcs80_bg_nametbl_get(void);
 
 /**
  * @brief Continuously writes the specified ASCII code and attribute values to BG's NameTable
@@ -182,7 +182,7 @@ void fcs80_bg_scroll_y(uint8_t y);
  * @brief Acquire FG name table
  * @return FG name table
  */
-NameTable* fcs80_fg_get_nametbl(void);
+NameTable* fcs80_fg_nametbl_get(void);
 
 /**
  * @brief Continuously writes the specified ASCII code and attribute values to FG's NameTable
@@ -217,7 +217,7 @@ void fcs80_fg_scroll_y(uint8_t y);
  * @return first address of OAM
  * @note about OAM: https://github.com/suzukiplan/fcs80/blob/master/README.md#object-attribute-memory-sprite
  */
-OAM* fcs80_get_oam(void);
+OAM* fcs80_oam_get(void);
 
 /**
  * @brief Acquire joypad input status
