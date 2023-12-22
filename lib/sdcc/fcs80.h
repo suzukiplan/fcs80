@@ -179,6 +179,40 @@ void fcs80_bg_scroll_x(uint8_t x);
 void fcs80_bg_scroll_y(uint8_t y);
 
 /**
+ * @brief Acquire FG name table
+ * @return FG name table
+ */
+NameTable* fcs80_fg_get_nametbl(void);
+
+/**
+ * @brief Continuously writes the specified ASCII code and attribute values to FG's NameTable
+ * @param x X-coordinate (0-31)
+ * @param y Y-coordinate (0-31)
+ * @param attr attribute value https://github.com/suzukiplan/fcs80/blob/master/README.md#attribute-bit-layout-bgfgsprite
+ * @param str '\0' terminated string
+ */
+void fcs80_fg_putstr(uint8_t x, uint8_t y, uint8_t attr, const char* str);
+
+/**
+ * @brief Set hardware scroll (X and Y coordinate) for FG
+ * @param x X-coordinate (0-255)
+ * @param y Y-coordinate (0-255)
+ */
+void fcs80_fg_scroll(uint8_t x, uint8_t y);
+
+/**
+ * @brief Set hardware scroll (X coordinate) for FG
+ * @param x X-coordinate (0-255)
+ */
+void fcs80_fg_scroll_x(uint8_t x);
+
+/**
+ * @brief Set hardware scroll (X coordinate) for FG
+ * @param y Y-coordinate (0-255)
+ */
+void fcs80_fg_scroll_y(uint8_t y);
+
+/**
  * @brief Acquire the first address of OAM
  * @return first address of OAM
  * @note about OAM: https://github.com/suzukiplan/fcs80/blob/master/README.md#object-attribute-memory-sprite

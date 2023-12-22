@@ -108,6 +108,42 @@ void fcs80_bg_scroll_y(uint8_t y)
     *((uint8_t*)0x9603) = y;
 }
 
+NameTable* fcs80_fg_get_nametbl(void)
+{
+    return (NameTable*)0x8800;
+}
+
+void fcs80_fg_putstr(uint8_t x, uint8_t y, uint8_t attr, const char* str)
+{
+    x &= 0x1F;
+    y &= 0x1F;
+    uint16_t addrC = 0x8800 + (y << 5) + x;
+    uint16_t addrA = addrC + 0x400;
+    while (*str) {
+        *((uint8_t*)addrC) = *str;
+        *((uint8_t*)addrA) = attr;
+        addrC++;
+        addrA++;
+        str++;
+    }
+}
+
+void fcs80_fg_scroll(uint8_t x, uint8_t y)
+{
+    *((uint8_t*)0x9604) = x;
+    *((uint8_t*)0x9605) = y;
+}
+
+void fcs80_fg_scroll_x(uint8_t x)
+{
+    *((uint8_t*)0x9604) = x;
+}
+
+void fcs80_fg_scroll_y(uint8_t y)
+{
+    *((uint8_t*)0x9605) = y;
+}
+
 OAM* fcs80_get_oam(void)
 {
     return (OAM*)0x9000;
