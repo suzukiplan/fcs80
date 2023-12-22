@@ -2,10 +2,9 @@ all:
 	sdasz80 -o crt0.s
 	sdcc -mz80 --code-loc 0x0100 --no-std-crt0 -c fcs80.c
 	sdar -rc fcs80.lib crt0.rel fcs80.rel
-	make doc
 
 doc: fcs80.h
-	doxygen Doxyfile
+	doxygen -s Doxyfile
 
 clean:
 	rm -f *.rel
