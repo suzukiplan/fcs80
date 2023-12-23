@@ -30,7 +30,7 @@
 #pragma disable_warning 85 // no check unused args (check at inline-asm)
 #define STACK_ARG_HEAD 4
 
-void fcs80_wait_vsync(void)
+void fcs80_wait_vsync(void) __z88dk_fastcall
 {
 __asm
     ld hl, #0x9607
@@ -41,7 +41,7 @@ wait_vblank_loop:
 __endasm;
 }
 
-void fcs80_wait_scanline(uint8_t n)
+void fcs80_wait_scanline(uint8_t n) __z88dk_fastcall
 {
     if (192 <= n) {
         return; // invalid line number
@@ -51,7 +51,7 @@ void fcs80_wait_scanline(uint8_t n)
     }
 }
 
-void fcs80_palette_set(uint8_t pn, uint8_t pi, uint8_t r, uint8_t g, uint8_t b)
+void fcs80_palette_set(uint8_t pn, uint8_t pi, uint8_t r, uint8_t g, uint8_t b) __smallc
 {
     uint16_t col;
     uint16_t addr;
@@ -66,7 +66,7 @@ void fcs80_palette_set(uint8_t pn, uint8_t pi, uint8_t r, uint8_t g, uint8_t b)
     *((uint16_t*)addr) = col;
 }
 
-void fcs80_palette_set_rgb555(uint8_t pn, uint8_t pi, uint16_t rgb555)
+void fcs80_palette_set_rgb555(uint8_t pn, uint8_t pi, uint16_t rgb555) __smallc
 {
     uint16_t addr;
     addr = 0x9400;
@@ -75,74 +75,70 @@ void fcs80_palette_set_rgb555(uint8_t pn, uint8_t pi, uint16_t rgb555)
     *((uint16_t*)addr) = rgb555;
 }
 
-void fcs80_dma(uint8_t prg)
+void fcs80_dma(uint8_t prg) __z88dk_fastcall
 {
 __asm
-    push ix
-    ld ix, #STACK_ARG_HEAD
-    add ix, sp
-    ld a, (ix)
-    pop ix
+    ld a, l
     out (#0xC0), a
 __endasm;
 }
 
-void fcs80_memset(uint16_t dst, uint8_t value, uint16_t cnt)
+void fcs80_memset(uint16_t dst, uint8_t value, uint16_t cnt) __smallc
 {
 __asm
     push ix
     ld ix, #STACK_ARG_HEAD
     add ix, sp
-    // dst -> bc
-    ld c, (ix)
+    // cnt -> hl
+    ld l, (ix)
     inc ix
-    ld b, (ix)
+    ld h, (ix)
     inc ix
     // value-> a
     ld a, (ix)
     inc ix
-    // count -> hl
-    ld l, (ix)
+    // dst -> bc
+    ld c, (ix)
     inc ix
-    ld h, (ix)
+    ld b, (ix)
     pop ix
     // execute DMA
     out (#0xC2), a
 __endasm;
 }
 
-void fcs80_memcpy(uint16_t dst, uint16_t src, uint16_t cnt)
+void fcs80_memcpy(uint16_t dst, uint16_t src, uint16_t cnt) __smallc
 {
 __asm
     push ix
     ld ix, #STACK_ARG_HEAD
     add ix, sp
-    // dst -> bc
-    ld c, (ix)
+    // cnt -> hl
+    ld l, (ix)
     inc ix
-    ld b, (ix)
+    ld h, (ix)
     inc ix
     // src -> de
     ld e, (ix)
     inc ix
     ld d, (ix)
     inc ix
-    // count -> hl
-    ld l, (ix)
+    // dst -> bc
+    ld c, (ix)
     inc ix
-    ld h, (ix)
+    ld b, (ix)
     pop ix
     // execute DMA
     out (#0xC3), a
 __endasm;
 }
 
-NameTable* fcs80_bg_nametbl_get(void)
+NameTable* fcs80_bg_nametbl_get(void) __smallc
 {
     return (NameTable*)0x8000;
 }
 
-void fcs80_bg_putstr(uint8_t x, uint8_t y, uint8_t attr, const char* str)
+void fcs80_bg_putstr(uint8_t x, uint8_t y, uint8_t attr, const char* str) __smallc
 {
     x &= 0x1F;
     y &= 0x1F;
@@ -157,38 +153,38 @@ void fcs80_bg_putstr(uint8_t x, uint8_t y, uint8_t attr, const char* str)
     }
 }
 
-void fcs80_bg_scroll(uint8_t x, uint8_t y)
+void fcs80_bg_scroll(uint8_t x, uint8_t y) __smallc
 {
     *((uint8_t*)0x9602) = x;
     *((uint8_t*)0x9603) = y;
 }
 
-void fcs80_bg_scroll_x(uint8_t x)
+void fcs80_bg_scroll_x(uint8_t x) __z88dk_fastcall
 {
     *((uint8_t*)0x9602) = x;
 }
 
-void fcs80_bg_scroll_y(uint8_t y)
+void fcs80_bg_scroll_y(uint8_t y) __z88dk_fastcall
 {
     *((uint8_t*)0x9603) = y;
 }
 
-uint8_t fcs80_bg_scroll_x_get()
+uint8_t fcs80_bg_scroll_x_get() __z88dk_fastcall
 {
     return *((uint8_t*)0x9602);
 }
 
-uint8_t fcs80_bg_scroll_y_get()
+uint8_t fcs80_bg_scroll_y_get() __z88dk_fastcall
 {
     return *((uint8_t*)0x9603);
 }
 
-NameTable* fcs80_fg_nametbl_get(void)
+NameTable* fcs80_fg_nametbl_get(void) __smallc
 {
     return (NameTable*)0x8800;
 }
 
-void fcs80_fg_putstr(uint8_t x, uint8_t y, uint8_t attr, const char* str)
+void fcs80_fg_putstr(uint8_t x, uint8_t y, uint8_t attr, const char* str) __smallc
 {
     x &= 0x1F;
     y &= 0x1F;
@@ -203,38 +199,38 @@ void fcs80_fg_putstr(uint8_t x, uint8_t y, uint8_t attr, const char* str)
     }
 }
 
-void fcs80_fg_scroll(uint8_t x, uint8_t y)
+void fcs80_fg_scroll(uint8_t x, uint8_t y) __smallc
 {
     *((uint8_t*)0x9604) = x;
     *((uint8_t*)0x9605) = y;
 }
 
-void fcs80_fg_scroll_x(uint8_t x)
+void fcs80_fg_scroll_x(uint8_t x) __z88dk_fastcall
 {
     *((uint8_t*)0x9604) = x;
 }
 
-void fcs80_fg_scroll_y(uint8_t y)
+void fcs80_fg_scroll_y(uint8_t y) __z88dk_fastcall
 {
     *((uint8_t*)0x9605) = y;
 }
 
-uint8_t fcs80_fg_scroll_x_get()
+uint8_t fcs80_fg_scroll_x_get() __z88dk_fastcall
 {
     return *((uint8_t*)0x9604);
 }
 
-uint8_t fcs80_fg_scroll_y_get()
+uint8_t fcs80_fg_scroll_y_get() __z88dk_fastcall
 {
     return *((uint8_t*)0x9605);
 }
 
-OAM* fcs80_oam_get(void)
+OAM* fcs80_oam_get(void) __smallc
 {
     return (OAM*)0x9000;
 }
 
-uint8_t fcs80_joypad_get(void)
+uint8_t fcs80_joypad_get(void) __z88dk_fastcall
 {
 __asm
     ld a, #0x0E
@@ -246,22 +242,17 @@ __asm
 __endasm;
 }
 
-void fcs80_psg_tone_ch0_set(uint16_t tone)
+void fcs80_psg_tone_ch0_set(uint16_t tone) __z88dk_fastcall
 {
 __asm
-    push ix
-    ld ix, #STACK_ARG_HEAD
-    add ix, sp
-    ld a, (ix)
+    ld a, l
     out (#0xD0), a
-    inc ix
-    ld a, (ix)
+    ld a, h
     out (#0xD1), a
-    pop ix
 __endasm;
 }
 
-uint16_t fcs80_psg_tone_ch0_get(void)
+uint16_t fcs80_psg_tone_ch0_get(void) __z88dk_fastcall
 {
 __asm
     in a, (#0xD0)
@@ -272,22 +263,17 @@ __asm
 __endasm;
 }
 
-void fcs80_psg_tone_ch1_set(uint16_t tone)
+void fcs80_psg_tone_ch1_set(uint16_t tone) __z88dk_fastcall
 {
 __asm
-    push ix
-    ld ix, #STACK_ARG_HEAD
-    add ix, sp
-    ld a, (ix)
+    ld a, l
     out (#0xD2), a
-    inc ix
-    ld a, (ix)
+    ld a, h
     out (#0xD3), a
-    pop ix
 __endasm;
 }
 
-uint16_t fcs80_psg_tone_ch1_get(void)
+uint16_t fcs80_psg_tone_ch1_get(void) __z88dk_fastcall
 {
 __asm
     in a, (#0xD2)
@@ -298,22 +284,17 @@ __asm
 __endasm;
 }
 
-void fcs80_psg_tone_ch2_set(uint16_t tone)
+void fcs80_psg_tone_ch2_set(uint16_t tone) __z88dk_fastcall
 {
 __asm
-    push ix
-    ld ix, #STACK_ARG_HEAD
-    add ix, sp
-    ld a, (ix)
+    ld a, l
     out (#0xD4), a
-    inc ix
-    ld a, (ix)
+    ld a, h
     out (#0xD5), a
-    pop ix
 __endasm;
 }
 
-uint16_t fcs80_psg_tone_ch2_get(void)
+uint16_t fcs80_psg_tone_ch2_get(void) __z88dk_fastcall
 {
 __asm
     in a, (#0xD4)
@@ -324,7 +305,7 @@ __asm
 __endasm;
 }
 
-void fcs80_psg_tone_set(uint8_t ch, uint16_t tone)
+void fcs80_psg_tone_set(uint8_t ch, uint16_t tone) __smallc
 {
     if (0 == ch) {
         fcs80_psg_tone_ch0_set(tone);
@@ -335,7 +316,7 @@ void fcs80_psg_tone_set(uint8_t ch, uint16_t tone)
     }
 }
 
-uint16_t fcs80_psg_tone_get(uint8_t ch)
+uint16_t fcs80_psg_tone_get(uint8_t ch) __z88dk_fastcall
 {
     if (0 == ch) {
         return fcs80_psg_tone_ch0_get();
@@ -347,19 +328,15 @@ uint16_t fcs80_psg_tone_get(uint8_t ch)
     return 0xFFFF;
 }
 
-void fcs80_psg_noise_set(uint8_t noise)
+void fcs80_psg_noise_set(uint8_t noise) __z88dk_fastcall
 {
 __asm
-    push ix
-    ld ix, #STACK_ARG_HEAD
-    add ix, sp
-    ld a, (ix)
+    ld a, l
     out (#0xD6), a
-    pop ix
 __endasm;
 }
 
-uint8_t fcs80_psg_noise_get(void)
+uint8_t fcs80_psg_noise_get(void) __z88dk_fastcall
 {
 __asm
     in a, (#0xD6)
@@ -368,19 +345,15 @@ __asm
 __endasm;
 }
 
-void fcs80_psg_mixing_set(uint8_t mixing)
+void fcs80_psg_mixing_set(uint8_t mixing) __z88dk_fastcall
 {
 __asm
-    push ix
-    ld ix, #STACK_ARG_HEAD
-    add ix, sp
-    ld a, (ix)
+    ld a, l
     out (#0xD7), a
-    pop ix
 __endasm;
 }
 
-uint8_t fcs80_psg_mixing_get(void)
+uint8_t fcs80_psg_mixing_get(void) __z88dk_fastcall
 {
 __asm
     in a, (#0xD7)
@@ -389,19 +362,15 @@ __asm
 __endasm;
 }
 
-void fcs80_psg_volume_ch0_set(uint8_t volume)
+void fcs80_psg_volume_ch0_set(uint8_t volume) __z88dk_fastcall
 {
 __asm
-    push ix
-    ld ix, #STACK_ARG_HEAD
-    add ix, sp
-    ld a, (ix)
+    ld a, l
     out (#0xD8), a
-    pop ix
 __endasm;
 }
 
-uint8_t fcs80_psg_volume_ch0_get(void)
+uint8_t fcs80_psg_volume_ch0_get(void) __z88dk_fastcall
 {    
 __asm
     in a, (#0xD8)
@@ -410,19 +379,15 @@ __asm
 __endasm;
 }
 
-void fcs80_psg_volume_ch1_set(uint8_t volume)
+void fcs80_psg_volume_ch1_set(uint8_t volume) __z88dk_fastcall
 {
 __asm
-    push ix
-    ld ix, #STACK_ARG_HEAD
-    add ix, sp
-    ld a, (ix)
+    ld a, l
     out (#0xD9), a
-    pop ix
 __endasm;
 }
 
-uint8_t fcs80_psg_volume_ch1_get(void)
+uint8_t fcs80_psg_volume_ch1_get(void) __z88dk_fastcall
 {    
 __asm
     in a, (#0xD9)
@@ -431,19 +396,15 @@ __asm
 __endasm;
 }
 
-void fcs80_psg_volume_ch2_set(uint8_t volume)
+void fcs80_psg_volume_ch2_set(uint8_t volume) __z88dk_fastcall
 {
 __asm
-    push ix
-    ld ix, #STACK_ARG_HEAD
-    add ix, sp
-    ld a, (ix)
+    ld a, l
     out (#0xDA), a
-    pop ix
 __endasm;
 }
 
-uint8_t fcs80_psg_volume_ch2_get(void)
+uint8_t fcs80_psg_volume_ch2_get(void) __z88dk_fastcall
 {    
 __asm
     in a, (#0xDA)
@@ -452,7 +413,7 @@ __asm
 __endasm;
 }
 
-void fcs80_psg_volume_set(uint8_t ch, uint8_t volume)
+void fcs80_psg_volume_set(uint8_t ch, uint8_t volume) __smallc
 {
     if (0 == ch) {
         fcs80_psg_volume_ch0_set(volume);
@@ -463,7 +424,7 @@ void fcs80_psg_volume_set(uint8_t ch, uint8_t volume)
     }
 }
 
-uint8_t fcs80_psg_volume_get(uint8_t ch)
+uint8_t fcs80_psg_volume_get(uint8_t ch) __z88dk_fastcall
 {
     if (0 == ch) {
         return fcs80_psg_volume_ch0_get();
@@ -475,22 +436,17 @@ uint8_t fcs80_psg_volume_get(uint8_t ch)
     return 0xFF;
 }
 
-void fcs80_psg_envelope_period_set(uint16_t period)
+void fcs80_psg_envelope_period_set(uint16_t period) __z88dk_fastcall
 {
 __asm
-    push ix
-    ld ix, #STACK_ARG_HEAD
-    add ix, sp
-    ld a, (ix)
+    ld a, l
     out (#0xDB), a
-    inc ix
-    ld a, (ix)
+    ld a, h
     out (#0xDC), a
-    pop ix
 __endasm;
 }
 
-uint16_t fcs80_psg_envelope_period_get(void)
+uint16_t fcs80_psg_envelope_period_get(void) __z88dk_fastcall
 {
 __asm
     in a, (#0xDB)
@@ -501,19 +457,15 @@ __asm
 __endasm;
 }
 
-void fcs80_psg_envelope_pattern_set(uint8_t pattern)
+void fcs80_psg_envelope_pattern_set(uint8_t pattern) __z88dk_fastcall
 {
 __asm
-    push ix
-    ld ix, #STACK_ARG_HEAD
-    add ix, sp
-    ld a, (ix)
+    ld a, l
     out (#0xDD), a
-    pop ix
 __endasm;
 }
 
-uint8_t fcs80_psg_envelope_pattern_get(void)
+uint8_t fcs80_psg_envelope_pattern_get(void) __z88dk_fastcall
 {
 __asm
     in a, (#0xDD)
@@ -522,14 +474,64 @@ __asm
 __endasm;
 }
 
-void fcs80_scc_waveform_set(uint8_t ch, const void* waveform)
+void fcs80_scc_waveform_ch0_set(uint16_t waveform) __z88dk_fastcall
 {
-    if (4 <= ch) return;
-    fcs80_memcpy(0x9800 + (ch << 5), (uint16_t)waveform, 32);
+    fcs80_memcpy(0x9800, waveform, 32);
 }
 
-void fcs80_scc_waveform_get(uint8_t ch, void* waveform)
+void fcs80_scc_waveform_ch1_set(uint16_t waveform) __z88dk_fastcall
 {
-    if (4 <= ch) return;
-    fcs80_memcpy((uint16_t)waveform, 0x9800 + (ch << 5), 32);
+    fcs80_memcpy(0x9820, waveform, 32);
+}
+
+void fcs80_scc_waveform_ch2_set(uint16_t waveform) __z88dk_fastcall
+{
+    fcs80_memcpy(0x9840, waveform, 32);
+}
+
+void fcs80_scc_waveform_ch34_set(uint16_t waveform) __z88dk_fastcall
+{
+    fcs80_memcpy(0x9860, waveform, 32);
+}
+
+void fcs80_scc_waveform_set(uint8_t ch, const void* waveform) __smallc
+{
+    switch (ch) {
+        case 0: fcs80_scc_waveform_ch0_set((uint16_t)waveform); break;
+        case 1: fcs80_scc_waveform_ch1_set((uint16_t)waveform); break;
+        case 2: fcs80_scc_waveform_ch2_set((uint16_t)waveform); break;
+        case 3: fcs80_scc_waveform_ch34_set((uint16_t)waveform); break;
+        case 4: fcs80_scc_waveform_ch34_set((uint16_t)waveform); break;
+    }
+}
+
+void fcs80_scc_waveform_ch0_get(uint16_t waveform) __z88dk_fastcall
+{
+    fcs80_memcpy(waveform, 0x9800, 32);
+}
+
+void fcs80_scc_waveform_ch1_get(uint16_t waveform) __z88dk_fastcall
+{
+    fcs80_memcpy(waveform, 0x9820, 32);
+}
+
+void fcs80_scc_waveform_ch2_get(uint16_t waveform) __z88dk_fastcall
+{
+    fcs80_memcpy(waveform, 0x9840, 32);
+}
+
+void fcs80_scc_waveform_ch34_get(uint16_t waveform) __z88dk_fastcall
+{
+    fcs80_memcpy(waveform, 0x9860, 32);
+}
+
+void fcs80_scc_waveform_get(uint8_t ch, void* waveform) __smallc
+{
+    switch (ch) {
+        case 0: fcs80_scc_waveform_ch0_get((uint16_t)waveform); break;
+        case 1: fcs80_scc_waveform_ch1_get((uint16_t)waveform); break;
+        case 2: fcs80_scc_waveform_ch2_get((uint16_t)waveform); break;
+        case 3: fcs80_scc_waveform_ch34_get((uint16_t)waveform); break;
+        case 4: fcs80_scc_waveform_ch34_get((uint16_t)waveform); break;
+    }
 }
