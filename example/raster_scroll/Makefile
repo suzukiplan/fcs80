@@ -4,6 +4,8 @@ MAKEROM = ../../tools/bin/makerom
 CSV2BIN = ../../tools/bin/csv2bin
 
 all: ${BMP2CHR} ${MAKEROM} ${CSV2BIN} ${PRJ}.rom
+	cd ../../hal/sdl2 && make
+	../../hal/sdl2/fcs80 raster_scroll.rom
 
 clear:
 	rm -f *.bin *.o *.chr
