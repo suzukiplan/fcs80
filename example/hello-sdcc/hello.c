@@ -1,4 +1,4 @@
-#include "fcs80.h"
+#include "../../lib/sdcc/fcs80.h"
 
 void main(void)
 {
@@ -12,8 +12,8 @@ void main(void)
     fcs80_palette_set(0, 2, 24, 24, 24); // light gray
     fcs80_palette_set(0, 3, 31, 31, 31); // white
 
-    // Bank 1 を Character Pattern Table ($A000) に転送 (DMA)
-    fcs80_dma(1);
+    // Bank 2 を Character Pattern Table ($A000) に転送 (DMA)
+    fcs80_dma(2);
 
     // 画面中央付近 (10,12) に "HELLO,WORLD!" を描画
     fcs80_bg_putstr(10, 12, 0x80, "HELLO,WORLD!");

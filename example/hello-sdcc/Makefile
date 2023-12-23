@@ -24,12 +24,13 @@ ${BMP2CHR}:
 ${MAKEROM}:
 	cd ../../tools && make
 
-hello.rom: hello.c fcs80.c fcs80.h crt0.s font.chr
-	sdasz80 -o crt0.s
-	sdcc -mz80 --code-loc 0x0100 --no-std-crt0 -c fcs80.c
-	sdcc -mz80 --code-loc 0x1000 --no-std-crt0 -Wlcrt0.rel -Wlfcs80.rel hello.c
-	makebin -s 8192 hello.ihx hello.bin
+hello.rom: hello.bin font.chr
 	${MAKEROM} hello.rom hello.bin font.chr
+
+hello.bin: hello.c ../../lib/sdcc/fcs80.lib ../../lib/sdcc/fcs80.h
+	cd ../../lib/sdcc && make
+	sdcc -mz80 --opt-code-size --code-loc 0x100 --no-std-crt0 -Wl../../lib/sdcc/fcs80.lib hello.c
+	makebin -s 16384 hello.ihx hello.bin
 
 font.chr: font.bmp
 	${BMP2CHR} font.bmp font.chr
