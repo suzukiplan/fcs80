@@ -34,7 +34,7 @@ map_scroll.rom: program.bin image.chr mapdata.bin
 
 program.bin: program.c
 	cd ../../lib/sdcc && make
-	sdcc -mz80 --code-loc 0x2000 --no-std-crt0 -Wl../../lib/sdcc/fcs80.lib program.c
+	sdcc -mz80 --opt-code-size --code-loc 0x100 --no-std-crt0 -Wl../../lib/sdcc/fcs80.lib program.c
 	makebin -s 16384 program.ihx program.bin
 
 image.chr: image.bmp
