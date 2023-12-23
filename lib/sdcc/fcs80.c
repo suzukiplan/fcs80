@@ -535,3 +535,80 @@ void fcs80_scc_waveform_get(uint8_t ch, void* waveform) __smallc
         case 4: fcs80_scc_waveform_ch34_get((uint16_t)waveform); break;
     }
 }
+
+void fcs80_scc_tone_ch0_set(uint16_t tone) __z88dk_fastcall
+{
+    *((uint16_t*)0x9880) = tone;
+}
+
+void fcs80_scc_tone_ch1_set(uint16_t tone) __z88dk_fastcall
+{
+    *((uint16_t*)0x9882) = tone;
+}
+
+void fcs80_scc_tone_ch2_set(uint16_t tone) __z88dk_fastcall
+{
+    *((uint16_t*)0x9884) = tone;
+}
+
+void fcs80_scc_tone_ch3_set(uint16_t tone) __z88dk_fastcall
+{
+    *((uint16_t*)0x9886) = tone;
+}
+
+void fcs80_scc_tone_ch4_set(uint16_t tone) __z88dk_fastcall
+{
+    *((uint16_t*)0x9888) = tone;
+}
+
+void fcs80_scc_tone_set(uint8_t ch, uint16_t tone) __smallc
+{
+    switch (ch) {
+        case 0: fcs80_scc_tone_ch0_set(tone); break;
+        case 1: fcs80_scc_tone_ch1_set(tone); break;
+        case 2: fcs80_scc_tone_ch2_set(tone); break;
+        case 3: fcs80_scc_tone_ch3_set(tone); break;
+        case 4: fcs80_scc_tone_ch4_set(tone); break;
+    }
+}
+
+void fcs80_scc_volume_ch0_set(uint8_t volume) __z88dk_fastcall
+{
+    *((uint8_t*)0x988A) = volume;
+}
+
+void fcs80_scc_volume_ch1_set(uint8_t volume) __z88dk_fastcall
+{
+    *((uint8_t*)0x988B) = volume;
+}
+
+void fcs80_scc_volume_ch2_set(uint8_t volume) __z88dk_fastcall
+{
+    *((uint8_t*)0x988C) = volume;
+}
+
+void fcs80_scc_volume_ch3_set(uint8_t volume) __z88dk_fastcall
+{
+    *((uint8_t*)0x988D) = volume;
+}
+
+void fcs80_scc_volume_ch4_set(uint8_t volume) __z88dk_fastcall
+{
+    *((uint8_t*)0x988E) = volume;
+}
+
+void fcs80_scc_volume_set(uint8_t ch, uint8_t volume) __smallc
+{
+    switch (ch) {
+        case 0: fcs80_scc_volume_ch0_set(volume); break;
+        case 1: fcs80_scc_volume_ch1_set(volume); break;
+        case 2: fcs80_scc_volume_ch2_set(volume); break;
+        case 3: fcs80_scc_volume_ch3_set(volume); break;
+        case 4: fcs80_scc_volume_ch4_set(volume); break;
+    }
+}
+
+void fcs80_scc_mixing_set(uint8_t mixing) __z88dk_fastcall
+{
+    *((uint8_t*)0x988F) = mixing;
+}

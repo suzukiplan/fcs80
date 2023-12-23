@@ -277,18 +277,21 @@ uint8_t fcs80_joypad_get(void) __z88dk_fastcall;
 /**
  * @brief PSG: Set Ch0 tone
  * @param tone tone
+ * @note about tone: https://github.com/suzukiplan/fcs80/blob/master/README.md#register-05-tone-generator
  */
 void fcs80_psg_tone_ch0_set(uint16_t tone) __z88dk_fastcall;
 
 /**
  * @brief PSG: Get Ch0 tone
  * @return tone
+ * @note about tone: https://github.com/suzukiplan/fcs80/blob/master/README.md#register-05-tone-generator
  */
 uint16_t fcs80_psg_tone_ch0_get(void) __z88dk_fastcall;
 
 /**
  * @brief PSG: Set Ch1 tone
  * @param tone tone
+ * @note about tone: https://github.com/suzukiplan/fcs80/blob/master/README.md#register-05-tone-generator
  */
 void fcs80_psg_tone_ch1_set(uint16_t tone) __z88dk_fastcall;
 
@@ -301,12 +304,14 @@ uint16_t fcs80_psg_tone_ch1_get(void) __z88dk_fastcall;
 /**
  * @brief PSG: Set Ch2 tone
  * @param tone tone
+ * @note about tone: https://github.com/suzukiplan/fcs80/blob/master/README.md#register-05-tone-generator
  */
 void fcs80_psg_tone_ch2_set(uint16_t tone) __z88dk_fastcall;
 
 /**
  * @brief PSG: Get Ch2 tone
  * @return tone
+ * @note about tone: https://github.com/suzukiplan/fcs80/blob/master/README.md#register-05-tone-generator
  */
 uint16_t fcs80_psg_tone_ch2_get(void) __z88dk_fastcall;
 
@@ -314,6 +319,7 @@ uint16_t fcs80_psg_tone_ch2_get(void) __z88dk_fastcall;
  * @brief PSG: Set tone
  * @param ch channel (0-2)
  * @param tone tone
+ * @note about tone: https://github.com/suzukiplan/fcs80/blob/master/README.md#register-05-tone-generator
  */
 void fcs80_psg_tone_set(uint8_t ch, uint16_t tone) __smallc;
 
@@ -321,6 +327,7 @@ void fcs80_psg_tone_set(uint8_t ch, uint16_t tone) __smallc;
  * @brief PSG: Get tone
  * @param ch channel (0-2)
  * @return tone
+ * @note about tone: https://github.com/suzukiplan/fcs80/blob/master/README.md#register-05-tone-generator
  */
 uint16_t fcs80_psg_tone_get(uint8_t ch) __z88dk_fastcall;
 
@@ -485,5 +492,91 @@ void fcs80_scc_waveform_ch34_get(uint16_t waveform) __z88dk_fastcall;
  * @note ch4's waveform is save as ch3
  */
 void fcs80_scc_waveform_get(uint8_t ch, void* waveform) __smallc;
+
+/**
+ * @brief SCC: Set Ch0 tone
+ * @param tone 12bits tone (0-4095)
+ * @note about tone: https://github.com/suzukiplan/fcs80/blob/master/README.md#register-05-tone-generator
+ */
+void fcs80_scc_tone_ch0_set(uint16_t tone) __z88dk_fastcall;
+
+/**
+ * @brief SCC: Set Ch1 tone
+ * @param tone 12bits tone (0-4095)
+ * @note about tone: https://github.com/suzukiplan/fcs80/blob/master/README.md#register-05-tone-generator
+ */
+void fcs80_scc_tone_ch1_set(uint16_t tone) __z88dk_fastcall;
+
+/**
+ * @brief SCC: Set Ch2 tone
+ * @param tone 12bits tone (0-4095)
+ * @note about tone: https://github.com/suzukiplan/fcs80/blob/master/README.md#register-05-tone-generator
+ */
+void fcs80_scc_tone_ch2_set(uint16_t tone) __z88dk_fastcall;
+
+/**
+ * @brief SCC: Set Ch3 tone
+ * @param tone 12bits tone (0-4095)
+ * @note about tone: https://github.com/suzukiplan/fcs80/blob/master/README.md#register-05-tone-generator
+ */
+void fcs80_scc_tone_ch3_set(uint16_t tone) __z88dk_fastcall;
+
+/**
+ * @brief SCC: Set Ch4 tone
+ * @param tone 12bits tone (0-4095)
+ * @note about tone: https://github.com/suzukiplan/fcs80/blob/master/README.md#register-05-tone-generator
+ */
+void fcs80_scc_tone_ch4_set(uint16_t tone) __z88dk_fastcall;
+
+/**
+ * @brief SCC: Set tone
+ * @param ch channel (0-4)
+ * @param tone 12bits tone (0-4095)
+ * @note about tone: https://github.com/suzukiplan/fcs80/blob/master/README.md#register-05-tone-generator
+ */
+void fcs80_scc_tone_set(uint8_t ch, uint16_t tone) __smallc;
+
+/**
+ * @brief SCC: Set Ch0 volume
+ * @param volume volume (0-15)
+ */
+void fcs80_scc_volume_ch0_set(uint8_t volume) __z88dk_fastcall;
+
+/**
+ * @brief SCC: Set Ch1 volume
+ * @param volume volume (0-15)
+ */
+void fcs80_scc_volume_ch1_set(uint8_t volume) __z88dk_fastcall;
+
+/**
+ * @brief SCC: Set Ch2 volume
+ * @param volume volume (0-15)
+ */
+void fcs80_scc_volume_ch2_set(uint8_t volume) __z88dk_fastcall;
+
+/**
+ * @brief SCC: Set Ch3 volume
+ * @param volume volume (0-15)
+ */
+void fcs80_scc_volume_ch3_set(uint8_t volume) __z88dk_fastcall;
+
+/**
+ * @brief SCC: Set Ch4 volume
+ * @param volume volume (0-15)
+ */
+void fcs80_scc_volume_ch4_set(uint8_t volume) __z88dk_fastcall;
+
+/**
+ * @brief SCC: Set volume
+ * @param ch channel (0-4)
+ * @param volume volume (0-15)
+ */
+void fcs80_scc_volume_set(uint8_t ch, uint8_t volume) __smallc;
+
+/**
+ * @brief SCC: Set mixing
+ * @param mixing mixing
+ */
+void fcs80_scc_mixing_set(uint8_t mixing) __z88dk_fastcall;
 
 #endif
