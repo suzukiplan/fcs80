@@ -33,7 +33,7 @@ void main(void)
         // 1行づつスクロール値を設定
         for (uint8_t scanline = 0; scanline < 192; scanline++) {
             fcs80_wait_scanline(scanline);
-            *((volatile uint8_t*)0x9602) = stbl[(scanline + sidx) & 0x1F];
+            *FCS80_ADDR_BG_SCROLL_X = stbl[(scanline + sidx) & 0x1F];
         }
         sidx++;
     }
