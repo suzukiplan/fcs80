@@ -68,6 +68,71 @@
  */
 #define FCS80_JOYPAD_T2 0b00000001
 
+/** @def
+ * BG name table
+ */
+#define FCS80_ADDR_BG ((volatile NameTable*)0x8000)
+
+/** @def
+ * FG name table
+ */
+#define FCS80_ADDR_FG ((volatile NameTable*)0x8800)
+
+/** @def
+ * Object Attribute Memory
+ */
+#define FCS80_ADDR_OAM ((volatile OAM*)0x9000)
+
+/** @def
+ * Palette table
+ */
+#define FCS80_ADDR_PALETTE ((volatile uint16_t*)0x9400)
+
+/** @def
+ * Vertical rendering counter
+ */
+#define FCS80_ADDR_COUNT_V ((volatile uint8_t*)0x9600)
+
+/** @def
+ * Horizontal rendering counter
+ */
+#define FCS80_ADDR_COUNT_H ((volatile uint8_t*)0x9601)
+
+/** @def
+ * BG scroll X
+ */
+#define FCS80_ADDR_BG_SCROLL_X ((volatile uint8_t*)0x9602)
+
+/** @def
+ * BG scroll Y
+ */
+#define FCS80_ADDR_BG_SCROLL_Y ((volatile uint8_t*)0x9603)
+
+/** @def
+ * FG scroll X
+ */
+#define FCS80_ADDR_FG_SCROLL_X ((volatile uint8_t*)0x9604)
+
+/** @def
+ * FG scroll Y
+ */
+#define FCS80_ADDR_FG_SCROLL_Y ((volatile uint8_t*)0x9605)
+
+/** @def
+ * IRQ scanline position
+ */
+#define FCS80_ADDR_IRQ_SCANLINE ((volatile uint8_t*)0x9606)
+
+/** @def
+ * VDP status
+ */
+#define FCS80_ADDR_STATUS ((volatile uint8_t*)0x9607)
+
+/** @def
+ * Character pattern table
+ */
+#define FCS80_ADDR_CHARACTER ((volatile uint8_t*)0xA000)
+
 //! stdint compatible (8bit unsigned)
 typedef unsigned char uint8_t;
 
