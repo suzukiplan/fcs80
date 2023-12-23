@@ -421,7 +421,7 @@ This chapter will guide you on how to implement a game that runs on the FCS80.
 | Hello, World! | [Z80](./example/hello), [SDCC](./example/hello-sdcc) | Display "Hello, World!" in the BG, and scroll it by the input of JoyPad. |
 | Sprite Test | [Z80](./example/sprite) | Render and move 256 sprites |
 | Map Scroll | [Z80](./example/map_scroll), [SDCC](./example//map_scroll-sdcc/) | View and scroll through map data created with the [Tiled Map Editor](https://www.mapeditor.org). |
-| Raster Scroll | [Z80](./example/raster_scroll) | Shake the screen by rewriting the scroll X for each scanline. |
+| Raster Scroll | [Z80](./example/raster_scroll), [SDCC](./example/raster_scroll-sdcc/) | Shake the screen by rewriting the scroll X for each scanline. |
 | PSG Test (normal port)| [Z80](./example/psg) | Play 8 bars of Twinkle Twinkle Little Star on PSG with accompaniment. (using PSG port $A0 ~ $A2) |
 | PSG Test (direct port)| [Z80](./example/psg_direct) | Play 8 bars of Twinkle Twinkle Little Star on PSG with accompaniment. (using PSG port $Dx) |
 
