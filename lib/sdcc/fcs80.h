@@ -206,13 +206,13 @@ void fcs80_bg_scroll_y(uint8_t y) __z88dk_fastcall;
  * @brief Get hardware scroll (X coordinate) for BG
  * @return x X-coordinate (0-255)
  */
-uint8_t fcs80_bg_scroll_x_get() __z88dk_fastcall;
+uint8_t fcs80_bg_scroll_x_get(void) __z88dk_fastcall;
 
 /**
  * @brief Get hardware scroll (Y coordinate) for BG
  * @return y Y-coordinate (0-255)
  */
-uint8_t fcs80_bg_scroll_y_get() __z88dk_fastcall;
+uint8_t fcs80_bg_scroll_y_get(void) __z88dk_fastcall;
 
 /**
  * @brief Acquire FG name table
@@ -252,13 +252,13 @@ void fcs80_fg_scroll_y(uint8_t y) __z88dk_fastcall;
  * @brief Get hardware scroll (X coordinate) for FG
  * @return x X-coordinate (0-255)
  */
-uint8_t fcs80_fg_scroll_x_get() __z88dk_fastcall;
+uint8_t fcs80_fg_scroll_x_get(void) __z88dk_fastcall;
 
 /**
  * @brief Get hardware scroll (Y coordinate) for FG
  * @return y Y-coordinate (0-255)
  */
-uint8_t fcs80_fg_scroll_y_get() __z88dk_fastcall;
+uint8_t fcs80_fg_scroll_y_get(void) __z88dk_fastcall;
 
 /**
  * @brief Acquire the first address of OAM

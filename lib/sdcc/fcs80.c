@@ -169,12 +169,12 @@ void fcs80_bg_scroll_y(uint8_t y) __z88dk_fastcall
     *((uint8_t*)0x9603) = y;
 }
 
-uint8_t fcs80_bg_scroll_x_get() __z88dk_fastcall
+uint8_t fcs80_bg_scroll_x_get(void) __z88dk_fastcall
 {
     return *((uint8_t*)0x9602);
 }
 
-uint8_t fcs80_bg_scroll_y_get() __z88dk_fastcall
+uint8_t fcs80_bg_scroll_y_get(void) __z88dk_fastcall
 {
     return *((uint8_t*)0x9603);
 }
@@ -215,12 +215,12 @@ void fcs80_fg_scroll_y(uint8_t y) __z88dk_fastcall
     *((uint8_t*)0x9605) = y;
 }
 
-uint8_t fcs80_fg_scroll_x_get() __z88dk_fastcall
+uint8_t fcs80_fg_scroll_x_get(void) __z88dk_fastcall
 {
     return *((uint8_t*)0x9604);
 }
 
-uint8_t fcs80_fg_scroll_y_get() __z88dk_fastcall
+uint8_t fcs80_fg_scroll_y_get(void) __z88dk_fastcall
 {
     return *((uint8_t*)0x9605);
 }
