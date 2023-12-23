@@ -291,10 +291,10 @@ class FCS80
                 int addr = this->cpu->reg.pair.A;
                 addr *= 0x2000;
                 if (addr + 0x2000 <= (int)this->romSize) {
-                    //printf("DMA: rom[%06X] bank(%d) -> cptn\n", addr, this->cpu->reg.pair.A);
+                    // printf("DMA: rom[%06X] bank(%d) -> cptn\n", addr, this->cpu->reg.pair.A);
                     memcpy(&this->vdp->ctx.ram[0x2000], &this->rom[addr], 0x2000);
                 } else {
-                    //printf("DMA-error: rom[%06X] bank(%d) -> cptn\n", addr, this->cpu->reg.pair.A);
+                    // printf("DMA-error: rom[%06X] bank(%d) -> cptn\n", addr, this->cpu->reg.pair.A);
                     memset(&this->vdp->ctx.ram[0x2000], 0xFF, 0x2000);
                 }
                 break;
@@ -307,7 +307,7 @@ class FCS80
                 unsigned short count = this->cpu->reg.pair.H;
                 count <<= 8;
                 count |= this->cpu->reg.pair.L;
-                //printf("DMA: memset(%04X,%02X,%d)\n",addrTo,cpu->reg.pair.A,count);
+                // printf("DMA: memset(%04X,%02X,%d)\n",addrTo,cpu->reg.pair.A,count);
                 for (int i = 0; i < count; i++, addrTo++) {
                     this->writeMemory(addrTo, this->cpu->reg.pair.A);
                 }
@@ -323,7 +323,7 @@ class FCS80
                 unsigned short count = this->cpu->reg.pair.H;
                 count <<= 8;
                 count |= this->cpu->reg.pair.L;
-                //printf("DMA: memcpy(%04X,%04X,%d)\n",addrTo,addrFrom,count);
+                // printf("DMA: memcpy(%04X,%04X,%d)\n",addrTo,addrFrom,count);
                 for (int i = 0; i < count; i++, addrTo++, addrFrom++) {
                     this->writeMemory(addrTo, this->readMemory(addrFrom));
                 }
