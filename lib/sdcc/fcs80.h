@@ -139,6 +139,14 @@ void fcs80_wait_scanline(uint8_t n);
 void fcs80_palette_set(uint8_t pn, uint8_t pi, uint8_t r, uint8_t g, uint8_t b);
 
 /**
+ * @brief Set palette (RGB555)
+ * @param pn number of palette (0-15)
+ * @param pi index of palette (0-15)
+ * @param rgb555 color depth of RGB555 (0b0rrrrrgggggbbbbb)
+ */
+void fcs80_palette_set_rgb555(uint8_t pn, uint8_t pi, uint16_t rgb555);
+
+/**
  * @brief High-speed DMA transfer of the contents of the specified ROM Bank to the Character Pattern Table in VRAM
  * @param prg ROM Bank number (0-255)
  */
@@ -195,6 +203,18 @@ void fcs80_bg_scroll_x(uint8_t x);
 void fcs80_bg_scroll_y(uint8_t y);
 
 /**
+ * @brief Get hardware scroll (X coordinate) for BG
+ * @return x X-coordinate (0-255)
+ */
+uint8_t fcs80_bg_scroll_x_get();
+
+/**
+ * @brief Get hardware scroll (Y coordinate) for BG
+ * @return y Y-coordinate (0-255)
+ */
+uint8_t fcs80_bg_scroll_y_get();
+
+/**
  * @brief Acquire FG name table
  * @return FG name table
  */
@@ -227,6 +247,18 @@ void fcs80_fg_scroll_x(uint8_t x);
  * @param y Y-coordinate (0-255)
  */
 void fcs80_fg_scroll_y(uint8_t y);
+
+/**
+ * @brief Get hardware scroll (X coordinate) for FG
+ * @return x X-coordinate (0-255)
+ */
+uint8_t fcs80_fg_scroll_x_get();
+
+/**
+ * @brief Get hardware scroll (Y coordinate) for FG
+ * @return y Y-coordinate (0-255)
+ */
+uint8_t fcs80_fg_scroll_y_get();
 
 /**
  * @brief Acquire the first address of OAM

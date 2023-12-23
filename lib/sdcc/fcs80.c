@@ -28,6 +28,7 @@
 #include "fcs80.h"
 #pragma disable_warning 59 // no check none return (return at inline-asm)
 #pragma disable_warning 85 // no check unused args (check at inline-asm)
+#define STACK_ARG_HEAD 4
 
 void fcs80_wait_vsync(void)
 {
@@ -65,9 +66,23 @@ void fcs80_palette_set(uint8_t pn, uint8_t pi, uint8_t r, uint8_t g, uint8_t b)
     *((uint16_t*)addr) = col;
 }
 
+void fcs80_palette_set_rgb555(uint8_t pn, uint8_t pi, uint16_t rgb555)
+{
+    uint16_t addr;
+    addr = 0x9400;
+    addr += pn << 5;
+    addr += pi << 1;
+    *((uint16_t*)addr) = rgb555;
+}
+
 void fcs80_dma(uint8_t prg)
 {
 __asm
+    push ix
+    ld ix, #STACK_ARG_HEAD
+    add ix, sp
+    ld a, (ix)
+    pop ix
     out (#0xC0), a
 __endasm;
 }
@@ -75,17 +90,23 @@ __endasm;
 void fcs80_memset(uint16_t dst, uint8_t value, uint16_t cnt)
 {
 __asm
-    ld b, h
-    ld c, l
     push ix
-    ld ix, #4
+    ld ix, #STACK_ARG_HEAD
     add ix, sp
+    // dst -> bc
+    ld c, (ix)
+    inc ix
+    ld b, (ix)
+    inc ix
+    // value-> a
     ld a, (ix)
     inc ix
+    // count -> hl
     ld l, (ix)
     inc ix
     ld h, (ix)
     pop ix
+    // execute DMA
     out (#0xC2), a
 __endasm;
 }
@@ -93,15 +114,25 @@ __endasm;
 void fcs80_memcpy(uint16_t dst, uint16_t src, uint16_t cnt)
 {
 __asm
-    ld b, h
-    ld c, l
     push ix
-    ld ix, #4
+    ld ix, #STACK_ARG_HEAD
     add ix, sp
+    // dst -> bc
+    ld c, (ix)
+    inc ix
+    ld b, (ix)
+    inc ix
+    // src -> de
+    ld e, (ix)
+    inc ix
+    ld d, (ix)
+    inc ix
+    // count -> hl
     ld l, (ix)
     inc ix
     ld h, (ix)
     pop ix
+    // execute DMA
     out (#0xC3), a
 __endasm;
 }
@@ -142,6 +173,16 @@ void fcs80_bg_scroll_y(uint8_t y)
     *((uint8_t*)0x9603) = y;
 }
 
+uint8_t fcs80_bg_scroll_x_get()
+{
+    return *((uint8_t*)0x9602);
+}
+
+uint8_t fcs80_bg_scroll_y_get()
+{
+    return *((uint8_t*)0x9603);
+}
+
 NameTable* fcs80_fg_nametbl_get(void)
 {
     return (NameTable*)0x8800;
@@ -178,6 +219,16 @@ void fcs80_fg_scroll_y(uint8_t y)
     *((uint8_t*)0x9605) = y;
 }
 
+uint8_t fcs80_fg_scroll_x_get()
+{
+    return *((uint8_t*)0x9604);
+}
+
+uint8_t fcs80_fg_scroll_y_get()
+{
+    return *((uint8_t*)0x9605);
+}
+
 OAM* fcs80_oam_get(void)
 {
     return (OAM*)0x9000;
@@ -198,10 +249,15 @@ __endasm;
 void fcs80_psg_tone_ch0_set(uint16_t tone)
 {
 __asm
-    ld a, l
+    push ix
+    ld ix, #STACK_ARG_HEAD
+    add ix, sp
+    ld a, (ix)
     out (#0xD0), a
-    ld a, h
+    inc ix
+    ld a, (ix)
     out (#0xD1), a
+    pop ix
 __endasm;
 }
 
@@ -219,10 +275,15 @@ __endasm;
 void fcs80_psg_tone_ch1_set(uint16_t tone)
 {
 __asm
-    ld a, l
+    push ix
+    ld ix, #STACK_ARG_HEAD
+    add ix, sp
+    ld a, (ix)
     out (#0xD2), a
-    ld a, h
+    inc ix
+    ld a, (ix)
     out (#0xD3), a
+    pop ix
 __endasm;
 }
 
@@ -240,10 +301,15 @@ __endasm;
 void fcs80_psg_tone_ch2_set(uint16_t tone)
 {
 __asm
-    ld a, l
+    push ix
+    ld ix, #STACK_ARG_HEAD
+    add ix, sp
+    ld a, (ix)
     out (#0xD4), a
-    ld a, h
+    inc ix
+    ld a, (ix)
     out (#0xD5), a
+    pop ix
 __endasm;
 }
 
@@ -284,7 +350,12 @@ uint16_t fcs80_psg_tone_get(uint8_t ch)
 void fcs80_psg_noise_set(uint8_t noise)
 {
 __asm
+    push ix
+    ld ix, #STACK_ARG_HEAD
+    add ix, sp
+    ld a, (ix)
     out (#0xD6), a
+    pop ix
 __endasm;
 }
 
@@ -300,7 +371,12 @@ __endasm;
 void fcs80_psg_mixing_set(uint8_t mixing)
 {
 __asm
+    push ix
+    ld ix, #STACK_ARG_HEAD
+    add ix, sp
+    ld a, (ix)
     out (#0xD7), a
+    pop ix
 __endasm;
 }
 
@@ -316,7 +392,12 @@ __endasm;
 void fcs80_psg_volume_ch0_set(uint8_t volume)
 {
 __asm
+    push ix
+    ld ix, #STACK_ARG_HEAD
+    add ix, sp
+    ld a, (ix)
     out (#0xD8), a
+    pop ix
 __endasm;
 }
 
@@ -332,7 +413,12 @@ __endasm;
 void fcs80_psg_volume_ch1_set(uint8_t volume)
 {
 __asm
+    push ix
+    ld ix, #STACK_ARG_HEAD
+    add ix, sp
+    ld a, (ix)
     out (#0xD9), a
+    pop ix
 __endasm;
 }
 
@@ -348,7 +434,12 @@ __endasm;
 void fcs80_psg_volume_ch2_set(uint8_t volume)
 {
 __asm
+    push ix
+    ld ix, #STACK_ARG_HEAD
+    add ix, sp
+    ld a, (ix)
     out (#0xDA), a
+    pop ix
 __endasm;
 }
 
@@ -387,10 +478,15 @@ uint8_t fcs80_psg_volume_get(uint8_t ch)
 void fcs80_psg_envelope_period_set(uint16_t period)
 {
 __asm
-    ld a, l
+    push ix
+    ld ix, #STACK_ARG_HEAD
+    add ix, sp
+    ld a, (ix)
     out (#0xDB), a
-    ld a, h
+    inc ix
+    ld a, (ix)
     out (#0xDC), a
+    pop ix
 __endasm;
 }
 
@@ -408,7 +504,12 @@ __endasm;
 void fcs80_psg_envelope_pattern_set(uint8_t pattern)
 {
 __asm
+    push ix
+    ld ix, #STACK_ARG_HEAD
+    add ix, sp
+    ld a, (ix)
     out (#0xDD), a
+    pop ix
 __endasm;
 }
 
