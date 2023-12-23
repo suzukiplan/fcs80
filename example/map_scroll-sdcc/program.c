@@ -43,4 +43,52 @@ void main(void)
         nextWrite &= 0x1F;
         fcs80_memcpy((uint16_t)&bg->ptn[nextWrite][0], nextRead, 32);
     }
+/*
+    ; メインループ
+mainloop:
+    ; スクロールカウンタ (RAM) をインクリメント
+    ld a, ($C000)
+    inc a
+    and $07
+    ld ($C000), a
+    jp nz, mainloop_next
+
+    ; 次のマップを描画
+    ld hl, ($C002)
+    ld a, h
+    cp $40
+    jp z, mainloop_jump_to_head
+    ld a, l
+    sub $20
+    ld l, a
+    ld a, h
+    sbc $00
+    ld h, a
+    ld ($C002), hl
+    jmp mainloop_set_nametbl
+mainloop_jump_to_head:
+    ; 先頭に達したのでループさせる
+    ld hl, $5FE0
+    ld ($C002), hl
+mainloop_set_nametbl:
+    ld de, ($C004)
+    ld a, e
+    sub $20
+    ld e, a
+    ld a, d
+    sbc $00
+    and $03
+    ld d, a
+    ld ($C004), de
+    ld a, d
+    or $80
+    ld d, a
+    ld bc, 32
+    ldir
+
+mainloop_next:
+    jmp mainloop
+
+
+*/
 }
