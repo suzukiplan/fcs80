@@ -13,6 +13,10 @@ all:
 	make execute-format FILENAME=./hal/rpizero/src/kernel.h
 	make execute-format FILENAME=./hal/rpizero/src/main.cpp
 	make execute-format FILENAME=./hal/rpizero/src/std.c
+	make execute-format FILENAME=./lib/sdcc/fcs80.c
+	make execute-format FILENAME=./lib/sdcc/fcs80.h
+	make execute-format FILENAME=./example/hello-sdcc/hello.c
+	make execute-format FILENAME=./example/map_scroll-sdcc/program.c
 	cd hal/sdl2 && make
 	cd hal/rpizero && make
 	cd hal/rpizero2 && make
