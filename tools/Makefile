@@ -1,4 +1,4 @@
-all: bin bin/bmp2chr bin/makerom bin/csv2bin
+all: bin bin/bmp2chr bin/makerom bin/csv2bin bin/makebgm
 	cd vgsmml && make
 	cp -p vgsmml/vgsmml bin
 
@@ -13,3 +13,6 @@ bin/makerom: src/makerom.c
 
 bin/csv2bin: src/csv2bin.c
 	g++ -o bin/csv2bin src/csv2bin.c
+
+bin/makebgm: src/makebgm.cpp
+	g++ -o bin/makebgm src/makebgm.cpp
