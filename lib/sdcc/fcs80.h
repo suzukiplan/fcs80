@@ -644,4 +644,25 @@ void fcs80_scc_volume_set(uint8_t ch, uint8_t volume) __smallc;
  */
 void fcs80_scc_mixing_set(uint8_t mixing) __z88dk_fastcall;
 
+/**
+ * @brief VGS: Play BGM
+ * @param song number of the song to play
+ */
+void fcs80_vgs_play(uint8_t song) __z88dk_fastcall;
+
+/**
+ * @brief VGS: Pause BGM
+ */
+void fcs80_vgs_pause() __z88dk_fastcall;
+
+/**
+ * @brief VGS: Resume BGM
+ */
+void fcs80_vgs_resume() __z88dk_fastcall;
+
+/**
+ * @brief VGS: Fadeout BGM
+ */
+void fcs80_vgs_fadeout() __z88dk_fastcall;
+
 #endif

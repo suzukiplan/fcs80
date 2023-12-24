@@ -612,3 +612,35 @@ void fcs80_scc_mixing_set(uint8_t mixing) __z88dk_fastcall
 {
     *((uint8_t*)0x988F) = mixing;
 }
+
+void fcs80_vgs_play(uint8_t song) __z88dk_fastcall
+{
+__asm
+    ld a, l
+    out (#0xE0), a
+__endasm;
+}
+
+void fcs80_vgs_pause() __z88dk_fastcall
+{
+__asm
+    ld a, 0
+    out (#0xE1), a
+__endasm;
+}
+
+void fcs80_vgs_resume() __z88dk_fastcall
+{
+__asm
+    ld a, 1
+    out (#0xE1), a
+__endasm;
+}
+
+void fcs80_vgs_fadeout() __z88dk_fastcall
+{
+__asm
+    ld a, 2
+    out (#0xE1), a
+__endasm;
+}
