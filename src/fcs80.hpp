@@ -294,7 +294,9 @@ class FCS80
             short* r = &this->soundBuffer[this->soundCursor];
             this->soundCursor++;
             this->psg->tick(l, r, 81);
-            this->scc->tick(l, r, 81);
+            if (this->scc) {
+                this->scc->tick(l, r, 81);
+            }
             this->psg->ctx.bobo -= FCS80_CPU_CLOCK_PER_SEC;
         }
     }
