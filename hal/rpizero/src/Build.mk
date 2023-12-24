@@ -2,6 +2,7 @@ CIRCLEHOME = ./circle
 CHECK_DEPS = 0
 STANDARD = -std=c++17
 CFLAGS = -O3
+CFLAGS += -I../../../src
 CPPFLAGS = -O3
 CPPFLAGS += -I../../../src
 CPPFLAGS += -DZ80_DISABLE_DEBUG
@@ -17,6 +18,8 @@ OBJS = main.o
 OBJS += std.o
 OBJS += kernel.o
 OBJS += splash.o
+OBJS += lz4.o
+OBJS += vgstone.o
 LIBS = $(CIRCLEHOME)/lib/libcircle.a
 LIBS += $(CIRCLEHOME)/lib/sound/libsound.a
 LIBS += $(CIRCLEHOME)/lib/sched/libsched.a

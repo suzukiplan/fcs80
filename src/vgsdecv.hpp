@@ -386,9 +386,9 @@ class VGSDecoder
     void seekTo(int time, void (*callback)(int percent) = nullptr)
     {
         int progress;
-        if (ctx.timeP == time) {
+        if (ctx.timeP == (unsigned int)time) {
             return;
-        } else if (ctx.timeP < time) {
+        } else if (ctx.timeP < (unsigned int)time) {
             progress = ctx.timeP;
         } else {
             progress = 0;

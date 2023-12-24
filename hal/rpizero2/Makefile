@@ -5,6 +5,8 @@ all:
 	cp -p ../rpizero/src/main.cpp src
 	cp -p ../rpizero/src/std.c src
 	cp -p ../rpizero/src/splash.c src
+	cp -p ../../src/lz4.c src
+	cp -p ../../src/vgstone.c src
 	cd src && git submodule update --init circle
 	cp src/Config.mk src/circle
 	cd src/circle && ./makeall --nosample

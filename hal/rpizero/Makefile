@@ -1,6 +1,8 @@
 all:
 	cd src && git submodule update --init circle
 	cp src/Config.mk src/circle
+	cp -p ../../src/lz4.c src
+	cp -p ../../src/vgstone.c src
 	cd src/circle && ./makeall --nosample
 	cd src/circle/addon/fatfs && make
 	cd src/circle/addon/SDCard && make
