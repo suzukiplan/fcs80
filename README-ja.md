@@ -417,15 +417,14 @@ C言語の `memcpy` 関数に相当するDMA転送機能です。
 
 ### 5-2. Example
 
-| Name                                           | Description                                                                            |
-| :--------------------------------------------- | :------------------------------------------------------------------------------------- |
-| [Hello, World!](./example/hello)               | BG に `Hello, World!` を表示 & ジョイパッドでスクロール                                |
-| [Hello, World! (SDCC)](./example/hello-sdcc)  | BG に `Hello, World!` を表示 & ジョイパッドでスクロール (SDCCを用いたC言語版)|
-| [Sprite Test](./example/sprite)                | 256 個のスプライトを描画して動かす                                                     |
-| [Map Scroll](./example/map_scroll)             | [Tiled Map Editor](https://www.mapeditor.org) で作ったマップデータを描画してスクロール |
-| [Raster Scroll](./example/raster_scroll)       | スクロール X をスキャンライン毎に更新して画面をシェイク                                |
-| [PSG Test (normal port)](./example/psg)        | きらきら星の 8 小節をループ演奏 ($A0 ~ $A2: 3 ポートアクセス版)                        |
-| [PSG Test (direct port)](./example/psg_direct) | きらきら星の 8 小節をループ演奏 ($D0 ~ $DF: ダイレクト・ポートアクセス版)              |
+| Name | Language | Description |
+| :--- | :------- | :---------- | 
+| Hello, World! | [Z80](./example/hello), [SDCC](./example/hello-sdcc) | Display "Hello, World!" in the BG, and scroll it by the input of JoyPad. |
+| Sprite Test | [Z80](./example/sprite), [SDCC](./example/sprite-sdcc/) | Render and move sprites |
+| Map Scroll | [Z80](./example/map_scroll), [SDCC](./example//map_scroll-sdcc/) | View and scroll through map data created with the [Tiled Map Editor](https://www.mapeditor.org). |
+| Raster Scroll | [Z80](./example/raster_scroll), [SDCC](./example/raster_scroll-sdcc/) | Shake the screen by rewriting the scroll X for each scanline. |
+| PSG Test (normal port)| [Z80](./example/psg) | Play 8 bars of Twinkle Twinkle Little Star on PSG with accompaniment. (using PSG port $A0 ~ $A2) |
+| PSG Test (direct port)| [Z80](./example/psg_direct) | Play 8 bars of Twinkle Twinkle Little Star on PSG with accompaniment. (using PSG port $Dx) |
 
 ### 5-3. Notes for keeping the compatible
 
