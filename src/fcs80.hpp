@@ -192,7 +192,7 @@ class FCS80
                 } else if (wav < -32768) {
                     wav = -32768;
                 }
-                sounfBuffer[cursor++] = (short)wav;
+                this->soundBuffer[cursor++] = (short)wav;
             }
             // check end playing
             this->vgsctx.playing = !this->vgsdec->isPlayEnd();
