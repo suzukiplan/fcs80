@@ -16,6 +16,8 @@ FAIRY COMPUTER SYSTEM 80(FCS80)は、8 ビット時代の技術である Z80 と
   - [3-2. $B0~$B3: Bank switch](#3-2-b0b3-bank-switch) (バンク切り替え)
   - [3-3. $C0: High Speed DMA (Bank to VRAM)](#3-3-c0-high-speed-dma-bank-to-vram) (高速 DMA)
   - [3-4. $C1: CPU boost flag](#3-4-c1-cpu-boost-flag) (CPU 高速化フラグ)
+  - [3-5. $C2: memset](#3-5-c2-memset)
+  - [3-6. $C3: memcpy](#3-6-c3-memcpy)
 - [4. ROM](#4-rom)
   - [4-1. File Format](#4-1-file-format) (ファイル構造)
 - [5. Programming Guide](#5-programming-guide) (プログラミングガイド)
@@ -369,6 +371,23 @@ FCS80 は新規プログラムの作成を容易にする 16 ポートアクセ�
 
 通常、[consumeClock](src/z80.hpp#L340-L346)は 4Hz または 3Hz（GBZ80 の場合は 4Hz に固定）の間隔でコールバックされますが、cpuBoostFlag が 0 でない間は常に 1Hz に固定されることで、CPU の実行速度が 4 ～ 3 倍になります。
 
+### 3-5. $C2: memset
+
+C言語の `memset` 関数に相当するDMA転送機能です。
+
+- Register A: セットする値
+- Register BC: 転送先アドレス
+- Register HL: 転送サイズ
+
+### 3-6. $C3: memcpy
+
+C言語の `memcpy` 関数に相当するDMA転送機能です。
+
+- Register A: 無視されます
+- Register BC: 転送先アドレス
+- Register DE: 転送元アドレス
+- Register HL: 転送サイズ
+
 ## 4. ROM
 
 ### 4-1. File Format
@@ -398,15 +417,14 @@ FCS80 は新規プログラムの作成を容易にする 16 ポートアクセ�
 
 ### 5-2. Example
 
-| Name                                           | Description                                                                            |
-| :--------------------------------------------- | :------------------------------------------------------------------------------------- |
-| [Hello, World!](./example/hello)               | BG に `Hello, World!` を表示 & ジョイパッドでスクロール                                |
-| [Hello, World! (SDCC)](./example/hello-sdcc)  | BG に `Hello, World!` を表示 & ジョイパッドでスクロール (SDCCを用いたC言語版)|
-| [Sprite Test](./example/sprite)                | 256 個のスプライトを描画して動かす                                                     |
-| [Map Scroll](./example/map_scroll)             | [Tiled Map Editor](https://www.mapeditor.org) で作ったマップデータを描画してスクロール |
-| [Raster Scroll](./example/raster_scroll)       | スクロール X をスキャンライン毎に更新して画面をシェイク                                |
-| [PSG Test (normal port)](./example/psg)        | きらきら星の 8 小節をループ演奏 ($A0 ~ $A2: 3 ポートアクセス版)                        |
-| [PSG Test (direct port)](./example/psg_direct) | きらきら星の 8 小節をループ演奏 ($D0 ~ $DF: ダイレクト・ポートアクセス版)              |
+| Name | Language | Description |
+| :--- | :------- | :---------- | 
+| Hello, World! | [Z80](./example/hello), [SDCC](./example/hello-sdcc) | Display "Hello, World!" in the BG, and scroll it by the input of JoyPad. |
+| Sprite Test | [Z80](./example/sprite), [SDCC](./example/sprite-sdcc/) | Render and move sprites |
+| Map Scroll | [Z80](./example/map_scroll), [SDCC](./example//map_scroll-sdcc/) | View and scroll through map data created with the [Tiled Map Editor](https://www.mapeditor.org). |
+| Raster Scroll | [Z80](./example/raster_scroll), [SDCC](./example/raster_scroll-sdcc/) | Shake the screen by rewriting the scroll X for each scanline. |
+| PSG Test (normal port)| [Z80](./example/psg) | Play 8 bars of Twinkle Twinkle Little Star on PSG with accompaniment. (using PSG port $A0 ~ $A2) |
+| PSG Test (direct port)| [Z80](./example/psg_direct) | Play 8 bars of Twinkle Twinkle Little Star on PSG with accompaniment. (using PSG port $Dx) |
 
 ### 5-3. Notes for keeping the compatible
 

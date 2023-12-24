@@ -2,6 +2,8 @@ PRJ = psg
 MAKEROM = ../../tools/bin/makerom
 
 all: ${MAKEROM} ${PRJ}.rom
+	cd ../../hal/sdl2 && make
+	../../hal/sdl2/fcs80 ${PRJ}.rom
 
 clear:
 	rm -f *.bin *.o *.chr

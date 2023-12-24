@@ -290,13 +290,45 @@ class FCS80
             case 0xC0: {
                 int addr = this->cpu->reg.pair.A;
                 addr *= 0x2000;
-                if (addr + 0x2000 <= (int)this->romSize)
+                if (addr + 0x2000 <= (int)this->romSize) {
+                    // printf("DMA: rom[%06X] bank(%d) -> cptn\n", addr, this->cpu->reg.pair.A);
                     memcpy(&this->vdp->ctx.ram[0x2000], &this->rom[addr], 0x2000);
-                else
+                } else {
+                    // printf("DMA-error: rom[%06X] bank(%d) -> cptn\n", addr, this->cpu->reg.pair.A);
                     memset(&this->vdp->ctx.ram[0x2000], 0xFF, 0x2000);
+                }
                 break;
             }
             case 0xC1: this->ctx.cpuBoostFlag = value; break;
+            case 0xC2: {
+                unsigned short addrTo = this->cpu->reg.pair.B;
+                addrTo <<= 8;
+                addrTo |= this->cpu->reg.pair.C;
+                unsigned short count = this->cpu->reg.pair.H;
+                count <<= 8;
+                count |= this->cpu->reg.pair.L;
+                // printf("DMA: memset(%04X,%02X,%d)\n",addrTo,cpu->reg.pair.A,count);
+                for (int i = 0; i < count; i++, addrTo++) {
+                    this->writeMemory(addrTo, this->cpu->reg.pair.A);
+                }
+                break;
+            }
+            case 0xC3: {
+                unsigned short addrTo = this->cpu->reg.pair.B;
+                addrTo <<= 8;
+                addrTo |= this->cpu->reg.pair.C;
+                unsigned short addrFrom = this->cpu->reg.pair.D;
+                addrFrom <<= 8;
+                addrFrom |= this->cpu->reg.pair.E;
+                unsigned short count = this->cpu->reg.pair.H;
+                count <<= 8;
+                count |= this->cpu->reg.pair.L;
+                // printf("DMA: memcpy(%04X,%04X,%d)\n",addrTo,addrFrom,count);
+                for (int i = 0; i < count; i++, addrTo++, addrFrom++) {
+                    this->writeMemory(addrTo, this->readMemory(addrFrom));
+                }
+                break;
+            }
             case 0xD0: this->psg->write(0, value); break;
             case 0xD1: this->psg->write(1, value); break;
             case 0xD2: this->psg->write(2, value); break;
