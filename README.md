@@ -40,7 +40,10 @@ This repository provides an official emulator for the FCS80 core system.
   - Number of Scanlines: 262
   - Frame Rate: 60 frames per second
   - Colors: 256 colors in 65536 colors
-- APU: AY-3-8910 (44100Hz)
+- APU:
+  - AY-3-8910 (44100Hz)
+  - SCC (optional)
+  - VGS (optional)
 - RAM: 16KB
 - VRAM: 16KB
 
@@ -276,6 +279,8 @@ NOTES:
 |    $C2    |  -  |  o  | High Speed DMA (memset)                                       |
 |    $C3    |  -  |  o  | High Speed DMA (memcpy)                                       |
 | $D0 ~ $DF |  o  |  o  | Direct read / write AY-3-8910 registers: #0 ($D0) ~ #15 ($DF) |
+|    $E0    |  -  |  o  | VGS: Play VGS BGM                                             |
+|    $E1    |  -  |  o  | VGS: Pause, Resume, Fadeout                                   |
 
 ### 3-1. $A0~$A2 or $D0~$DF: AY-3-8910
 
@@ -374,7 +379,7 @@ Normally, [consumeClock](src/z80.hpp#L340-L346) is called back at an interval of
 
 It is a DMA equivalent to `memset` in C language:
 
-- Register A: set value
+- Output value: set value
 - Register BC: destination address
 - Register HL: transfer count in byte
 
@@ -382,10 +387,24 @@ It is a DMA equivalent to `memset` in C language:
 
 It is a DMA equivalent to `memcpy` in C language:
 
-- Register A: ignored
+- Output value: ignored
 - Register BC: destination address
 - Register DE: source address
 - Register HL: transfer count in byte
+
+### 3-7. $E0: Play VGS
+
+Plays the BGM data of the VGS specified by value.
+
+This OUT is valid only in environments where BGM data has been loaded in advance with `FCS80::loadVgsData`.
+
+### 3-8. $E1: Pause, Resume or Fadeout VGS
+
+| Value | Description    |
+| :---: | :------------- |
+|   0   | Pause playing  |
+|   1   | Resume playing |
+|   2   | Fadeout        |
 
 ## 4. ROM
 

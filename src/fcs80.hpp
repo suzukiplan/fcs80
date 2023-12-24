@@ -32,6 +32,7 @@
 #include "fcs80def.h"
 #include "fcs80video.hpp"
 #include "scc.hpp"
+#include "vgsdecv.hpp"
 #include "z80.hpp"
 
 class FCS80
@@ -42,11 +43,24 @@ class FCS80
     short soundBuffer[0x10000];
     unsigned short soundCursor;
 
+    struct VgsData {
+        const void* buffer;
+        size_t size;
+    } vgsdat[256];
+
+    struct VgsContext {
+        bool playing;
+        bool fadeout;
+        int playingIndex;
+        unsigned int seekPosition;
+    } vgsctx;
+
   public:
     Z80* cpu;
     AY8910* psg;
     FCS80Video* vdp;
     SCC* scc;
+    VGSDecoder* vgsdec;
 
     struct Context {
         int bobo;
@@ -56,7 +70,7 @@ class FCS80
         unsigned char reserved[3];
     } ctx;
 
-    FCS80(FCS80Video::ColorMode colorMode = FCS80Video::ColorMode::RGB555)
+    FCS80(FCS80Video::ColorMode colorMode = FCS80Video::ColorMode::RGB555, bool sccEnabled = true)
     {
         this->cpu = new Z80([](void* arg, unsigned short addr) { return ((FCS80*)arg)->readMemory(addr); }, [](void* arg, unsigned short addr, unsigned char value) { ((FCS80*)arg)->writeMemory(addr, value); }, [](void* arg, unsigned short port) { return ((FCS80*)arg)->inPort(port); }, [](void* arg, unsigned short port, unsigned char value) { ((FCS80*)arg)->outPort(port, value); }, this);
         this->cpu->setConsumeClockCallback([](void* arg, int clocks) {
@@ -65,22 +79,27 @@ class FCS80
         this->vdp = new FCS80Video(
             colorMode, this, [](void* arg) { ((FCS80*)arg)->cpu->requestBreak(); }, [](void* arg) { ((FCS80*)arg)->cpu->generateIRQ(0x07); });
         this->psg = new AY8910();
-        this->scc = new SCC();
-        this->rom = NULL;
+        if (sccEnabled) {
+            this->scc = new SCC();
+        } else {
+            this->scc = nullptr;
+        }
+        this->rom = nullptr;
         this->romSize = 0;
+        memset(&this->vgsdat, 0, sizeof(this->vgsdat));
+        memset(&this->vgsctx, 0, sizeof(this->vgsctx));
+        this->vgsdec = nullptr;
         this->reset();
-        /*this->cpu->setDebugMessage([](void* arg, const char* msg) {
-            FCS80* fcs80 = (FCS80*)arg;
-            printf("line:%03d px:%03d %s\n", fcs80->vdp->ctx.countV, fcs80->vdp->ctx.countH, msg);
-        });*/
-        /*this->cpu->addBreakPoint(0x0024, [](void* arg) {
-            puts("0024");
-        });*/
     }
 
     ~FCS80()
     {
-        delete this->scc;
+        if (this->vgsdec) {
+            delete this->vgsdec;
+        }
+        if (this->scc) {
+            delete this->scc;
+        }
         delete this->psg;
         delete this->vdp;
         delete this->cpu;
@@ -92,7 +111,10 @@ class FCS80
         for (int i = 0; i < 4; i++) this->ctx.romBank[i] = i;
         this->vdp->reset();
         this->psg->reset(4);
-        this->scc->reset();
+        if (this->scc) {
+            this->scc->reset();
+        }
+        this->vgsctx.playing = false;
         memset(&this->cpu->reg, 0, sizeof(this->cpu->reg));
         this->cpu->reg.SP = 0xFFFF;
         memset(this->soundBuffer, 0, sizeof(this->soundBuffer));
@@ -102,7 +124,7 @@ class FCS80
     bool loadRom(const void* rom, size_t size)
     {
         if (this->rom) free(this->rom);
-        this->rom = NULL;
+        this->rom = nullptr;
         size -= size % 0x2000;
         if (0 < size) {
             this->rom = (unsigned char*)malloc(size);
@@ -144,10 +166,40 @@ class FCS80
         return result;
     }
 
+    void loadVgsData(unsigned short index, const void* buffer, size_t size)
+    {
+        this->vgsdat[index].buffer = buffer;
+        this->vgsdat[index].size = size;
+        if (!this->vgsdec) {
+            this->vgsdec = new VGSDecoder();
+        }
+    }
+
     void tick(unsigned char pad1, unsigned char pad2)
     {
+        unsigned short cursor = this->soundCursor;
         this->psg->setPads(pad1, pad2);
         this->cpu->execute(0x7FFFFFFF);
+        if (this->vgsdec && this->vgsctx.playing) {
+            short buf[735];
+            this->vgsdec->execute(buf, sizeof(buf));
+            // 22050Hz 1ch -> 44100Hz 2ch
+            for (int i = 0; i < 735 * 4; i++) {
+                int wav = this->soundBuffer[cursor];
+                wav += buf[i / 4];
+                if (32767 < wav) {
+                    wav = 32767;
+                } else if (wav < -32768) {
+                    wav = -32768;
+                }
+                sounfBuffer[cursor++] = (short)wav;
+            }
+            // check end playing
+            this->vgsctx.playing = !this->vgsdec->isPlayEnd();
+            if (!this->vgsctx.playing) {
+                this->vgsctx.fadeout = false;
+            }
+        }
     }
 
     unsigned short* getDisplay() { return this->vdp->display; }
@@ -160,7 +212,19 @@ class FCS80
         return this->soundBuffer;
     }
 
-    size_t getStateSize() { return sizeof(this->ctx) + sizeof(this->cpu->reg) + sizeof(this->psg->ctx) + sizeof(this->vdp->ctx) + sizeof(this->scc->ctx); }
+    size_t getStateSize() {
+        size_t result = sizeof(this->ctx);
+        result += sizeof(this->cpu->reg);
+        result += sizeof(this->psg->ctx);
+        result += sizeof(this->vdp->ctx);
+        if (this->scc) {
+            result += sizeof(this->scc->ctx);
+        }
+        if (this->vgsdec) {
+            result += sizeof(this->vgsctx);
+        }
+        return result;
+    }
 
     void saveState(void* buffer)
     {
@@ -173,7 +237,13 @@ class FCS80
         bufferPtr += sizeof(this->psg->ctx);
         memcpy(bufferPtr, &this->vdp->ctx, sizeof(this->vdp->ctx));
         bufferPtr += sizeof(this->vdp->ctx);
-        memcpy(bufferPtr, &this->scc->ctx, sizeof(this->scc->ctx));
+        if (this->scc) {
+            memcpy(bufferPtr, &this->scc->ctx, sizeof(this->scc->ctx));
+            bufferPtr += sizeof(this->scc->ctx);
+        }
+        if (this->vgsdec) {
+            memcpy(bufferPtr, &this->vgsctx, sizeof(this->vgsctx));
+        }
     }
 
     void loadState(const void* buffer)
@@ -189,7 +259,17 @@ class FCS80
         memcpy(&this->vdp->ctx, bufferPtr, sizeof(this->vdp->ctx));
         this->vdp->refreshDisplay();
         bufferPtr += sizeof(this->vdp->ctx);
-        memcpy(&this->scc->ctx, bufferPtr, sizeof(this->scc->ctx));
+        if (this->scc) {
+            memcpy(&this->scc->ctx, bufferPtr, sizeof(this->scc->ctx));
+            bufferPtr += sizeof(this->scc->ctx);
+        }
+        if (this->vgsdec) {
+            memcpy(&this->vgsctx, bufferPtr, sizeof(this->vgsctx));
+            if (this->vgsdat[this->vgsctx.playingIndex].buffer) {
+                this->vgsdec->load(this->vgsdat[this->vgsctx.playingIndex].buffer, this->vgsdat[this->vgsctx.playingIndex].size);
+                this->vgsdec->seekTo(this->vgsctx.seekPosition);
+            }
+        }
     }
 
   private:
@@ -345,6 +425,31 @@ class FCS80
             case 0xDD: this->psg->write(13, value); break;
             case 0xDE: this->psg->write(14, value); break;
             case 0xDF: this->psg->write(15, value); break;
+            case 0xE0:
+                if (this->vgsdec && this->vgsdat[value].buffer) {
+                    this->vgsctx.playing = true;
+                    this->vgsctx.fadeout = false;
+                    this->vgsctx.seekPosition = 0;
+                    this->vgsctx.playingIndex = value;
+                    this->vgsdec->load(this->vgsdat[value].buffer, this->vgsdat[value].size);
+                }
+                break;
+            case 0xE1:
+                if (this->vgsdec) {
+                    switch (value) {
+                        case 0: // pause
+                            this->vgsctx.playing = false;
+                            break;
+                        case 1: // resume
+                            this->vgsctx.playing = true;
+                            break;
+                        case 2: // fadeout
+                            this->vgsctx.fadeout = true;
+                            this->vgsdec->fadeout();
+                            break;
+                    }
+                }
+                break;
         }
     }
 };
