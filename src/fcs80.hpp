@@ -181,10 +181,11 @@ class FCS80
         this->psg->setPads(pad1, pad2);
         this->cpu->execute(0x7FFFFFFF);
         if (this->vgsdec && this->vgsctx.playing) {
-            short buf[735];
-            this->vgsdec->execute(buf, sizeof(buf));
+            static short buf[4096];
+            int count = this->soundCursor - cursor;
+            this->vgsdec->execute(buf, count / 2);
             // 22050Hz 1ch -> 44100Hz 2ch
-            for (int i = 0; i < 735 * 4; i++) {
+            for (int i = 0; i < count; i++) {
                 int wav = this->soundBuffer[cursor];
                 wav += buf[i / 4];
                 if (32767 < wav) {
