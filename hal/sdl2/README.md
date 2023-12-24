@@ -52,11 +52,12 @@ make
 ## Usage
 
 ```
-usage: fcs80 /path/to/file.rom ..... Specify ROM file to be used
-             [-g { None ............ GPU: Do not use
-                 | OpenGL .......... GPU: OpenGL <default>
-                 | Vulkan .......... GPU: Vulkan
-                 | Metal ........... GPU: Metal
+usage: fcs80 /path/to/file.rom ....... Specify ROM file to be used
+             [-v /path/to/bgm.vgs] ... VGS BGM data (max 256 data)
+             [-g { None .............. GPU: Do not use
+                 | OpenGL ............ GPU: OpenGL <default>
+                 | Vulkan ............ GPU: Vulkan
+                 | Metal ............. GPU: Metal
                  }]
-             [-f] .................. Full Screen Mode
+             [-f] .................... Full Screen Mode
 ```

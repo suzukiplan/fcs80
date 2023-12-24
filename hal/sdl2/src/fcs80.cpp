@@ -40,6 +40,11 @@
 #define WINDOW_TITLE "FCS80 for SDL2"
 #define USE_CBIOS
 
+typedef struct {
+    void* data;
+    size_t size;
+} Binary;
+
 static BufferQueue soundQueue(65536);
 static pthread_mutex_t soundMutex = PTHREAD_MUTEX_INITIALIZER;
 static bool halt = false;
@@ -89,12 +94,31 @@ static inline unsigned char bit5To8(unsigned char bit5)
     return bit5;
 }
 
+static void* loadBinary(const char* path, size_t* size)
+{
+    log("Loading %s", path);
+    FILE* fp = fopen(path, "rb");
+    if (!fp) return nullptr;
+    fseek(fp, 0, SEEK_END);
+    *size = (size_t)ftell(fp);
+    fseek(fp, 0, SEEK_SET);
+    void* result = malloc(*size);
+    if (*size != fread(result, 1, *size, fp)) {
+        fclose(fp);
+        free(result);
+        return nullptr;
+    }
+    fclose(fp);
+    return result;
+}
+
 int main(int argc, char* argv[])
 {
     const char* romPath = nullptr;
     bool cliError = false;
     int fullScreen = 0;
     int gpuType = SDL_WINDOW_OPENGL;
+    std::vector<Binary*> vgsTable;
 
     for (int i = 1; !cliError && i < argc; i++) {
         if ('-' != argv[i][0]) {
@@ -102,6 +126,22 @@ int main(int argc, char* argv[])
             continue;
         }
         switch (tolower(argv[i][1])) {
+            case 'v': {
+                i++;
+                if (argc <= i) {
+                    cliError = true;
+                    break;
+                }
+                auto bin = new Binary();
+                bin->data = loadBinary(argv[i], &bin->size);
+                if (!bin->data) {
+                    puts("File not found");
+                    cliError = true;
+                    break;
+                }
+                vgsTable.push_back(bin);
+                break;
+            }
             case 'f':
                 fullScreen = SDL_WINDOW_FULLSCREEN;
                 break;
@@ -130,13 +170,14 @@ int main(int argc, char* argv[])
         }
     }
     if (cliError || !romPath) {
-        puts("usage: fcs80 /path/to/file.rom ..... Specify ROM file to be used");
-        puts("             [-g { None ............ GPU: Do not use");
-        puts("                 | OpenGL .......... GPU: OpenGL <default>");
-        puts("                 | Vulkan .......... GPU: Vulkan");
-        puts("                 | Metal ........... GPU: Metal");
+        puts("usage: fcs80 /path/to/file.rom ....... Specify ROM file to be used");
+        puts("             [-v /path/to/bgm.vgs] ... VGS BGM data (max 256 data)");
+        puts("             [-g { None .............. GPU: Do not use");
+        puts("                 | OpenGL ............ GPU: OpenGL <default>");
+        puts("                 | Vulkan ............ GPU: Vulkan");
+        puts("                 | Metal ............. GPU: Metal");
         puts("                 }]");
-        puts("             [-f] .................. Full Screen Mode");
+        puts("             [-f] .................... Full Screen Mode");
         return 1;
     }
 
@@ -147,6 +188,13 @@ int main(int argc, char* argv[])
 
     log("Initializing FCS80");
     FCS80 fcs80;
+
+    int vgsIndex = 0;
+    for (Binary* vgs : vgsTable) {
+        log("Loaded BGM data #%d (%lu bytes)", vgsIndex, vgs->size);
+        fcs80.loadVgsData(vgsIndex++, vgs->data, vgs->size);
+    }
+
     if (!fcs80.loadRomFile(romPath)) {
         log("Load ROM failed: %s", romPath);
         return -1;
