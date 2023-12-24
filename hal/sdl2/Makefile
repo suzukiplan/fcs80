@@ -28,10 +28,14 @@ HEADER_FILES += $(FCS80SRC)/fcs80def.h
 HEADER_FILES += $(FCS80SRC)/fcs80video.hpp
 HEADER_FILES += $(FCS80SRC)/scc.hpp
 HEADER_FILES += $(FCS80SRC)/z80.hpp
+HEADER_FILES += $(FCS80SRC)/lz4.h
+HEADER_FILES += $(FCS80SRC)/vgsdecv.hpp
 HEADER_FILES += src/BufferQueue.h
 
 OBJECTS = fcs80.o
 OBJECTS += BufferQueue.o
+OBJECTS += lz4.o
+OBJECTS += vgstone.o
 
 all: fcs80
 
@@ -47,3 +51,9 @@ BufferQueue.o: src/BufferQueue.cpp $(HEADER_FILES) ./Makefile
 
 fcs80.o: src/fcs80.cpp $(HEADER_FILES) ./Makefile
 	$(CPP) -c $<
+
+lz4.o: ../../src/lz4.c $(HEADER_FILES) ./Makefile
+	$(CC) -c $<
+
+vgstone.o: ../../src/vgstone.c $(HEADER_FILES) ./Makefile
+	$(CC) -c $<
