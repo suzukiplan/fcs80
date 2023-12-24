@@ -352,5 +352,9 @@ int main(int argc, char* argv[])
     SDL_CloseAudioDevice(audioDeviceId);
     SDL_DestroyWindow(window);
     SDL_Quit();
+    for (Binary* bin : vgsTable) {
+        free(bin->data);
+        delete bin;
+    }
     return 0;
 }
