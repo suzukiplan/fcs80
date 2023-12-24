@@ -212,7 +212,8 @@ class FCS80
         return this->soundBuffer;
     }
 
-    size_t getStateSize() {
+    size_t getStateSize()
+    {
         size_t result = sizeof(this->ctx);
         result += sizeof(this->cpu->reg);
         result += sizeof(this->psg->ctx);
